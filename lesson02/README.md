@@ -4,6 +4,8 @@
 
 [PDF](./gcc的使用和矩阵乘法性能比较.pdf)，[Markdown](./docs/gcc 使用和矩阵乘法性能比较 b9e3e2ef8c954cd0b07ce8df4d225a37.md)，[Online](https://www.chiro.work/gcc-b9e3e2ef8c954cd0b07ce8df4d225a37)。
 
+GDB: [PDF](./GDB_的使用.pdf)，[Online](https://www.chiro.work/GDB-13d0c91dfdde48a88a4f8bc3809de023)。
+
 **代码说明**
 
 ```
@@ -17,6 +19,7 @@
 │   └── plot.png
 ├── docs				# 实验文档
 ├── gcc的使用和矩阵乘法性能比较.pdf
+├── GDB_的使用.pdf
 ├── mul_test_all.py		# 实验的主程序
 ├── requirements.txt	# Python 依赖
 └── src					# 实验源文件
