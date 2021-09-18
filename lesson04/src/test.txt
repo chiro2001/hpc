@@ -1,0 +1,4042 @@
+Starting 512 threads.
+----request 1: <html><body><code>glob = 2</code></body></html>
+----request 5: <html><body><code>glob = 4</code></body></html>
+----request 2: <html><body><code>glob = 1</code></body></html>
+----request 4: <html><body><code>glob = 3</code></body></html>
+----request 7: <html><body><code>glob = 6</code></body></html>
+----request 6: <html><body><code>glob = 5</code></body></html>
+----request 16: <html><body><code>glob = 9</code></body></html>
+----request 3: <html><body><code>glob = 10</code></body></html>
+----request 17: <html><body><code>glob = 8</code></body></html>
+----request 8: <html><body><code>glob = 7</code></body></html>
+----request 9: <html><body><code>glob = 11</code></body></html>
+----request 11: <html><body><code>glob = 12</code></body></html>
+----request 20: <html><body><code>glob = 14</code></body></html>
+----request 39: <html><body><code>glob = 16</code></body></html>
+----request 10: <html><body><code>glob = 18</code></body></html>
+Listen on port 8000, thread_max = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+Start child thread: client = 5, index = 1
+====== waiting for read request data =====
+Start child thread: client = 4, index = 0
+enter sleeping...
+finish sleeping...
+enter sleeping...
+finish sleeping...
+client_socket = 6
+====== waiting for client's request =====
+Start child thread: client = 6, index = 2
+enter sleeping...
+finish sleeping...
+client 6 closed.
+====== waiting for read request data =====
+client 5 closed.
+client 4 closed.
+client_socket = 4
+====== waiting for client's request =====
+Start child thread: client = 4, index = 3
+enter sleeping...
+finish sleeping...
+client 4 closed.
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+Start child thread: client = 4, index = 5
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+Start child thread: client = 5, index = 4
+Start child thread: client = 8, index = 8
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+Start child thread: client = 10, index = 10
+Start child thread: client = 9, index = 9
+enter sleeping...
+finish sleeping...
+enter sleeping...
+finish sleeping...
+client 5 closed.
+client 4 closed.
+enter sleeping...
+finish sleeping...
+client 8 closed.
+enter sleeping...
+finish sleeping...
+Start child thread: client = 6, index = 6
+enter sleeping...
+finish sleeping...
+client 10 closed.
+enter sleeping...
+finish sleeping...
+client 9 closed.
+client 6 closed.
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+Start child thread: client = 11, index = 11
+====== waiting for read request data =====
+client_socket = 10
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+client 11 closed.
+Start child thread: client = 4, index = 12
+enter sleeping...
+finish sleeping...
+Start child thread: client = 7, index = 7
+enter sleeping...
+finish sleeping...
+client 7 closed.
+client 4 closed.
+Start child thread: client = 6, index = 14
+enter sleeping...
+finish sleeping...
+client 6 closed.
+Start child thread: client = 10, index = 17
+====== waiting for read request data =====
+enter sleeping...
+finish sleeping...
+client_socket = 12
+====== waiting for client's request =====
+client 10 closed.
+Start child thread: client = 12, index = 18
+enter sleeping...
+finish sleeping...
+client 12 closed.
+====== waiting for read request data =====
+Start child thread: client = 9, index = 16
+enter sleeping...
+finish sleeping...
+client_socket = 4
+====== waiting for client's request =====
+client 9 closed.
+Start child thread: client = 4, index = 19
+enter sleeping...
+finish sleeping...
+client 4 closed.
+Start child thread: client = 5, index = 13
+enter sleeping...
+finish sleeping...
+client 5 closed.
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== wa----request 14: <html><body><code>glob = 13</code></body></html>
+----request 31: <html><body><code>glob = 17</code></body></html>
+----request 22: <html><body><code>glob = 15</code></body></html>
+----request 29: <html><body><code>glob = 19</code></body></html>
+----request 37: <html><body><code>glob = 20</code></body></html>
+----request 15: <html><body><code>glob = 21</code></body></html>
+----request 57: <html><body><code>glob = 22</code></body></html>
+----request 51: <html><body><code>glob = 23</code></body></html>
+----request 35: <html><body><code>glob = 24</code></body></html>
+iting for read request data =====
+Start child thread: client = 6, index = 20
+enter sleeping...
+finish sleeping...
+client 6 closed.
+Start child thread: client = 8, index = 15
+enter sleeping...
+finish sleeping...
+client 8 closed.
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 13
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 14
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 16
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 17
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 18
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 19
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 20
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 21
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 22
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 23
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 24
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 25
+Start child thread: client = 22, index = 39
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 26
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 27
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 28
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 29
+====== waiting for client's request =====
+====== waiting for read request data =====
+Start child thread: client = 25, index = 42
+enter sleeping...
+finish sleeping...
+client 25 closed.
+Start child thread: client = 18, index = 35
+enter sleeping...
+finish sleeping...
+client_socket = 30
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 18
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 22
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 25
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 31
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 32
+====== waiting for client's request =====
+Start child thread: client = 24, index = 41
+enter sleeping...
+finish sleeping...
+client 24 closed.
+====== waiting for read request data =====
+client_socket = 33
+====== waiting for client's request =====
+client 18 closed.
+Start child thread: client = 9, index = 26
+enter sleeping...
+finish sleeping...
+Start child thread: client ----request 67: <html><body><code>glob = 25</code></body></html>
+----request 12: <html><body><code>glob = 26</code></body></html>
+----request 34: <html><body><code>glob = 29</code></body></html>
+----request 69: <html><body><code>glob = 31</code></body></html>
+----request 68: <html><body><code>glob = 32</code></body></html>
+----request 65: <html><body><code>glob = 30</code></body></html>
+----request 25: <html><body><code>glob = 34</code></body></html>
+----request 71: <html><body><code>glob = 28</code></body></html>
+----request 55: <html><body><code>glob = 36</code></body></html>
+----request 32: <html><body><code>glob = 37</code></body></html>
+----request 24: <html><body><code>glob = 38</code></body></html>
+----request 33: <html><body><code>glob = 39</code></body></html>
+----request 18: <html><body><code>glob = 41</code></body></html>
+----request 53: <html><body><code>glob = 27</code></body></html>
+----request 49: <html><body><code>glob = 40</code></body></html>
+----request 59: <html><body><code>glob = 35</code></body></html>
+----request 21: <html><body><code>glob = 43</code></body></html>
+----request 19: <html><body><code>glob = 44</code></body></html>
+----request 44: <html><body><code>glob = 45</code></body></html>
+----request 42: <html><body><code>glob = 42</code></body></html>
+----request 66: <html><body><code>glob = 49</code></body></html>
+----request 81: <html><body><code>glob = 48</code></body></html>
+----request 27: <html><body><code>glob = 50</code></body></html>
+----request 28: <html><body><code>glob = 52</code></body></html>
+----request 38: <html><body><code>glob = 33</code></body></html>
+----request 43: <html><body><code>glob = 47</code></body></html>
+----request 23: <html><body><code>glob = 53</code></body></html>
+----request 41: <html><body><code>glob = 55</code></body></html>
+----request 63: <html><body><code>glob = 46</code></body></html>
+----request 58: <html><body><code>glob = 56</code></body></html>
+= 19, index = 36
+enter sleeping...
+finish sleeping...
+client 19 closed.
+Start child thread: client = 27, index = 44
+enter sleeping...
+finish sleeping...
+client 27 closed.
+Start child thread: client = 10, index = 27
+enter sleeping...
+finish sleeping...
+Start child thread: client = 20, index = 37
+enter sleeping...
+finish sleeping...
+client 20 closed.
+Start child thread: client = 29, index = 46
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+Start child thread: client = 21, index = 38
+enter sleeping...
+finish sleeping...
+Start child thread: client = 12, index = 29
+enter sleeping...
+finish sleeping...
+client 10 closed.
+Start child thread: client = 7, index = 24
+enter sleeping...
+finish sleeping...
+Start child thread: client = 25, index = 50
+enter sleeping...
+finish sleeping...
+client 25 closed.
+Start child thread: client = 16, index = 33
+enter sleeping...
+finish sleeping...
+client 7 closed.
+Start child thread: client = 31, index = 51
+enter sleeping...
+finish sleeping...
+client 22 closed.
+Start child thread: client = 23, index = 40
+enter sleeping...
+finish sleeping...
+Start child thread: client = 14, index = 31
+client 23 closed.
+Start child thread: client = 22, index = 49
+enter sleeping...
+finish sleeping...
+Start child thread: client = 30, index = 47
+enter sleeping...
+finish sleeping...
+client 30 closed.
+client 29 closed.
+Start child thread: client = 11, index = 28
+enter sleeping...
+finish sleeping...
+client 31 closed.
+client 21 closed.
+client 12 closed.
+client 11 closed.
+client 9 closed.
+Start child thread: client = 5, index = 22
+enter sleeping...
+finish sleeping...
+Start child thread: client = 13, index = 30
+client 5 closed.
+enter sleeping...
+finish sleeping...
+client 13 closed.
+enter sleeping...
+finish sleeping...
+client 14 closed.
+Start child thread: client = 6, index = 23
+enter sleeping...
+finish sleeping...
+client 16 closed.
+Start child thread: client = 33, index = 53
+enter sleeping...
+finish sleeping...
+client 33 closed.
+Start child thread: client = 8, index = 25
+enter sleeping...
+finish sleeping...
+client 8 closed.
+Start child thread: client = 26, index = 43
+enter sleeping...
+finish sleeping...
+client 26 closed.
+Start child thread: client = 17, index = 34
+enter sleeping...
+finish sleeping...
+client 17 closed.
+client 6 closed.
+Start child thread: client = 4, index = 21
+enter sleeping...
+finish sleeping...
+client 4 closed.
+Start child thread: client = 28, index = 45
+enter sleeping...
+finish sleeping...
+Start child thread: client = 32, index = 52
+enter sleeping...
+finish sleeping...
+client_socket = 24
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+Start child thread: client = 18, index = 48
+enter sleeping...
+finish sleeping...
+client 18 closed.
+====== waiting for read request data =====
+client 32 closed.
+Start child thread: client = 4, index = 55
+enter sleeping...
+finish sleeping...
+client 22 closed.
+Start child thread: client = 15, index = 32
+enter sleeping...
+finish sleeping...
+client 4 closed.
+client 15 closed.
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+Start child thread: client = 9, index = 60
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+client 28 closed.
+client 9 clos----request 60: <html><body><code>glob = 51</code></body></html>
+----request 77: <html><body><code>glob = 54</code></body></html>
+----request 56: <html><body><code>glob = 57</code></body></html>
+----request 13: <html><body><code>glob = 58</code></body></html>
+----request 30: <html><body><code>glob = 59</code></body></html>
+----request 50: <html><body><code>glob = 60</code></body></html>
+----request 45: <html><body><code>glob = 63</code></body></html>
+----request 36: <html><body><code>glob = 61</code></body></html>
+----request 83: <html><body><code>glob = 62</code></body></html>
+----request 54: <html><body><code>glob = 64</code></body></html>
+----request 62: <html><body><code>glob = 65</code></body></html>
+----request 26: <html><body><code>glob = 66</code></body></html>
+----request 47: <html><body><code>glob = 67</code></body></html>
+----request 78: <html><body><code>glob = 68</code></body></html>
+----request 92: <html><body><code>glob = 69</code></body></html>
+----request 80: <html><body><code>glob = 70</code></body></html>
+----request 64: <html><body><code>glob = 71</code></body></html>
+----request 75: <html><body><code>glob = 73</code></body></html>
+----request 73: <html><body><code>glob = 76</code></body></html>
+----request 84: <html><body><code>glob = 74</code></body></html>
+----request 86: <html><body><code>glob = 72</code></body></html>
+----request 48: <html><body><code>glob = 75</code></body></html>
+----request 90: <html><body><code>glob = 78</code></body></html>
+----request 76: <html><body><code>glob = 77</code></body></html>
+----request 74: <html><body><code>glob = 79</code></body></html>
+ed.
+Start child thread: client = 24, index = 54
+enter sleeping...
+finish sleeping...
+Start child thread: client = 9, index = 63
+enter sleeping...
+finish sleeping...
+client 9 closed.
+client 24 closed.
+====== waiting for read request data =====
+Start child thread: client = 11, index = 64
+enter sleeping...
+finish sleeping...
+client 11 closed.
+Start child thread: client = 5, index = 56
+enter sleeping...
+finish sleeping...
+client 5 closed.
+Start child thread: client = 4, index = 61
+enter sleeping...
+finish sleeping...
+Start child thread: client = 8, index = 59
+enter sleeping...
+finish sleeping...
+client 8 closed.
+Start child thread: client = 7, index = 58
+enter sleeping...
+finish sleeping...
+client 7 closed.
+client 4 closed.
+Start child thread: client = 6, index = 57
+enter sleeping...
+finish sleeping...
+client 6 closed.
+Start child thread: client = 10, index = 62
+enter sleeping...
+finish sleeping...
+client 10 closed.
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+Start child thread: client = 12, index = 65
+enter sleeping...
+====== waiting for client's request =====
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+client 12 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 13
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 14
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 16
+====== waiting for client's request =====
+====== waiting for read request data =====
+Start child thread: client = 6, index = 68
+enter sleeping...
+finish sleeping...
+client 6 closed.
+Start child thread: client = 9, index = 71
+enter sleeping...
+finish sleeping...
+client 9 closed.
+Start child thread: client = 8, index = 70
+enter sleeping...
+finish sleeping...
+client 8 closed.
+Start child thread: client = 5, index = 67
+enter sleeping...
+finish sleeping...
+client 5 closed.
+Start child thread: client = 10, index = 72
+enter sleeping...
+finish sleeping...
+client 10 closed.
+Start child thread: client = 16, index = 78
+enter sleeping...
+finish sleeping...
+Start child thread: client = 12, index = 74
+enter sleeping...
+finish sleeping...
+client 12 closed.
+Start child thread: client = 15, index = 77
+enter sleeping...
+finish sleeping...
+client 15 closed.
+Start child thread: client = 7, index = 69
+enter sleeping...
+finish sleeping...
+client 7 closed.
+Start child thread: client = 14, index = 76
+enter sleeping...
+finish sleeping...
+client 14 closed.
+client 16 closed.
+Start child thread: client = 4, index = 66
+enter sleeping...
+finish sleeping...
+client 4 closed.
+Start child thread: client = 13, index = 75
+enter sleeping...
+finish sleeping...
+client 13 closed.
+Start child thread: client = 11, index = 73
+enter sleeping...
+finish sleeping...
+client 11 closed.
+client_socket = 17
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 13
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 14
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+Start child thread: client = 6, index = 82
+====== waiting for client's request =====
+enter sleeping...
+====== waiting for read request data =====
+finish sleeping...
+client_socket = 16
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 18
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 19
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+client 6 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 20
+Start child thread: client = 9, index = 85
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 21
+client 9 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+Start child thread: client = 14, index = 90
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 22
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 23
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 24
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 25
+====== waiting for client's request =====
+Start child thread: client = 17, index = 79
+====== waiting for read request data =====
+enter sleeping...
+finish sleeping...
+client_socket = 26
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 27
+client 17 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 17
+Start child thread: client = 4, index = 80
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 28
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 29
+client 4 closed.
+Start child thread: client = 10, index = 86
+====== waiting for client's request =====
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 30
+client 10 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+Start child thread: client = 11, index = 87
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 31
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 14
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 32
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 33
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =----request 122: <html><body><code>glob = 82</code></body></html>
+----request 82: <html><body><code>glob = 85</code></body></html>
+----request 135: <html><body><code>glob = 87</code></body></html>
+----request 91: <html><body><code>glob = 84</code></body></html>
+----request 88: <html><body><code>glob = 86</code></body></html>
+----request 120: <html><body><code>glob = 80</code></body></html>
+----request 106: <html><body><code>glob = 89</code></body></html>
+----request 137: <html><body><code>glob = 88</code></body></html>
+====
+====== waiting for read request data =====
+client_socket = 34
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 35
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 36
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 37
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 38
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 39
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 40
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 41
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 42
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 43
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 44
+====== waiting for client's request =====
+client 11 closed.
+====== waiting for read request data =====
+client_socket = 45
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 46
+Start child thread: client = 16, index = 92
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 47
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 48
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 49
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 50
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 51
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 52
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 16
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 53
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 54
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 55
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 56
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 57
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 58
+client 14 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 59
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 60
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 61
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 62
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 63
+====== waiting for client's request =====
+client 16 closed.
+Start child thread: client = 15, index = 91
+enter sleeping...
+finish sleeping...
+Start child thread: client = 22, index = 99
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 15
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 22
+====== waiting for client's request =====
+Start child thread: client = 7, index = 83
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 64
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 65
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 66
+====== waiti----request 52: <html><body><code>glob = 83</code></body></html>
+----request 119: <html><body><code>glob = 92</code></body></html>
+----request 85: <html><body><code>glob = 90</code></body></html>
+----request 139: <html><body><code>glob = 91</code></body></html>
+----request 97: <html><body><code>glob = 81</code></body></html>
+----request 110: <html><body><code>glob = 94</code></body></html>
+----request 124: <html><body><code>glob = 93</code></body></html>
+ng for client's request =====
+Start child thread: client = 10, index = 110
+Start child thread: client = 21, index = 97
+client 22 closed.
+enter sleeping...
+finish sleeping...
+Start child thread: client = 25, index = 102
+enter sleeping...
+finish sleeping...
+client 21 closed.
+client 25 closed.
+Start child thread: client = 13, index = 89
+enter sleeping...
+finish sleeping...
+Start child thread: client = 17, index = 105
+enter sleeping...
+finish sleeping...
+client 13 closed.
+Start child thread: client = 6, index = 95
+enter sleeping...
+finish sleeping...
+client 17 closed.
+Start child thread: client = 28, index = 106
+====== waiting for read request data =====
+client_socket = 67
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 13
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 17
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 21
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 25
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 68
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 69
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 70
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 71
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 72
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 73
+Start child thread: client = 9, index = 98
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 74
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 75
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 76
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 77
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 78
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 79
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 80
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 81
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 82
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 83
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 84
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 85
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 86
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 87
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 88
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 89
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 90
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 91
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 92
+====== waitin----request 146: <html><body><code>glob = 96</code></body></html>
+----request 87: <html><body><code>glob = 97</code></body></html>
+----request 103: <html><body><code>glob = 99</code></body></html>
+----request 156: <html><body><code>glob = 100</code></body></html>
+----request 192: <html><body><code>glob = 102</code></body></html>
+----request 141: <html><body><code>glob = 103</code></body></html>
+----request 149: <html><body><code>glob = 105</code></body></html>
+----request 136: <html><body><code>glob = 104</code></body></html>
+----request 96: <html><body><code>glob = 107</code></body></html>
+----request 123: <html><body><code>glob = 106</code></body></html>
+----request 147: <html><body><code>glob = 108</code></body></html>
+----request 160: <html><body><code>glob = 116</code></body></html>
+----request 79: <html><body><code>glob = 112</code></body></html>
+----request 193: <html><body><code>glob = 114</code></body></html>
+----request 118: <html><body><code>glob = 115</code></body></html>
+----request 166: <html><body><code>glob = 101</code></body></html>
+g for client's request =====
+====== waiting for read request data =====
+client_socket = 93
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 94
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 95
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 96
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 97
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 98
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 99
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 100
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 101
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 102
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 103
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 104
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 105
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 106
+====== waiting for client's request =====
+enter sleeping...
+finish sleeping...
+client 28 closed.
+Start child thread: client = 29, index = 107
+enter sleeping...
+finish sleeping...
+client 9 closed.
+client 29 closed.
+====== waiting for read request data =====
+Start child thread: client = 23, index = 100
+client 15 closed.
+enter sleeping...
+finish sleeping...
+client_socket = 107
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+Start child thread: client = 63, index = 146
+enter sleeping...
+finish sleeping...
+Start child thread: client = 15, index = 147
+enter sleeping...
+finish sleeping...
+client 23 closed.
+Start child thread: client = 32, index = 113
+enter sleeping...
+finish sleeping...
+client 15 closed.
+Start child thread: client = 4, index = 108
+enter sleeping...
+finish sleeping...
+Start child thread: client = 52, index = 134
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 28
+====== waiting for client's request =====
+====== waiting for read request data =====
+client 32 closed.
+Start child thread: client = 54, index = 137
+enter sleeping...
+finish sleeping...
+client 10 closed.
+Start child thread: client = 36, index = 118
+enter sleeping...
+finish sleeping...
+client 4 closed.
+client 6 closed.
+Start child thread: client = 14, index = 112
+enter sleeping...
+finish sleeping...
+client 7 closed.
+client 36 closed.
+client 54 closed.
+Start child thread: client = 24, index = 101
+enter sleeping...
+finish sleeping...
+Start child thread: client = 58, index = 141
+Start child thread: client = 41, index = 123
+enter sleeping...
+enter sleeping...
+Start child thread: client = 46, index = 128
+finish sleeping...
+enter sleeping...
+finish sleeping...
+client 24 closed.
+Start child thread: client = 30, index = 109
+enter sleeping...
+finish sleeping...
+client 30 closed.
+Start child thread: client = 33, index = 114
+enter sleeping...
+finish sleeping...
+Start child thread: client = 66, index = 151
+enter sleeping...
+finish sleeping...
+client 33 closed.
+client 66 closed.
+Start child thread: client = 38, index = 120
+enter sleeping...
+finish sleeping...
+Start child thread: client = 64, index = 149
+enter sleeping...
+finish sleeping...
+Start child thread: client = 12, index = 88
+enter sleeping...
+finish sleeping...
+client 12 closed.
+client 14 closed.
+client 64 closed.
+Start child thread: client = 42, index = 124
+enter sleeping...
+finish sleeping...
+Start child thread: client = 48, index = 130
+enter sleeping...
+finish sleeping...
+client 38 closed.
+Start child thread: client = 43, index = 125
+enter sleeping...
+finish sleeping...
+client 43 closed.
+Start child thread: c----request 184: <html><body><code>glob = 111</code></body></html>
+----request 129: <html><body><code>glob = 120</code></body></html>
+----request 40: <html><body><code>glob = 121</code></body></html>
+----request 128: <html><body><code>glob = 110</code></body></html>
+----request 183: <html><body><code>glob = 122</code></body></html>
+----request 190: <html><body><code>glob = 123</code></body></html>
+----request 95: <html><body><code>glob = 124</code></body></html>
+----request 177: <html><body><code>glob = 126</code></body></html>
+----request 162: <html><body><code>glob = 127</code></body></html>
+----request 181: <html><body><code>glob = 118</code></body></html>
+----request 197: <html><body><code>glob = 128</code></body></html>
+----request 171: <html><body><code>glob = 131</code></body></html>
+----request 126: <html><body><code>glob = 130</code></body></html>
+----request 175: <html><body><code>glob = 119</code></body></html>
+----request 134: <html><body><code>glob = 132</code></body></html>
+----request 170: <html><body><code>glob = 134</code></body></html>
+----request 212: <html><body><code>glob = 135</code></body></html>
+----request 100: <html><body><code>glob = 133</code></body></html>
+----request 198: <html><body><code>glob = 137</code></body></html>
+----request 167: <html><body><code>glob = 136</code></body></html>
+----request 132: <html><body><code>glob = 138</code></body></html>
+----request 98: <html><body><code>glob = 141</code></body></html>
+----request 186: <html><body><code>glob = 139</code></body></html>
+----request 70: <html><body><code>glob = 143</code></body></html>
+----request 104: <html><body><code>glob = 140</code></body></html>
+----request 180: <html><body><code>glob = 145</code></body></html>
+----request 61: <html><body><code>glob = 142</code></body></html>
+----request 148: <html><body><code>glob = 146</code></body></html>
+----request 163: <html><body><code>glob = 152</code></body></html>
+----request 121: <html><body><code>glob = 147</code></body></html>
+----request 125: <html><body><code>glob = 149</code></body></html>
+----request 131: <html><body><code>glob = 153</code></body></html>
+----request 196: <html><body><code>glob = 154</code></body></html>
+----request 127: <html><body><code>glob = 148</code></body></html>
+----request 159: <html><body><code>glob = 155</code></body></html>
+----request 111: <html><body><code>glob = 150</code></body></html>
+----request 140: <html><body><code>glob = 151</code></body></html>
+----request 178: <html><body><code>glob = 144</code></body></html>
+----request 200: <html><body><code>glob = 159</code></body></html>
+lient = 49, index = 131
+enter sleeping...
+finish sleeping...
+client 46 closed.
+finish sleeping...
+Start child thread: client = 53, index = 136
+enter sleeping...
+finish sleeping...
+client 49 closed.
+Start child thread: client = 55, index = 138
+enter sleeping...
+finish sleeping...
+client 55 closed.
+client 41 closed.
+Start child thread: client = 47, index = 129
+enter sleeping...
+finish sleeping...
+client 47 closed.
+Start child thread: client = 61, index = 144
+enter sleeping...
+finish sleeping...
+client 53 closed.
+client 61 closed.
+Start child thread: client = 16, index = 135
+enter sleeping...
+finish sleeping...
+client 63 closed.
+client 58 closed.
+client 52 closed.
+Start child thread: client = 25, index = 158
+enter sleeping...
+finish sleeping...
+client 16 closed.
+Start child thread: client = 65, index = 150
+enter sleeping...
+finish sleeping...
+client 65 closed.
+Start child thread: client = 17, index = 156
+enter sleeping...
+finish sleeping...
+client 17 closed.
+Start child thread: client = 80, index = 171
+enter sleeping...
+finish sleeping...
+client 80 closed.
+Start child thread: client = 87, index = 179
+enter sleeping...
+finish sleeping...
+Start child thread: client = 35, index = 117
+enter sleeping...
+finish sleeping...
+client 25 closed.
+Start child thread: client = 71, index = 162
+client 87 closed.
+Start child thread: client = 75, index = 166
+enter sleeping...
+finish sleeping...
+Start child thread: client = 103, index = 195
+enter sleeping...
+finish sleeping...
+client 42 closed.
+client 48 closed.
+client 103 closed.
+Start child thread: client = 72, index = 163
+Start child thread: client = 73, index = 164
+enter sleeping...
+enter sleeping...
+finish sleeping...
+finish sleeping...
+client 75 closed.
+enter sleeping...
+finish sleeping...
+client 72 closed.
+Start child thread: client = 6, index = 153
+enter sleeping...
+finish sleeping...
+client 6 closed.
+Start child thread: client = 95, index = 187
+enter sleeping...
+finish sleeping...
+Start child thread: client = 5, index = 81
+enter sleeping...
+finish sleeping...
+client 5 closed.
+Start child thread: client = 8, index = 84
+enter sleeping...
+finish sleeping...
+client 8 closed.
+client 35 closed.
+Start child thread: client = 18, index = 93
+enter sleeping...
+finish sleeping...
+Start child thread: client = 60, index = 143
+enter sleeping...
+finish sleeping...
+client 71 closed.
+Start child thread: client = 82, index = 174
+enter sleeping...
+finish sleeping...
+client 82 closed.
+Start child thread: client = 89, index = 181
+enter sleeping...
+finish sleeping...
+Start child thread: client = 78, index = 169
+enter sleeping...
+finish sleeping...
+client 78 closed.
+Start child thread: client = 86, index = 178
+enter sleeping...
+finish sleeping...
+client 18 closed.
+client 86 closed.
+Start child thread: client = 20, index = 96
+enter sleeping...
+finish sleeping...
+Start child thread: client = 101, index = 193
+enter sleeping...
+finish sleeping...
+client 20 closed.
+client 95 closed.
+Start child thread: client = 107, index = 199
+enter sleeping...
+finish sleeping...
+Start child thread: client = 22, index = 148
+enter sleeping...
+finish sleeping...
+client 107 closed.
+client 22 closed.
+client 89 closed.
+Start child thread: client = 7, index = 154
+enter sleeping...
+finish sleeping...
+client 7 closed.
+Start child thread: client = 76, index = 167
+enter sleeping...
+finish sleeping...
+client 101 closed.
+client 73 closed.
+Start child thread: client = 81, index = 172
+enter sleeping...
+finish sleeping...
+client 76 closed.
+Start child thread: client = 83, index = 175
+enter sleeping...
+finish sleeping...
+client 83 closed.
+Start child thread: client = 99, index = 191
+enter sleeping...
+finish sleeping...
+client 99 closed.
+Start child thread: client = 68, index = 159
+enter sleeping...
+finish sleeping...
+client 81 closed.
+Start child thread: client = 96, index = 188
+enter sleeping...
+finish sleeping...
+Start child thread: client = 98, index = 190
+enter sleeping...
+finish sleeping...
+client 98 closed.
+client 60 closed.
+Start child thread: client = 62, index = 145
+enter sleeping...
+finish sleeping...
+client 96 closed.
+Start child th----request 155: <html><body><code>glob = 160</code></body></html>
+----request 187: <html><body><code>glob = 161</code></body></html>
+----request 191: <html><body><code>glob = 165</code></body></html>
+----request 46: <html><body><code>glob = 163</code></body></html>
+----request 114: <html><body><code>glob = 158</code></body></html>
+----request 138: <html><body><code>glob = 169</code></body></html>
+----request 211: <html><body><code>glob = 168</code></body></html>
+----request 201: <html><body><code>glob = 170</code></body></html>
+----request 173: <html><body><code>glob = 166</code></body></html>
+----request 179: <html><body><code>glob = 175</code></body></html>
+----request 109: <html><body><code>glob = 167</code></body></html>
+----request 94: <html><body><code>glob = 176</code></body></html>
+----request 182: <html><body><code>glob = 172</code></body></html>
+----request 194: <html><body><code>glob = 162</code></body></html>
+----request 116: <html><body><code>glob = 177</code></body></html>
+----request 133: <html><body><code>glob = 179</code></body></html>
+----request 115: <html><body><code>glob = 174</code></body></html>
+----request 151: <html><body><code>glob = 98</code></body></html>
+----request 208: <html><body><code>glob = 171</code></body></html>
+----request 102: <html><body><code>glob = 180</code></body></html>
+----request 99: <html><body><code>glob = 95</code></body></html>
+----request 185: <html><body><code>glob = 181</code></body></html>
+----request 105: <html><body><code>glob = 182</code></body></html>
+----request 107: <html><body><code>glob = 109</code></body></html>
+----request 157: <html><body><code>glob = 125</code></body></html>
+----request 143: <html><body><code>glob = 185</code></body></html>
+----request 210: <html><body><code>glob = 173</code></body></html>
+----request 142: <html><body><code>glob = 129</code></body></html>
+----request 93: <html><body><code>glob = 113</code></body></html>
+----request 165: <html><body><code>glob = 187</code></body></html>
+----request 112: <html><body><code>glob = 188</code></body></html>
+----request 154: <html><body><code>glob = 189</code></body></html>
+----request 164: <html><body><code>glob = 186</code></body></html>
+----request 207: <html><body><code>glob = 192</code></body></html>
+----request 144: <html><body><code>glob = 184</code></body></html>
+----request 176: <html><body><code>glob = 190</code></body></html>
+----request 199: <html><body><code>glob = 157</code></body></html>
+----request 206: <html><body><code>glob = 156</code></body></html>
+----request 169: <html><body><code>glob = 194</code></body></html>
+----request 172: <html><body><code>glob = 195</code></body></html>
+----request 174: <html><body><code>glob = 197</code></body></html>
+----request 195: <html><body><code>glob = 196</code></body></html>
+----request 101: <html><body><code>glob = 117</code></body></html>
+----request 152: <html><body><code>glob = 178</code></body></html>
+----request 220: <html><body><code>glob = 191</code></body></html>
+----request 72: <html><body><code>glob = 193</code></body></html>
+read: client = 69, index = 160
+enter sleeping...
+finish sleeping...
+Start child thread: client = 19, index = 94
+enter sleeping...
+finish sleeping...
+client 19 closed.
+Start child thread: client = 27, index = 104
+enter sleeping...
+finish sleeping...
+client 27 closed.
+Start child thread: client = 77, index = 168
+enter sleeping...
+finish sleeping...
+Start child thread: client = 11, index = 115
+enter sleeping...
+finish sleeping...
+client 11 closed.
+client 77 closed.
+Start child thread: client = 37, index = 119
+enter sleeping...
+finish sleeping...
+Start child thread: client = 84, index = 176
+enter sleeping...
+finish sleeping...
+client 37 closed.
+Start child thread: client = 40, index = 122
+enter sleeping...
+finish sleeping...
+client 84 closed.
+Start child thread: client = 100, index = 192
+enter sleeping...
+finish sleeping...
+Start child thread: client = 106, index = 198
+enter sleeping...
+finish sleeping...
+client 100 closed.
+client 106 closed.
+Start child thread: client = 59, index = 142
+enter sleeping...
+finish sleeping...
+Start child thread: client = 28, index = 200
+enter sleeping...
+finish sleeping...
+client 28 closed.
+Start child thread: client = 67, index = 152
+enter sleeping...
+finish sleeping...
+client 40 closed.
+Start child thread: client = 45, index = 127
+enter sleeping...
+finish sleeping...
+client 45 closed.
+Start child thread: client = 51, index = 133
+enter sleeping...
+finish sleeping...
+client 62 closed.
+client 59 closed.
+Start child thread: client = 26, index = 103
+enter sleeping...
+finish sleeping...
+client 26 closed.
+Start child thread: client = 31, index = 111
+enter sleeping...
+finish sleeping...
+client 31 closed.
+Start child thread: client = 34, index = 116
+enter sleeping...
+finish sleeping...
+client 69 closed.
+client 67 closed.
+Start child thread: client = 91, index = 183
+enter sleeping...
+finish sleeping...
+client 51 closed.
+Start child thread: client = 57, index = 140
+enter sleeping...
+finish sleeping...
+Start child thread: client = 88, index = 180
+enter sleeping...
+finish sleeping...
+client 88 closed.
+Start child thread: client = 104, index = 196
+enter sleeping...
+finish sleeping...
+client 104 closed.
+client 91 closed.
+client 68 closed.
+client 57 closed.
+Start child thread: client = 13, index = 155
+enter sleeping...
+finish sleeping...
+Start child thread: client = 90, index = 182
+enter sleeping...
+finish sleeping...
+client 13 closed.
+client 90 closed.
+Start child thread: client = 21, index = 157
+enter sleeping...
+finish sleeping...
+client 21 closed.
+Start child thread: client = 70, index = 161
+enter sleeping...
+finish sleeping...
+client 70 closed.
+Start child thread: client = 74, index = 165
+enter sleeping...
+finish sleeping...
+Start child thread: client = 9, index = 173
+enter sleeping...
+finish sleeping...
+client 9 closed.
+Start child thread: client = 97, index = 189
+enter sleeping...
+finish sleeping...
+client 97 closed.
+Start child thread: client = 105, index = 197
+enter sleeping...
+finish sleeping...
+client 105 closed.
+Start child thread: client = 94, index = 186
+enter sleeping...
+finish sleeping...
+client 94 closed.
+client 74 closed.
+client 34 closed.
+Start child thread: client = 39, index = 121
+enter sleeping...
+finish sleeping...
+client 39 closed.
+Start child thread: client = 44, index = 126
+enter sleeping...
+finish sleeping...
+client 44 closed.
+Start child thread: client = 50, index = 132
+enter sleeping...
+finish sleeping...
+client 50 closed.
+Start child thread: client = 56, index = 139
+enter sleeping...
+finish sleeping...
+client 56 closed.
+Start child thread: client = 92, index = 184
+enter sleeping...
+finish sleeping...
+client 92 closed.
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 13
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 14
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 16
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 17
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 18
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 19
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 20
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 21
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 22
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 23
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 24
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 25
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 26
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 27
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 28
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 29
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 30
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 31
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 32
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 33
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 34
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 35
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 36
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 37
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 38
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 39
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 40
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 41
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 42
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 43
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 44
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 45
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 46
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 47
+====== waiting for client's request =====
+====== waiting for read request data =----request 232: <html><body><code>glob = 198</code></body></html>
+----request 243: <html><body><code>glob = 204</code></body></html>
+----request 158: <html><body><code>glob = 199</code></body></html>
+----request 250: <html><body><code>glob = 203</code></body></html>
+----request 233: <html><body><code>glob = 212</code></body></html>
+----request 234: <html><body><code>glob = 211</code></body></html>
+----request 226: <html><body><code>glob = 200</code></body></html>
+----request 89: <html><body><code>glob = 222</code></body></html>
+----request 244: <html><body><code>glob = 218</code></body></html>
+====
+client_socket = 48
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 49
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 50
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 51
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 52
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 53
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 54
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 55
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 56
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 57
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 58
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 59
+Start child thread: client = 25, index = 222
+enter sleeping...
+finish sleeping...
+client 25 closed.
+Start child thread: client = 11, index = 208
+enter sleeping...
+finish sleeping...
+Start child thread: client = 14, index = 211
+enter sleeping...
+finish sleeping...
+client 14 closed.
+Start child thread: client = 20, index = 217
+enter sleeping...
+finish sleeping...
+client 20 closed.
+Start child thread: client = 51, index = 248
+enter sleeping...
+finish sleeping...
+client 51 closed.
+Start child thread: client = 27, index = 224
+enter sleeping...
+finish sleeping...
+client 27 closed.
+Start child thread: client = 35, index = 232
+enter sleeping...
+finish sleeping...
+client 35 closed.
+Start child thread: client = 43, index = 240
+enter sleeping...
+finish sleeping...
+client 43 closed.
+Start child thread: client = 57, index = 254
+enter sleeping...
+finish sleeping...
+client 57 closed.
+Start child thread: client = 10, index = 201
+enter sleeping...
+finish sleeping...
+client 10 closed.
+Start child thread: client = 4, index = 202
+enter sleeping...
+finish sleeping...
+Start child thread: client = 7, index = 205
+enter sleeping...
+finish sleeping...
+client 11 closed.
+Start child thread: client = 13, index = 210
+enter sleeping...
+finish sleeping...
+client 13 closed.
+Start child thread: client = 19, index = 216
+enter sleeping...
+finish sleeping...
+Start child thread: client = 24, index = 221
+enter sleeping...
+finish sleeping...
+client 24 closed.
+client 19 closed.
+client 7 closed.
+client 4 closed.
+Start child thread: client = 26, index = 223
+enter sleeping...
+finish sleeping...
+client 26 closed.
+Start child thread: client = 42, index = 239
+enter sleeping...
+finish sleeping...
+client 42 closed.
+Start child thread: client = 34, index = 231
+enter sleeping...
+finish sleeping...
+client 34 closed.
+Start child thread: client = 50, index = 247
+enter sleeping...
+finish sleeping...
+client 50 closed.
+Start child thread: client = 55, index = 252
+enter sleeping...
+finish sleeping...
+client 55 closed.
+Start child thread: client = 17, index = 214
+enter sleeping...
+finish sleeping...
+client 17 closed.
+Start child thread: client = 23, index = 220
+enter sleeping...
+finish sleeping...
+client 23 closed.
+Start child thread: client = 47, index = 244
+enter sleeping...
+finish sleeping...
+client 47 closed.
+Start child thread: client = 5, index = 203
+enter sleeping...
+finish sleeping...
+client 5 closed.
+Start child thread: client = 9, index = 207
+enter sleeping...
+finish sleeping...
+Start child thread: client = 53, index = 250
+enter sleeping...
+finish sleeping...
+client 53 closed.
+Start child thread: client = 6, index = 204
+enter sleeping...
+finish sleeping...
+Start child thread: client = 18, index = 215
+enter sleeping...
+finish sleeping...
+client 6 closed.
+client 18 closed.
+Start child thread: client = 8, index = 206
+enter sleeping...
+finish sleeping...
+Start child thread: client = 45, index = 242
+enter sleeping...
+finish slee----request 150: <html><body><code>glob = 213</code></body></html>
+----request 227: <html><body><code>glob = 234</code></body></html>
+----request 249: <html><body><code>glob = 229</code></body></html>
+----request 213: <html><body><code>glob = 225</code></body></html>
+----request 305: <html><body><code>glob = 235</code></body></html>
+----request 242: <html><body><code>glob = 236</code></body></html>
+----request 239: <html><body><code>glob = 238</code></body></html>
+----request 219: <html><body><code>glob = 237</code></body></html>
+----request 273: <html><body><code>glob = 223</code></body></html>
+----request 289: <html><body><code>glob = 230</code></body></html>
+----request 247: <html><body><code>glob = 239</code></body></html>
+----request 246: <html><body><code>glob = 219</code></body></html>
+----request 300: <html><body><code>glob = 206</code></body></html>
+----request 253: <html><body><code>glob = 240</code></body></html>
+----request 218: <html><body><code>glob = 215</code></body></html>
+----request 228: <html><body><code>glob = 228</code></body></html>
+----request 257: <html><body><code>glob = 220</code></body></html>
+----request 295: <html><body><code>glob = 202</code></body></html>
+----request 240: <html><body><code>glob = 233</code></body></html>
+----request 256: <html><body><code>glob = 214</code></body></html>
+----request 224: <html><body><code>glob = 224</code></body></html>
+----request 266: <html><body><code>glob = 231</code></body></html>
+----request 252: <html><body><code>glob = 217</code></body></html>
+----request 203: <html><body><code>glob = 245</code></body></html>
+----request 238: <html><body><code>glob = 248</code></body></html>
+----request 237: <html><body><code>glob = 243</code></body></html>
+----request 304: <html><body><code>glob = 246</code></body></html>
+----request 251: <html><body><code>glob = 247</code></body></html>
+----request 259: <html><body><code>glob = 244</code></body></html>
+----request 248: <html><body><code>glob = 232</code></body></html>
+----request 286: <html><body><code>glob = 216</code></body></html>
+----request 223: <html><body><code>glob = 226</code></body></html>
+----request 189: <html><body><code>glob = 183</code></body></html>
+----request 221: <html><body><code>glob = 201</code></body></html>
+----request 229: <html><body><code>glob = 241</code></body></html>
+----request 214: <html><body><code>glob = 242</code></body></html>
+----request 117: <html><body><code>glob = 249</code></body></html>
+----request 204: <html><body><code>glob = 251</code></body></html>
+----request 145: <html><body><code>glob = 252</code></body></html>
+----request 108: <html><body><code>glob = 250</code></body></html>
+----request 113: <html><body><code>glob = 164</code></body></html>
+----request 217: <html><body><code>glob = 254</code></body></html>
+----request 188: <html><body><code>glob = 255</code></body></html>
+----request 254: <html><body><code>glob = 257</code></body></html>
+----request 274: <html><body><code>glob = 253</code></body></html>
+ping...
+Start child thread: client = 21, index = 218
+enter sleeping...
+finish sleeping...
+client 21 closed.
+client 45 closed.
+Start child thread: client = 28, index = 225
+enter sleeping...
+finish sleeping...
+client 28 closed.
+Start child thread: client = 58, index = 255
+enter sleeping...
+finish sleeping...
+client 58 closed.
+Start child thread: client = 49, index = 246
+enter sleeping...
+finish sleeping...
+client 49 closed.
+Start child thread: client = 33, index = 230
+enter sleeping...
+finish sleeping...
+client 33 closed.
+Start child thread: client = 41, index = 238
+enter sleeping...
+finish sleeping...
+client 41 closed.
+client 8 closed.
+Start child thread: client = 12, index = 209
+enter sleeping...
+finish sleeping...
+Start child thread: client = 59, index = 256
+enter sleeping...
+finish sleeping...
+client 59 closed.
+Start child thread: client = 31, index = 228
+enter sleeping...
+finish sleeping...
+Start child thread: client = 15, index = 212
+enter sleeping...
+finish sleeping...
+Start child thread: client = 30, index = 227
+enter sleeping...
+finish sleeping...
+client 30 closed.
+client 31 closed.
+Start child thread: client = 39, index = 236
+enter sleeping...
+finish sleeping...
+client 39 closed.
+client 15 closed.
+client 12 closed.
+Start child thread: client = 37, index = 234
+enter sleeping...
+finish sleeping...
+client 37 closed.
+client 9 closed.
+Start child thread: client = 16, index = 213
+enter sleeping...
+finish sleeping...
+client 16 closed.
+Start child thread: client = 22, index = 219
+enter sleeping...
+finish sleeping...
+client 22 closed.
+Start child thread: client = 56, index = 253
+enter sleeping...
+finish sleeping...
+client 56 closed.
+Start child thread: client = 48, index = 245
+enter sleeping...
+finish sleeping...
+client 48 closed.
+Start child thread: client = 32, index = 229
+enter sleeping...
+finish sleeping...
+Start child thread: client = 54, index = 251
+enter sleeping...
+finish sleeping...
+client 32 closed.
+client 54 closed.
+Start child thread: client = 36, index = 233
+enter sleeping...
+finish sleeping...
+client 36 closed.
+Start child thread: client = 40, index = 237
+enter sleeping...
+finish sleeping...
+client 40 closed.
+Start child thread: client = 79, index = 170
+enter sleeping...
+finish sleeping...
+client 79 closed.
+Start child thread: client = 85, index = 177
+enter sleeping...
+finish sleeping...
+client 85 closed.
+Start child thread: client = 102, index = 194
+enter sleeping...
+finish sleeping...
+client 102 closed.
+Start child thread: client = 93, index = 185
+enter sleeping...
+finish sleeping...
+client 93 closed.
+Start child thread: client = 46, index = 243
+enter sleeping...
+finish sleeping...
+client 46 closed.
+Start child thread: client = 29, index = 226
+enter sleeping...
+finish sleeping...
+client 29 closed.
+Start child thread: client = 38, index = 235
+enter sleeping...
+finish sleeping...
+client 38 closed.
+Start child thread: client = 52, index = 249
+enter sleeping...
+finish sleeping...
+Start child thread: client = 44, index = 241
+enter sleeping...
+finish sleeping...
+client 44 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+client 52 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 13
+----request 263: <html><body><code>glob = 256</code></body></html>
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 14
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 16
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 17
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 18
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 19
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 20
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 21
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 22
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 23
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 24
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 25
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 26
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 27
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 28
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 29
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 30
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 31
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 32
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 33
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 34
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 35
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 36
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 37
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 38
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 39
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 40
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 41
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 42
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 43
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 44
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 45
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 46
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 47
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 48
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 49
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 50
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 51
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 52
+====== waiting for client's request ====----request 230: <html><body><code>glob = 258</code></body></html>
+----request 314: <html><body><code>glob = 260</code></body></html>
+----request 260: <html><body><code>glob = 261</code></body></html>
+----request 225: <html><body><code>glob = 259</code></body></html>
+----request 231: <html><body><code>glob = 266</code></body></html>
+----request 290: <html><body><code>glob = 265</code></body></html>
+----request 296: <html><body><code>glob = 267</code></body></html>
+----request 323: <html><body><code>glob = 269</code></body></html>
+----request 317: <html><body><code>glob = 263</code></body></html>
+----request 306: <html><body><code>glob = 268</code></body></html>
+----request 281: <html><body><code>glob = 272</code></body></html>
+----request 338: <html><body><code>glob = 273</code></body></html>
+----request 241: <html><body><code>glob = 274</code></body></html>
+----request 311: <html><body><code>glob = 270</code></body></html>
+----request 299: <html><body><code>glob = 275</code></body></html>
+----request 280: <html><body><code>glob = 280</code></body></html>
+----request 283: <html><body><code>glob = 278</code></body></html>
+=
+====== waiting for read request data =====
+client_socket = 53
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 54
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 55
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 56
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 57
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 58
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 59
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 60
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 61
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 62
+====== waiting for client's request =====
+Start child thread: client = 32, index = 285
+enter sleeping...
+finish sleeping...
+Start child thread: client = 36, index = 289
+enter sleeping...
+finish sleeping...
+client 36 closed.
+Start child thread: client = 44, index = 297
+enter sleeping...
+finish sleeping...
+Start child thread: client = 30, index = 283
+enter sleeping...
+finish sleeping...
+client 44 closed.
+Start child thread: client = 28, index = 281
+enter sleeping...
+finish sleeping...
+client 28 closed.
+Start child thread: client = 52, index = 305
+enter sleeping...
+finish sleeping...
+client 52 closed.
+client 30 closed.
+Start child thread: client = 37, index = 290
+enter sleeping...
+finish sleeping...
+client 32 closed.
+client 37 closed.
+Start child thread: client = 29, index = 282
+enter sleeping...
+finish sleeping...
+Start child thread: client = 40, index = 293
+enter sleeping...
+finish sleeping...
+Start child thread: client = 22, index = 275
+enter sleeping...
+finish sleeping...
+client 29 closed.
+client 40 closed.
+Start child thread: client = 34, index = 287
+enter sleeping...
+finish sleeping...
+client 34 closed.
+Start child thread: client = 42, index = 295
+enter sleeping...
+finish sleeping...
+client 22 closed.
+Start child thread: client = 45, index = 298
+enter sleeping...
+finish sleeping...
+client 42 closed.
+Start child thread: client = 26, index = 279
+enter sleeping...
+finish sleeping...
+Start child thread: client = 21, index = 274
+enter sleeping...
+finish sleeping...
+client 45 closed.
+Start child thread: client = 53, index = 306
+enter sleeping...
+finish sleeping...
+client 21 closed.
+client 53 closed.
+Start child thread: client = 16, index = 269
+enter sleeping...
+finish sleeping...
+Start child thread: client = 24, index = 277
+enter sleeping...
+finish sleeping...
+client 24 closed.
+Start child thread: client = 50, index = 303
+enter sleeping...
+finish sleeping...
+client 50 closed.
+client 16 closed.
+Start child thread: client = 61, index = 314
+enter sleeping...
+finish sleeping...
+client 61 closed.
+Start child thread: client = 9, index = 262
+enter sleeping...
+finish sleeping...
+Start child thread: client = 60, index = 313
+enter sleeping...
+finish sleeping...
+client 60 closed.
+Start child thread: client = 15, index = 268
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 63
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 16
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 21
+Start child thread: client = 31, index = 284
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 22
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 24
+client 31 closed.
+====== waiting for clien----request 326: <html><body><code>glob = 276</code></body></html>
+----request 322: <html><body><code>glob = 277</code></body></html>
+----request 312: <html><body><code>glob = 283</code></body></html>
+----request 282: <html><body><code>glob = 271</code></body></html>
+----request 255: <html><body><code>glob = 284</code></body></html>
+----request 209: <html><body><code>glob = 281</code></body></html>
+----request 130: <html><body><code>glob = 289</code></body></html>
+----request 276: <html><body><code>glob = 290</code></body></html>
+----request 235: <html><body><code>glob = 282</code></body></html>
+----request 330: <html><body><code>glob = 295</code></body></html>
+----request 308: <html><body><code>glob = 286</code></body></html>
+----request 265: <html><body><code>glob = 296</code></body></html>
+----request 216: <html><body><code>glob = 294</code></body></html>
+----request 318: <html><body><code>glob = 292</code></body></html>
+----request 279: <html><body><code>glob = 298</code></body></html>
+----request 202: <html><body><code>glob = 299</code></body></html>
+----request 277: <html><body><code>glob = 300</code></body></html>
+----request 333: <html><body><code>glob = 297</code></body></html>
+----request 205: <html><body><code>glob = 301</code></body></html>
+----request 288: <html><body><code>glob = 304</code></body></html>
+----request 303: <html><body><code>glob = 291</code></body></html>
+----request 245: <html><body><code>glob = 306</code></body></html>
+----request 337: <html><body><code>glob = 305</code></body></html>
+----request 264: <html><body><code>glob = 308</code></body></html>
+----request 310: <html><body><code>glob = 309</code></body></html>
+----request 334: <html><body><code>glob = 310</code></body></html>
+----request 336: <html><body><code>glob = 303</code></body></html>
+t's request =====
+====== waiting for read request data =====
+client_socket = 28
+====== waiting for client's request =====
+Start child thread: client = 33, index = 286
+enter sleeping...
+finish sleeping...
+client 33 closed.
+Start child thread: client = 41, index = 294
+enter sleeping...
+finish sleeping...
+client 9 closed.
+client 41 closed.
+Start child thread: client = 38, index = 291
+enter sleeping...
+finish sleeping...
+client 38 closed.
+Start child thread: client = 23, index = 276
+enter sleeping...
+finish sleeping...
+Start child thread: client = 48, index = 301
+enter sleeping...
+finish sleeping...
+client 48 closed.
+client 23 closed.
+Start child thread: client = 46, index = 299
+enter sleeping...
+finish sleeping...
+client 46 closed.
+Start child thread: client = 54, index = 307
+enter sleeping...
+finish sleeping...
+client 54 closed.
+Start child thread: client = 17, index = 270
+enter sleeping...
+finish sleeping...
+Start child thread: client = 6, index = 259
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client 26 closed.
+client_socket = 29
+Start child thread: client = 58, index = 311
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 23
+====== waiting for client's request =====
+Start child thread: client = 49, index = 302
+enter sleeping...
+finish sleeping...
+client 58 closed.
+Start child thread: client = 20, index = 273
+enter sleeping...
+finish sleeping...
+client 20 closed.
+Start child thread: client = 14, index = 267
+enter sleeping...
+finish sleeping...
+Start child thread: client = 56, index = 309
+enter sleeping...
+finish sleeping...
+client 56 closed.
+client 49 closed.
+Start child thread: client = 18, index = 271
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 17
+====== waiting for client's request =====
+Start child thread: client = 57, index = 310
+enter sleeping...
+finish sleeping...
+client 17 closed.
+Start child thread: client = 10, index = 263
+enter sleeping...
+finish sleeping...
+client 15 closed.
+client 10 closed.
+Start child thread: client = 11, index = 264
+enter sleeping...
+finish sleeping...
+client 18 closed.
+client 14 closed.
+Start child thread: client = 12, index = 265
+enter sleeping...
+finish sleeping...
+Start child thread: client = 7, index = 260
+enter sleeping...
+finish sleeping...
+client 7 closed.
+client 6 closed.
+Start child thread: client = 16, index = 319
+enter sleeping...
+finish sleeping...
+client 16 closed.
+Start child thread: client = 63, index = 316
+enter sleeping...
+finish sleeping...
+Start child thread: client = 15, index = 318
+enter sleeping...
+finish sleeping...
+client 15 closed.
+client 11 closed.
+Start child thread: client = 62, index = 315
+enter sleeping...
+finish sleeping...
+client 62 closed.
+client 12 closed.
+Start child thread: client = 5, index = 258
+enter sleeping...
+finish sleeping...
+client 57 closed.
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+Start child thread: client = 21, index = 320
+enter sleeping...
+finish sleeping...
+Start child thread: client = 35, index = 288
+enter sleeping...
+finish sleeping...
+client 35 closed.
+Start child thread: client = 39, index = 292
+enter sleeping...
+finish sleeping...
+client 39 closed.
+client 5 closed.
+Start child thread: client = 55, index = 308
+enter sleeping...
+finish sleeping...
+client 55 closed.
+Start child thread: client = 47, index = 300
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 5
+client 47 closed.
+Start child thread: client = 8, index = 261
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+client 8 closed.
+client 21 closed.
+Start child thread: client = 9, index = 317
+enter sleeping...
+finish sleeping...
+Start child thread: client = 24, index = 322
+enter sleeping...
+finish sleeping...
+client 24 closed.
+Start child thread: client = 27, index = 280
+enter sleeping...
+finish sleeping...
+client 9 closed.
+client 63 closed.
+Start child thread: client = 4,----request 291: <html><body><code>glob = 312</code></body></html>
+----request 315: <html><body><code>glob = 287</code></body></html>
+----request 270: <html><body><code>glob = 264</code></body></html>
+----request 161: <html><body><code>glob = 315</code></body></html>
+----request 309: <html><body><code>glob = 313</code></body></html>
+----request 284: <html><body><code>glob = 262</code></body></html>
+----request 324: <html><body><code>glob = 314</code></body></html>
+----request 294: <html><body><code>glob = 288</code></body></html>
+----request 320: <html><body><code>glob = 279</code></body></html>
+----request 316: <html><body><code>glob = 307</code></body></html>
+----request 292: <html><body><code>glob = 293</code></body></html>
+----request 302: <html><body><code>glob = 316</code></body></html>
+----request 329: <html><body><code>glob = 320</code></body></html>
+----request 332: <html><body><code>glob = 321</code></body></html>
+----request 328: <html><body><code>glob = 319</code></body></html>
+----request 319: <html><body><code>glob = 322</code></body></html>
+----request 298: <html><body><code>glob = 311</code></body></html>
+----request 293: <html><body><code>glob = 323</code></body></html>
+----request 275: <html><body><code>glob = 324</code></body></html>
+----request 287: <html><body><code>glob = 285</code></body></html>
+----request 258: <html><body><code>glob = 325</code></body></html>
+----request 267: <html><body><code>glob = 302</code></body></html>
+----request 325: <html><body><code>glob = 317</code></body></html>
+----request 269: <html><body><code>glob = 318</code></body></html>
+----request 272: <html><body><code>glob = 327</code></body></html>
+----request 331: <html><body><code>glob = 328</code></body></html>
+----request 345: <html><body><code>glob = 331</code></body></html>
+----request 349: <html><body><code>glob = 329</code></body></html>
+----request 327: <html><body><code>glob = 332</code></body></html>
+----request 168: <html><body><code>glob = 209</code></body></html>
+----request 236: <html><body><code>glob = 208</code></body></html>
+----request 262: <html><body><code>glob = 205</code></body></html>
+----request 215: <html><body><code>glob = 210</code></body></html>
+----request 153: <html><body><code>glob = 221</code></body></html>
+----request 261: <html><body><code>glob = 227</code></body></html>
+----request 222: <html><body><code>glob = 207</code></body></html>
+----request 313: <html><body><code>glob = 333</code></body></html>
+----request 352: <html><body><code>glob = 334</code></body></html>
+----request 271: <html><body><code>glob = 335</code></body></html>
+----request 339: <html><body><code>glob = 336</code></body></html>
+ index = 257
+enter sleeping...
+finish sleeping...
+client 4 closed.
+Start child thread: client = 28, index = 323
+enter sleeping...
+finish sleeping...
+client 28 closed.
+client 27 closed.
+Start child thread: client = 17, index = 326
+enter sleeping...
+finish sleeping...
+Start child thread: client = 22, index = 321
+enter sleeping...
+finish sleeping...
+client 17 closed.
+client 22 closed.
+Start child thread: client = 5, index = 328
+enter sleeping...
+finish sleeping...
+client 5 closed.
+Start child thread: client = 29, index = 324
+enter sleeping...
+finish sleeping...
+client 29 closed.
+Start child thread: client = 23, index = 325
+enter sleeping...
+finish sleeping...
+client 23 closed.
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+Start child thread: client = 25, index = 278
+enter sleeping...
+finish sleeping...
+client 25 closed.
+Start child thread: client = 19, index = 272
+enter sleeping...
+finish sleeping...
+client 19 closed.
+Start child thread: client = 13, index = 266
+enter sleeping...
+finish sleeping...
+client 13 closed.
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+Start child thread: client = 43, index = 296
+enter sleeping...
+finish sleeping...
+client 43 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+Start child thread: client = 7, index = 329
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+client 7 closed.
+Start child thread: client = 4, index = 330
+enter sleeping...
+finish sleeping...
+client 4 closed.
+Start child thread: client = 9, index = 333
+enter sleeping...
+finish sleeping...
+client 9 closed.
+Start child thread: client = 10, index = 334
+enter sleeping...
+finish sleeping...
+client 10 closed.
+====== waiting for read request data =====
+Start child thread: client = 8, index = 332
+enter sleeping...
+finish sleeping...
+client 8 closed.
+Start child thread: client = 5, index = 331
+enter sleeping...
+finish sleeping...
+client 5 closed.
+Start child thread: client = 6, index = 327
+enter sleeping...
+finish sleeping...
+Start child thread: client = 11, index = 335
+enter sleeping...
+finish sleeping...
+client 11 closed.
+client 6 closed.
+Start child thread: client = 51, index = 304
+enter sleeping...
+finish sleeping...
+client 51 closed.
+Start child thread: client = 59, index = 312
+enter sleeping...
+finish sleeping...
+client 59 closed.
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 13
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 14
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 1----request 307: <html><body><code>glob = 338</code></body></html>
+----request 297: <html><body><code>glob = 326</code></body></html>
+----request 379: <html><body><code>glob = 337</code></body></html>
+----request 368: <html><body><code>glob = 340</code></body></html>
+----request 342: <html><body><code>glob = 341</code></body></html>
+----request 378: <html><body><code>glob = 339</code></body></html>
+----request 301: <html><body><code>glob = 343</code></body></html>
+----request 348: <html><body><code>glob = 346</code></body></html>
+----request 364: <html><body><code>glob = 345</code></body></html>
+----request 335: <html><body><code>glob = 348</code></body></html>
+----request 346: <html><body><code>glob = 349</code></body></html>
+----request 340: <html><body><code>glob = 347</code></body></html>
+----request 369: <html><body><code>glob = 350</code></body></html>
+----request 389: <html><body><code>glob = 344</code></body></html>
+----request 278: <html><body><code>glob = 352</code></body></html>
+----request 377: <html><body><code>glob = 351</code></body></html>
+6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 17
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 18
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 19
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 20
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 21
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 22
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 23
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 24
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 25
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 26
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 27
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 28
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 29
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 30
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 31
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 32
+Start child thread: client = 31, index = 363
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 33
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 34
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 35
+client 31 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 31
+Start child thread: client = 20, index = 352
+enter sleeping...
+finish sleeping...
+client 20 closed.
+Start child thread: client = 28, index = 360
+enter sleeping...
+finish sleeping...
+client 28 closed.
+Start child thread: client = 21, index = 353
+enter sleeping...
+finish sleeping...
+client 21 closed.
+Start child thread: client = 19, index = 351
+enter sleeping...
+finish sleeping...
+client 19 closed.
+Start child thread: client = 26, index = 358
+enter sleeping...
+finish sleeping...
+client 26 closed.
+Start child thread: client = 15, index = 347
+enter sleeping...
+finish sleeping...
+Start child thread: client = 35, index = 367
+enter sleeping...
+finish sleeping...
+Start child thread: client = 14, index = 346
+enter sleeping...
+finish sleeping...
+client 35 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+client 15 closed.
+Start child thread: client = 12, index = 344
+enter sleeping...
+finish sleeping...
+Start child thread: client = 9, index = 341
+enter sleeping...
+finish sleeping...
+Start child thread: client = 22, index = 354
+enter sleeping...
+finish sleeping...
+client 12 closed.
+Start child thread: client = 8, index = 340
+enter sleeping...
+finish sleeping...
+client 14 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+client 22 closed.
+Start child thread: client = 33, index = 365
+enter sleeping...
+finish sleeping...
+client 33 closed.
+client 9 closed.
+Start child thread: client = 31, index = 368
+enter sleeping...
+finish sleeping...
+Start child thread: client = 5, index = 338
+enter sleeping...
+finish sleeping...
+client 5 closed.
+client 8 closed.
+Start child thread: client = 18, index = 350
+enter sleeping...
+finish sleeping...
+client 18 closed.
+Start child thread: client = 25, index = 357
+enter sleeping...
+finish sleeping...
+client 25 closed.
+Start child thread: client = 29----request 363: <html><body><code>glob = 353</code></body></html>
+----request 358: <html><body><code>glob = 354</code></body></html>
+----request 361: <html><body><code>glob = 356</code></body></html>
+----request 350: <html><body><code>glob = 357</code></body></html>
+----request 341: <html><body><code>glob = 359</code></body></html>
+----request 387: <html><body><code>glob = 355</code></body></html>
+----request 392: <html><body><code>glob = 360</code></body></html>
+, index = 361
+enter sleeping...
+finish sleeping...
+client 29 closed.
+Start child thread: client = 11, index = 343
+enter sleeping...
+finish sleeping...
+client 31 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+Start child thread: client = 6, index = 339
+client_socket = 5
+enter sleeping...
+finish sleeping...
+client 11 closed.
+client 6 closed.
+Start child thread: client = 15, index = 369
+enter sleeping...
+finish sleeping...
+Start child thread: client = 7, index = 336
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client 15 closed.
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 14
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 18
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 19
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 20
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 21
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 22
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 25
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 26
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 28
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 29
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 31
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 33
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 35
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 36
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 37
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 38
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 39
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 40
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 41
+client 7 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 42
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 43
+====== waiting for client's request =====
+Start child thread: client = 12, index = 376
+enter sleeping...
+finish sleeping...
+client 12 closed.
+====== waiting for read request data =====
+client_socket = 44
+====== waiting for client's request =====
+Start child thread: client = 18, index = 379
+enter sleeping...
+finish sleeping...
+Start child thread: client = 28, index = 386
+enter sleeping...
+finish sleeping...
+client 28 closed.
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+Start child thread: client = 15, index = 378
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 28
+Start child thread: client = ----request 386: <html><body><code>glob = 362</code></body></html>
+----request 365: <html><body><code>glob = 363</code></body></html>
+----request 356: <html><body><code>glob = 366</code></body></html>
+----request 375: <html><body><code>glob = 361</code></body></html>
+----request 355: <html><body><code>glob = 368</code></body></html>
+----request 362: <html><body><code>glob = 372</code></body></html>
+----request 397: <html><body><code>glob = 358</code></body></html>
+----request 321: <html><body><code>glob = 371</code></body></html>
+----request 372: <html><body><code>glob = 364</code></body></html>
+----request 370: <html><body><code>glob = 375</code></body></html>
+----request 391: <html><body><code>glob = 369</code></body></html>
+----request 385: <html><body><code>glob = 376</code></body></html>
+----request 344: <html><body><code>glob = 377</code></body></html>
+----request 359: <html><body><code>glob = 378</code></body></html>
+----request 399: <html><body><code>glob = 370</code></body></html>
+----request 357: <html><body><code>glob = 374</code></body></html>
+----request 367: <html><body><code>glob = 380</code></body></html>
+----request 384: <html><body><code>glob = 388</code></body></html>
+----request 401: <html><body><code>glob = 383</code></body></html>
+----request 343: <html><body><code>glob = 385</code></body></html>
+----request 393: <html><body><code>glob = 381</code></body></html>
+----request 404: <html><body><code>glob = 387</code></body></html>
+17, index = 349
+Start child thread: client = 20, index = 381
+enter sleeping...
+finish sleeping...
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+client 17 closed.
+Start child thread: client = 24, index = 356
+enter sleeping...
+finish sleeping...
+Start child thread: client = 39, index = 394
+enter sleeping...
+finish sleeping...
+client 39 closed.
+====== waiting for read request data =====
+client_socket = 45
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+====== waiting for client's request =====
+Start child thread: client = 16, index = 348
+enter sleeping...
+finish sleeping...
+client 16 closed.
+client 24 closed.
+Start child thread: client = 27, index = 359
+enter sleeping...
+finish sleeping...
+client 27 closed.
+client 18 closed.
+Start child thread: client = 42, index = 397
+enter sleeping...
+finish sleeping...
+client 42 closed.
+Start child thread: client = 5, index = 371
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 17
+====== waiting for client's request =====
+Start child thread: client = 10, index = 342
+enter sleeping...
+finish sleeping...
+client 15 closed.
+Start child thread: client = 19, index = 380
+enter sleeping...
+finish sleeping...
+client 19 closed.
+Start child thread: client = 22, index = 383
+enter sleeping...
+finish sleeping...
+client 22 closed.
+Start child thread: client = 29, index = 387
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 16
+====== waiting for client's request =====
+client 10 closed.
+Start child thread: client = 14, index = 377
+enter sleeping...
+finish sleeping...
+client 14 closed.
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+Start child thread: client = 4, index = 337
+enter sleeping...
+finish sleeping...
+Start child thread: client = 25, index = 384
+enter sleeping...
+finish sleeping...
+client 5 closed.
+client 29 closed.
+Start child thread: client = 40, index = 395
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client 40 closed.
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+Start child thread: client = 23, index = 355
+enter sleeping...
+finish sleeping...
+client 23 closed.
+Start child thread: client = 32, index = 364
+enter sleeping...
+finish sleeping...
+client 32 closed.
+client 25 closed.
+Start child thread: client = 36, index = 391
+enter sleeping...
+finish sleeping...
+client 36 closed.
+Start child thread: client = 21, index = 382
+enter sleeping...
+finish sleeping...
+client 4 closed.
+client 21 closed.
+Start child thread: client = 8, index = 374
+enter sleeping...
+finish sleeping...
+client 8 closed.
+Start child thread: client = 35, index = 390
+enter sleeping...
+finish sleeping...
+client 35 closed.
+Start child thread: client = 12, index = 400
+enter sleeping...
+finish sleeping...
+client 12 closed.
+Start child thread: client = 28, index = 401
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client 28 closed.
+client_socket = 14
+Start child thread: client = 11, index = 375
+enter sleeping...
+finish sleeping...
+Start child thread: client = 13, index = 345
+enter sleeping...
+finish sleeping...
+client 11 closed.
+client 13 closed.
+Start child thread: client = 38, index = 393
+enter sleeping...
+finish sleeping...
+client 38 closed.
+Start child thread: client = 43, index = 398
+enter sleeping...
+finish sleeping...
+client 43 closed.
+Start child thread: client = 45, index = 402
+enter sleeping...
+finish sleeping...
+client 45 closed.
+Start child thread: client = 44, index = 399
+enter sleeping...
+finish sleeping...
+client 44 closed.
+Start child thread: client = 7, index = 373
+enter sleeping...
+finish sleeping...
+Start child thread: client = 37, index = 392
+enter sleeping...
+finish sleeping...
+client 37 closed.
+Start child thread: client = 6, index = 372
+enter sleeping...
+finish sleeping...
+Start child thread: c----request 383: <html><body><code>glob = 394</code></body></html>
+----request 396: <html><body><code>glob = 396</code></body></html>
+----request 395: <html><body><code>glob = 382</code></body></html>
+----request 382: <html><body><code>glob = 390</code></body></html>
+----request 285: <html><body><code>glob = 389</code></body></html>
+----request 407: <html><body><code>glob = 386</code></body></html>
+----request 347: <html><body><code>glob = 398</code></body></html>
+----request 360: <html><body><code>glob = 395</code></body></html>
+----request 388: <html><body><code>glob = 367</code></body></html>
+----request 402: <html><body><code>glob = 397</code></body></html>
+----request 374: <html><body><code>glob = 373</code></body></html>
+----request 376: <html><body><code>glob = 399</code></body></html>
+----request 366: <html><body><code>glob = 391</code></body></html>
+----request 409: <html><body><code>glob = 392</code></body></html>
+----request 405: <html><body><code>glob = 379</code></body></html>
+----request 268: <html><body><code>glob = 402</code></body></html>
+----request 408: <html><body><code>glob = 400</code></body></html>
+----request 394: <html><body><code>glob = 384</code></body></html>
+----request 380: <html><body><code>glob = 403</code></body></html>
+----request 390: <html><body><code>glob = 406</code></body></html>
+----request 373: <html><body><code>glob = 365</code></body></html>
+----request 403: <html><body><code>glob = 401</code></body></html>
+----request 406: <html><body><code>glob = 407</code></body></html>
+----request 398: <html><body><code>glob = 408</code></body></html>
+----request 415: <html><body><code>glob = 409</code></body></html>
+----request 414: <html><body><code>glob = 393</code></body></html>
+----request 381: <html><body><code>glob = 404</code></body></html>
+----request 427: <html><body><code>glob = 410</code></body></html>
+----request 420: <html><body><code>glob = 415</code></body></html>
+----request 413: <html><body><code>glob = 411</code></body></html>
+----request 410: <html><body><code>glob = 413</code></body></html>
+----request 431: <html><body><code>glob = 418</code></body></html>
+lient = 30, index = 362
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+client 20 closed.
+Start child thread: client = 31, index = 388
+enter sleeping...
+finish sleeping...
+client 6 closed.
+client 30 closed.
+Start child thread: client = 34, index = 366
+enter sleeping...
+finish sleeping...
+client 34 closed.
+client 7 closed.
+client 31 closed.
+Start child thread: client = 41, index = 396
+enter sleeping...
+finish sleeping...
+client 41 closed.
+Start child thread: client = 5, index = 406
+enter sleeping...
+finish sleeping...
+client 5 closed.
+Start child thread: client = 9, index = 370
+enter sleeping...
+finish sleeping...
+client 9 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+Start child thread: client = 26, index = 385
+enter sleeping...
+finish sleeping...
+client 26 closed.
+Start child thread: client = 33, index = 389
+enter sleeping...
+finish sleeping...
+Start child thread: client = 16, index = 405
+enter sleeping...
+finish sleeping...
+client 33 closed.
+client 16 closed.
+Start child thread: client = 17, index = 404
+enter sleeping...
+finish sleeping...
+client 17 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+Start child thread: client = 10, index = 407
+enter sleeping...
+finish sleeping...
+client 10 closed.
+Start child thread: client = 14, index = 409
+enter sleeping...
+finish sleeping...
+client 14 closed.
+Start child thread: client = 4, index = 408
+enter sleeping...
+finish sleeping...
+client 4 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+Start child thread: client = 4, index = 413
+enter sleeping...
+finish sleeping...
+client 4 closed.
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+Start child thread: client = 6, index = 410
+enter sleeping...
+finish sleeping...
+client 6 closed.
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+Start child thread: client = 10, index = 416
+enter sleeping...
+finish sleeping...
+client 10 closed.
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+Start child thread: client = 11, index = 417
+enter sleeping...
+finish sleeping...
+client 11 closed.
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+Start child thread: client = 4, index = 418
+enter sleeping...
+finish sleeping...
+client 4 closed.
+====== waiting for read request data =====
+Start child thread: client = 5, index = 411
+enter sleeping...
+finish sleeping...
+client 5 closed.
+Start child thread: client = 7, index = 412
+enter sleeping...
+finish sleeping...
+client 7 closed.
+Start child thread: client = 8, index = 414
+enter sleeping...
+finish sleeping...
+client 8 closed.
+Start child thread: client = 6, index = 419
+enter sleeping...
+finish sleeping...
+client 6 closed.
+client_socket = 13
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client----request 417: <html><body><code>glob = 419</code></body></html>
+----request 371: <html><body><code>glob = 342</code></body></html>
+----request 462: <html><body><code>glob = 420</code></body></html>
+----request 433: <html><body><code>glob = 414</code></body></html>
+----request 448: <html><body><code>glob = 423</code></body></html>
+----request 438: <html><body><code>glob = 421</code></body></html>
+----request 455: <html><body><code>glob = 429</code></body></html>
+----request 429: <html><body><code>glob = 432</code></body></html>
+----request 423: <html><body><code>glob = 428</code></body></html>
+----request 354: <html><body><code>glob = 405</code></body></html>
+----request 432: <html><body><code>glob = 435</code></body></html>
+----request 422: <html><body><code>glob = 425</code></body></html>
+'s request =====
+====== waiting for read request data =====
+client_socket = 8
+Start child thread: client = 12, index = 421
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client 12 closed.
+Start child thread: client = 6, index = 426
+enter sleeping...
+finish sleeping...
+client 6 closed.
+Start child thread: client = 10, index = 420
+enter sleeping...
+finish sleeping...
+client 10 closed.
+Start child thread: client = 11, index = 422
+enter sleeping...
+finish sleeping...
+client_socket = 14
+client 11 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 16
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 17
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 18
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 19
+====== waiting for client's request =====
+Start child thread: client = 4, index = 424
+enter sleeping...
+finish sleeping...
+client 4 closed.
+Start child thread: client = 11, index = 432
+enter sleeping...
+finish sleeping...
+client 11 closed.
+Start child thread: client = 5, index = 425
+enter sleeping...
+finish sleeping...
+Start child thread: client = 19, index = 437
+client 5 closed.
+enter sleeping...
+finish sleeping...
+client 19 closed.
+Start child thread: client = 14, index = 429
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client 14 closed.
+Start child thread: client = 9, index = 415
+client_socket = 20
+enter sleeping...
+finish sleeping...
+Start child thread: client = 6, index = 430
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+client 9 closed.
+client 6 closed.
+====== waiting for client's request =====
+Start child thread: client = 13, index = 423
+enter sleeping...
+finish sleeping...
+client 13 closed.
+Start child thread: client = 7, index = 427
+enter sleeping...
+finish sleeping...
+client 7 closed.
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+Start child thread: client = 18, index = 436
+enter sleeping...
+finish sleeping...
+client 18 closed.
+Start child thread: client = 16, index = 434
+enter sleeping...
+finish sleeping...
+client 16 closed.
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+Start child thread: client = 8, index = 428
+enter sleeping...
+finish sleeping...
+client 8 closed.
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+Start child thread: client = 5, index = 440
+enter sleeping...
+finish sleeping...
+client 5 closed.
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+Start child thread: client = 6, index = 441
+enter sleeping...
+finish sleeping...
+client 6 closed.
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+Start child thread: client = 12, index = 433
+enter sleeping...
+finish sleeping...
+client 12 closed.
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read----request 443: <html><body><code>glob = 437</code></body></html>
+----request 428: <html><body><code>glob = 424</code></body></html>
+----request 465: <html><body><code>glob = 427</code></body></html>
+----request 444: <html><body><code>glob = 430</code></body></html>
+Started 512 threads.
+----request 435: <html><body><code>glob = 440</code></body></html>
+----request 426: <html><body><code>glob = 426</code></body></html>
+----request 469: <html><body><code>glob = 439</code></body></html>
+----request 449: <html><body><code>glob = 444</code></body></html>
+----request 456: <html><body><code>glob = 436</code></body></html>
+----request 353: <html><body><code>glob = 438</code></body></html>
+----request 400: <html><body><code>glob = 441</code></body></html>
+----request 411: <html><body><code>glob = 450</code></body></html>
+----request 459: <html><body><code>glob = 451</code></body></html>
+----request 445: <html><body><code>glob = 447</code></body></html>
+----request 418: <html><body><code>glob = 412</code></body></html>
+----request 451: <html><body><code>glob = 443</code></body></html>
+----request 425: <html><body><code>glob = 422</code></body></html>
+----request 460: <html><body><code>glob = 446</code></body></html>
+----request 452: <html><body><code>glob = 445</code></body></html>
+ request data =====
+client_socket = 13
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 14
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 16
+====== waiting for client's request =====
+Start child thread: client = 15, index = 403
+enter sleeping...
+finish sleeping...
+client 15 closed.
+Start child thread: client = 9, index = 444
+enter sleeping...
+finish sleeping...
+client 9 closed.
+Start child thread: client = 5, index = 445
+enter sleeping...
+finish sleeping...
+client 5 closed.
+====== waiting for read request data =====
+client_socket = 18
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+Start child thread: client = 7, index = 442
+enter sleeping...
+finish sleeping...
+client 7 closed.
+====== waiting for read request data =====
+Start child thread: client = 8, index = 443
+enter sleeping...
+finish sleeping...
+client_socket = 9
+client 8 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+Start child thread: client = 20, index = 438
+enter sleeping...
+finish sleeping...
+client 20 closed.
+Start child thread: client = 4, index = 439
+enter sleeping...
+finish sleeping...
+client 4 closed.
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 15
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 19
+====== waiting for client's request =====
+Start child thread: client = 5, index = 453
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client 5 closed.
+client_socket = 20
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+Start child thread: client = 6, index = 447
+enter sleeping...
+finish sleeping...
+client 6 closed.
+Start child thread: client = 9, index = 454
+enter sleeping...
+finish sleeping...
+client 9 closed.
+Start child thread: client = 4, index = 457
+enter sleeping...
+finish sleeping...
+client 4 closed.
+====== waiting for read request data =====
+client_socket = 21
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+Start child thread: client = 12, index = 448
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+client 12 closed.
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+Start child thread: client = 13, index = 449
+enter sleeping...
+finish sleeping...
+client 13 closed.
+====== waiting for read request data =====
+client_socket = 22
+====== waiting for client's request =====
+Start child thread: client = 11, index = 446
+enter sleeping...
+finish sleeping...
+client 11 closed.
+====== waiting for read request data =====
+client_socket = 13
+====== waiting for client's request =====
+Start child thread: client = 7, index = 455
+enter sleeping...
+finish sleeping...
+client 7 closed.
+Start child thread: client = 5, index = 461
+enter sleeping...
+finish sleeping...
+client 5 closed.
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+Start child thread: client = 14, index = 450
+enter sleeping...
+finish sleeping...
+client 14 closed.
+Start child thread: client = 15, index = 458
+enter sleeping.----request 442: <html><body><code>glob = 454</code></body></html>
+----request 464: <html><body><code>glob = 455</code></body></html>
+----request 488: <html><body><code>glob = 457</code></body></html>
+----request 468: <html><body><code>glob = 456</code></body></html>
+----request 470: <html><body><code>glob = 461</code></body></html>
+----request 351: <html><body><code>glob = 330</code></body></html>
+----request 480: <html><body><code>glob = 462</code></body></html>
+----request 471: <html><body><code>glob = 458</code></body></html>
+----request 489: <html><body><code>glob = 453</code></body></html>
+----request 479: <html><body><code>glob = 466</code></body></html>
+----request 483: <html><body><code>glob = 459</code></body></html>
+----request 458: <html><body><code>glob = 464</code></body></html>
+----request 467: <html><body><code>glob = 465</code></body></html>
+----request 495: <html><body><code>glob = 467</code></body></html>
+----request 482: <html><body><code>glob = 469</code></body></html>
+----request 461: <html><body><code>glob = 449</code></body></html>
+----request 457: <html><body><code>glob = 460</code></body></html>
+----request 440: <html><body><code>glob = 434</code></body></html>
+----request 511: <html><body><code>glob = 472</code></body></html>
+----request 485: <html><body><code>glob = 475</code></body></html>
+----request 436: <html><body><code>glob = 431</code></body></html>
+..
+finish sleeping...
+client 15 closed.
+Start child thread: client = 20, index = 460
+enter sleeping...
+finish sleeping...
+client 20 closed.
+====== waiting for read request data =====
+client_socket = 23
+Start child thread: client = 12, index = 466
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+client 12 closed.
+Start child thread: client = 22, index = 467
+enter sleeping...
+finish sleeping...
+client 22 closed.
+Start child thread: client = 8, index = 456
+enter sleeping...
+finish sleeping...
+client 8 closed.
+Start child thread: client = 19, index = 459
+enter sleeping...
+finish sleeping...
+client 19 closed.
+Start child thread: client = 6, index = 464
+enter sleeping...
+finish sleeping...
+client 6 closed.
+Start child thread: client = 13, index = 468
+enter sleeping...
+finish sleeping...
+client 13 closed.
+Start child thread: client = 16, index = 451
+enter sleeping...
+finish sleeping...
+client 16 closed.
+====== waiting for read request data =====
+Start child thread: client = 21, index = 462
+enter sleeping...
+finish sleeping...
+client 21 closed.
+Start child thread: client = 4, index = 463
+enter sleeping...
+finish sleeping...
+client 4 closed.
+Start child thread: client = 9, index = 465
+enter sleeping...
+finish sleeping...
+client 9 closed.
+Start child thread: client = 11, index = 469
+enter sleeping...
+finish sleeping...
+client 11 closed.
+Start child thread: client = 5, index = 470
+enter sleeping...
+finish sleeping...
+client 5 closed.
+Start child thread: client = 23, index = 472
+enter sleeping...
+finish sleeping...
+client 23 closed.
+Start child thread: client = 7, index = 471
+enter sleeping...
+finish sleeping...
+Start child thread: client = 18, index = 452
+enter sleeping...
+finish sleeping...
+client 7 closed.
+client 18 closed.
+client_socket = 14
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+Start child thread: client = 4, index = 474
+enter sleeping...
+finish sleeping...
+Start child thread: client = 6, index = 476
+enter sleeping...
+finish sleeping...
+client 6 closed.
+Start child thread: client = 9, index = 479
+enter sleeping...
+finish sleeping...
+client 9 closed.
+====== waiting for read request data =====
+client_socket = 13
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+Start child thread: client = 7, index = 477
+enter sleeping...
+finish sleeping...
+client 7 closed.
+Start child thread: client = 11, index = 480
+enter sleeping...
+finish sleeping...
+client 11 closed.
+Start child thread: client = 12, index = 481
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 6
+====== waiting for client's request =====
+Start child thread: client = 4, index = 483
+enter sleeping...
+finish sleeping...
+client 4 closed.
+Start child thread: client = 5, index = 475
+enter sleeping...
+finish sleeping...
+client 5 closed.
+Start child thread: client = 8, index = 478
+enter sleeping...
+finish sleeping...
+client 8 closed.
+client 4 closed.
+Start child thread: client = 13, index = 482
+enter sleeping...
+finish sleeping...
+client 13 closed.
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_soc----request 500: <html><body><code>glob = 474</code></body></html>
+----request 490: <html><body><code>glob = 478</code></body></html>
+----request 504: <html><body><code>glob = 482</code></body></html>
+----request 501: <html><body><code>glob = 486</code></body></html>
+----request 510: <html><body><code>glob = 485</code></body></html>
+----request 450: <html><body><code>glob = 481</code></body></html>
+----request 416: <html><body><code>glob = 416</code></body></html>
+----request 473: <html><body><code>glob = 476</code></body></html>
+----request 419: <html><body><code>glob = 417</code></body></html>
+----request 434: <html><body><code>glob = 484</code></body></html>
+----request 478: <html><body><code>glob = 489</code></body></html>
+----request 441: <html><body><code>glob = 487</code></body></html>
+----request 412: <html><body><code>glob = 433</code></body></html>
+----request 494: <html><body><code>glob = 491</code></body></html>
+----request 453: <html><body><code>glob = 483</code></body></html>
+----request 486: <html><body><code>glob = 488</code></body></html>
+----request 447: <html><body><code>glob = 468</code></body></html>
+----request 439: <html><body><code>glob = 463</code></body></html>
+----request 424: <html><body><code>glob = 442</code></body></html>
+----request 446: <html><body><code>glob = 490</code></body></html>
+----request 466: <html><body><code>glob = 452</code></body></html>
+----request 476: <html><body><code>glob = 473</code></body></html>
+----request 463: <html><body><code>glob = 471</code></body></html>
+----request 508: <html><body><code>glob = 492</code></body></html>
+----request 421: <html><body><code>glob = 470</code></body></html>
+----request 487: <html><body><code>glob = 495</code></body></html>
+ket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+Start child thread: client = 6, index = 484
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client_socket = 8
+Start child thread: client = 17, index = 435
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+client 17 closed.
+client 6 closed.
+Start child thread: client = 10, index = 431
+enter sleeping...
+finish sleeping...
+Start child thread: client = 4, index = 486
+enter sleeping...
+finish sleeping...
+client 4 closed.
+Start child thread: client = 14, index = 473
+enter sleeping...
+finish sleeping...
+client 14 closed.
+client 12 closed.
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+Start child thread: client = 5, index = 487
+enter sleeping...
+finish sleeping...
+Start child thread: client = 8, index = 488
+enter sleeping...
+finish sleeping...
+client 5 closed.
+client 8 closed.
+Start child thread: client = 9, index = 489
+enter sleeping...
+finish sleeping...
+client 9 closed.
+client 10 closed.
+Start child thread: client = 4, index = 490
+enter sleeping...
+finish sleeping...
+====== waiting for read request data =====
+client 4 closed.
+Start child thread: client = 7, index = 485
+enter sleeping...
+finish sleeping...
+client 7 closed.
+client_socket = 6
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 4
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 5
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 7
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 8
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 9
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 12
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 13
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 14
+====== waiting for client's request =====
+Start child thread: client = 10, index = 497
+====== waiting for read request data =====
+enter sleeping...
+finish sleeping...
+client 10 closed.
+Start child thread: client = 6, index = 491
+enter sleeping...
+finish sleeping...
+Start child thread: client = 13, index = 500
+enter sleeping...
+finish sleeping...
+Start child thread: client = 11, index = 498
+enter sleeping...
+finish sleeping...
+client 11 closed.
+client_socket = 15
+Start child thread: client = 14, index = 501
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 10
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 11
+====== waiting for client's request =====
+====== waiting for read request data =====
+client_socket = 16
+Start child thread: client = 4, index = 492
+enter sleeping...
+finish sleeping...
+====== waiting for client's request =====
+Start child thread: client = 12, index = 499
+enter sleeping...
+finish sleeping...
+client 4 closed.
+Start child thread: client = 9, index = 496
+enter sleeping...
+finish sleeping...
+client 12 closed.
+client 9 closed.
+Start child thread: client = 11, index = 504
+enter sleeping...
+finish sleeping...
+client 11 closed.
+client 14 closed.
+Start child thread: client = 7, index = 494
+enter sleeping...
+finish sleeping...
+client 13 closed.
+Start child thread: client = 5, index = 493
+enter sleeping...
+finish sleeping...
+client 7 closed.
+client 5 closed.
+Sta----request 475: <html><body><code>glob = 496</code></body></html>
+----request 491: <html><body><code>glob = 498</code></body></html>
+----request 481: <html><body><code>glob = 497</code></body></html>
+----request 430: <html><body><code>glob = 448</code></body></html>
+----request 509: <html><body><code>glob = 501</code></body></html>
+----request 502: <html><body><code>glob = 503</code></body></html>
+----request 499: <html><body><code>glob = 502</code></body></html>
+----request 474: <html><body><code>glob = 504</code></body></html>
+----request 472: <html><body><code>glob = 494</code></body></html>
+----request 454: <html><body><code>glob = 480</code></body></html>
+----request 497: <html><body><code>glob = 505</code></body></html>
+----request 507: <html><body><code>glob = 493</code></body></html>
+----request 493: <html><body><code>glob = 506</code></body></html>
+----request 492: <html><body><code>glob = 477</code></body></html>
+----request 484: <html><body><code>glob = 499</code></body></html>
+----request 496: <html><body><code>glob = 508</code></body></html>
+----request 437: <html><body><code>glob = 500</code></body></html>
+----request 498: <html><body><code>glob = 507</code></body></html>
+----request 477: <html><body><code>glob = 479</code></body></html>
+----request 506: <html><body><code>glob = 511</code></body></html>
+----request 505: <html><body><code>glob = 510</code></body></html>
+----request 512: <html><body><code>glob = 512</code></body></html>
+----request 503: <html><body><code>glob = 509</code></body></html>
+Using 0.660 s
