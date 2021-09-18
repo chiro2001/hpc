@@ -16,6 +16,13 @@ typedef struct {
   CHIMAT_TYPE* content;
 } Mat;
 
+typedef struct {
+  int id;
+  Mat* a;
+  Mat* b;
+  Mat* c;
+} mat_mul_thread_t;
+
 Mat* mat_create(int width, int height);
 Mat* mat_data_init(Mat* mat);
 Mat* mat_data_init_fast(Mat* mat);
@@ -26,5 +33,8 @@ Mat* mat_crop(Mat* mat, int x1, int y1, int x2, int y2);
 Mat* mat_padding_around(Mat* mat, int padding);
 Mat* mat_conv(Mat* mat, double kernel[3][3]);
 Mat* mat_mul(Mat *a, Mat *b, Mat *c_source);
+
+Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c_source);
+void mat_mul_cell(mat_mul_thread_t* thread_data);
 
 #endif

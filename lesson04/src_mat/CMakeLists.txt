@@ -34,6 +34,8 @@ message(STATUS "Source files: ${source_files}")
 link_libraries(-lpthread ${OpenBLAS_LIBRARIES} -lm)
 message(STATUS "OpenBLAS libs are: ${OpenBLAS_LIBRARIES}")
 
+set(CMAKE_C_FLAGS "-Wall -g -ggdb -mavx")
+
 add_executable(mat_mul_test ${PROJECT_SOURCE_DIR}/src/mat_mul_test.c ${source_files})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

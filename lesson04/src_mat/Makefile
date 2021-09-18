@@ -9,31 +9,26 @@ build:
 # 首先是犯下懒惰之罪的 mat.c，
 # 仗着自己有一些矩阵运算函数，
 # 就希望别的文件来静态链接它。
-	gcc -E src/mat.c -o ${build_path}/mat.i
-	gcc -S ${build_path}/mat.i -o ${build_path}/mat.s
-	gcc -c ${build_path}/mat.s -o ${build_path}/mat.o
 # 然后是犯下傲慢之罪的 mat_mul_test.c，
 # 自己只实现了一个函数就敢教贵为 OpenBLAS 的 cblas_dgemm 做事，
 # 没有任何一点自知之明。
-	gcc -E src/mat_mul_test.c -o ${build_path}/mat_mul_test.i -I${OpenBLAS_INCLUDE_DIRS}
-	gcc -S ${build_path}/mat_mul_test.i -o ${build_path}/mat_mul_test.s
-	gcc -c ${build_path}/mat_mul_test.s -o ${build_path}/mat_mul_test.o
 # 最后是犯下暴食之罪的 mat_mul_test，
 # 它疯狂吞噬了 mat.o 和 mat_mul_test.o 不算，
 # 还残忍吞入了 libopenblas.so，实在是欲望滔天！
-	gcc ${build_path}/mat.o \
-		${build_path}/mat_mul_test.o \
+	gcc src/mat.c src/mat_mul_test.c \
 		-o ${build_path}/mat_mul_test \
 		-lm \
 		-L${OpenBLAS_LIBRARIES} \
+		-I${OpenBLAS_INCLUDE_DIRS} \
 		-lopenblas \
 		-static \
-		-lpthread
+		-lpthread \
+		-mavx
 
 run: build
 # 所以，神降下了祂的神罚，惩罚作为世界载体的 CPU 高负荷执行一段无用的计算
 # 然后将此记录于石碑之上。
-	./build_mkfile/mat_mul_test 256
+	./build_mkfile/mat_mul_test 8
 
 clean:
 # 仁慈的父，我已坠入，

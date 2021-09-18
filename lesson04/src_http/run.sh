@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ../data/
+# cd ../data/
 
 pids=( )
 start=$(date +%s.%N)

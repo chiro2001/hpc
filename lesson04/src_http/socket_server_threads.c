@@ -12,9 +12,17 @@
 #include <unistd.h>
 
 #define PORT 8002  // 服务器监听端口
-// #define SERVER_THREAD_NUM_MAX 32  // 最大线程数
 #define SERVER_THREAD_NUM_MAX 512  // 最大线程数
+// #define SERVER_SLEEP
 int thread_max = SERVER_THREAD_NUM_MAX;
+
+// #define SERVER_DEBUG
+
+#ifdef SERVER_DEBUG
+#define pdebug(...) printf(__VA_ARGS__)
+#else
+#define pdebug(...)
+#endif  // SERVER_DEBUG
 
 // 添加一个互斥锁，防止对全局变量的同时读写操作
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -87,8 +95,10 @@ void send_handle(ThreadData *thread_data) {
       "</html>";
   char body[1024];
 
-  // printf("enter sleeping...\n");
-  // sleep(10);  //让进程进入睡眠状态，单位是秒。
+#ifdef SERVER_SLEEP
+  pdebug("enter sleeping...\n");
+  sleep(10);  //让进程进入睡眠状态，单位是秒。
+#endif
   // sleep_ms(1);
   // 处理信息
   // 进入锁区
@@ -103,14 +113,14 @@ void send_handle(ThreadData *thread_data) {
   }
   // 退出锁区
   pthread_mutex_unlock(&mutex);
-  // printf("finish sleeping...\n");
+  pdebug("finish sleeping...\n");
 
   write(client_socket, status, sizeof(status) - 1);
   write(client_socket, header, sizeof(header) - 1);
   write(client_socket, body, strlen(body) * sizeof(char));
 
   close(client_socket);
-  // printf("client %d closed.\n", client_socket);
+  pdebug("client %d closed.\n", client_socket);
   // 添加当前空缺位置到队列
   pthread_mutex_lock(&pool_mutex);
   while (queue_full()) {
