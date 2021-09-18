@@ -21,7 +21,14 @@ build:
 # 最后是犯下暴食之罪的 mat_mul_test，
 # 它疯狂吞噬了 mat.o 和 mat_mul_test.o 不算，
 # 还残忍吞入了 libopenblas.so，实在是欲望滔天！
-	gcc ${build_path}/mat.o ${build_path}/mat_mul_test.o -o ${build_path}/mat_mul_test -lm -L${OpenBLAS_LIBRARIES} -lopenblas -static -lpthread
+	gcc ${build_path}/mat.o \
+		${build_path}/mat_mul_test.o \
+		-o ${build_path}/mat_mul_test \
+		-lm \
+		-L${OpenBLAS_LIBRARIES} \
+		-lopenblas \
+		-static \
+		-lpthread
 
 run: build
 # 所以，神降下了祂的神罚，惩罚作为世界载体的 CPU 高负荷执行一段无用的计算
