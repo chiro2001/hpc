@@ -1,7 +1,6 @@
 import os
 import argparse
 from posixpath import join
-import sys
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import interp1d
@@ -48,10 +47,11 @@ def test_all(show_log: bool = False, max_n: int = 8, **kwargs):
         with open("results.txt", 'r') as f:
             results_now = [float(x) for x in f.readlines()]
             results[k] = results_now
-            print(f"N = {k:3}, time_native = {results[k][0]:8}, time_OpenBLAS = {results[k][1]:8}")
+            print(f"N = {k:4}, time_native = {results[k][0]:9}, time_OpenBLAS = {results[k][1]:9}")
     # print(results)
     # 画出图像
 
+    # 绘制平滑曲线
     def interp1d_data(X_data, Y_data):
         cubic_interploation_model = interp1d(X_data, Y_data, kind="cubic")
         xs = np.linspace(np.min(X_data), np.max(X_data), 500)
@@ -61,15 +61,20 @@ def test_all(show_log: bool = False, max_n: int = 8, **kwargs):
     X_linear = np.linspace(np.min(X), np.max(X), 500)
     Y1, Y2 = [interp1d_data(X, [results[k][z] for k in results]) for z in range(2)]
     plt.title('Running Time for Native mul and OpenBLAS')
+    plt.xlabel("N")
+    plt.ylabel("Time")
     plt.plot(X_linear, Y1, X_linear, Y2)
     plt.legend(('Native', 'OpenBLAS'), loc='upper right')
     plt.savefig("../data/plot.png")
     print('Saved image file: ../data/plot.png')
     plt.clf()
 
+    # 画一画 log 看看
     if show_log:
         Y1_log, Y2_log = [interp1d_data(X, [np.log(results[k][z]) for k in results]) for z in range(2)]
         plt.title('Running Time (log) for Native mul and OpenBLAS')
+        plt.xlabel("N")
+        plt.ylabel("Time (log)")
         plt.plot(X_linear, Y1_log, X_linear, Y2_log)
         plt.legend(('Native', 'OpenBLAS'), loc='upper right')
         plt.savefig("../data/plot_log.png")
