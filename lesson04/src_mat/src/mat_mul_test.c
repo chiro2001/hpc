@@ -86,7 +86,6 @@ int main(int argc, char** argv) {
   }
 
   Mat* C[32] = {NULL};
-  int result_tail = 0;
   double results[32];
 
   // const char task_names[][64] = {"简单矩阵", "单线程矩阵优化",
@@ -104,9 +103,8 @@ int main(int argc, char** argv) {
   int processor_number = sysconf(_SC_NPROCESSORS_ONLN);
   pdebug("Running with %d cores.\n", processor_number);
   for (int i = task_start; i < task_number; i++) {
-    do_calc(i, M, N, &C[result_tail], task_names[i], results, result_tail,
+    do_calc(i, M, N, &C[i], task_names[i], results, i,
             processor_number);
-    result_tail++;
   }
 
   // 结果写入文件

@@ -23,7 +23,6 @@ build:
 		-lopenblas \
 		-static \
 		-lpthread \
-		-O3 \
 		-mavx
 
 run: build

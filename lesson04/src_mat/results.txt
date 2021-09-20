@@ -1,3 +1,3 @@
-Threaded SIMD: 0.000000
-Unrolling Threaded SIMD: 0.000000
-OpenBLAS: 0.000000
+Threaded SIMD: 1.816911
+Unrolling Threaded SIMD: 1.763846
+OpenBLAS: 0.053971
