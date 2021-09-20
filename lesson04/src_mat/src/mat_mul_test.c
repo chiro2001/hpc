@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
     K = atoi(argv[1]);
     pdebug("使用: K = %d\n", K);
   }
-  mat_native_time_limit = 150.0;
+  mat_native_time_limit = 10.0;
   int M = K, N = K;
   srand(time(NULL));
 
@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
                                  "OpenBLAS"};
 
   const int task_number = 6;
-  const int task_start = 0;
+  const int task_start = 3;
 
   int processor_number = sysconf(_SC_NPROCESSORS_ONLN);
   pdebug("Running with %d cores.\n", processor_number);
@@ -115,24 +115,25 @@ int main(int argc, char** argv) {
     printf("Cannot open results.txt!!\n");
     return 1;
   }
-  // fprintf(fp, "%lf\n%lf\n%lf\n", result_1, result_2, result_3);
-  for (int i = task_start; i < result_tail; i++) {
+  for (int i = task_start; i < task_number; i++) {
     if (i == 0 && mat_native_timeout) {
       fprintf(fp, "%s: %lf\n", task_names[i], -results[i]);
     } else {
       fprintf(fp, "%s: %lf\n", task_names[i], results[i]);
+      // printf("%s: %lf\n", task_names[i], results[i]);
     }
   }
   fclose(fp);
+  // printf("Write done.\n");
   if (task_start == 0 && !mat_native_timeout) {
     pdebug("校验...\n");
     int is_ok[32];
-    for (int i = 0; i < result_tail; i++) {
+    for (int i = 0; i < task_number; i++) {
       is_ok[i] = 1;
     }
     for (int x = 0; x < C[0]->w; x++) {
       for (int y = 0; y < C[0]->h; y++) {
-        for (int k = 1; k < result_tail; k++) {
+        for (int k = task_start; k < task_number; k++) {
           if (is_ok[k]) {
             if (fabs(C[0]->data[x][y] - C[k]->data[x][y]) >= eps) {
               printf("K = %4d; %s 计算错误! (%d, %d): [%lf, %lf]\n", K,
@@ -144,14 +145,16 @@ int main(int argc, char** argv) {
       }
     }
     int is_ok_all = 1;
-    for (int i = 0; i < result_tail; i++)
+    for (int i = task_start; i < task_number; i++)
       if (!is_ok[i]) is_ok_all = 0;
     if (!is_ok_all) {
       puts("[0]\t参考: ");
       mat_print(C[0]);
-      for (int k = 1; k < result_tail; k++) {
-        printf("[%d]\t%s: \n", k, task_names[k]);
-        mat_print(C[k]);
+      for (int k = task_start; k < task_number; k++) {
+        if (!is_ok[k]) {
+          printf("[%d]\t%s: \n", k, task_names[k]);
+          mat_print(C[k]);
+        }
       }
     }
   }

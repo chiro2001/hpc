@@ -242,8 +242,8 @@ Mat* mat_mul(Mat* a, Mat* b, Mat* c) {
 void mat_print(Mat* a) {
   const char format_all[] = "Mat([%s], shape=(%d, %d))";
   // const char format_line[] = "    [%s], \n";
-  char* content = malloc(sizeof(char) * a->w * a->h * (MAT_PRINT_WIDTH + 3) +
-                         sizeof(char) * a->h * (4 + 5));
+  char* content = malloc(sizeof(char) * a->w * a->h * (MAT_PRINT_WIDTH + 10) +
+                         sizeof(char) * a->h * (4 + 5 + 10));
   // char* buf[512];
   memcpy(content, format_all, sizeof(char) * 4);
   int last = 4;
@@ -297,19 +297,13 @@ int* mat_task_data = NULL;
 int mat_task_tail = 0;
 pthread_mutex_t mat_task_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-#define PINT(x) printf(#x "\t= %d\n", (int)x)
-#define PD(x) printf(#x "\t= %lf\n", (double)x)
-#define PD4(x)                                                               \
-  printf("\t" #x "\t= %2.2lf, %2.2lf, %2.2lf, %2.2lf\n", ((double*)(&x))[0], \
-         ((double*)(&x))[1], ((double*)(&x))[2], ((double*)(&x))[3])
-
 void mat_mul_cell(mat_mul_thread_t* thread_data) {
   Mat* a = thread_data->a;
   Mat* b = thread_data->b;
   Mat* c = thread_data->c;
   int id = thread_data->id;
-  // int unrolling = thread_data->unrolling;
-  int unrolling = 0;
+  int unrolling = thread_data->unrolling;
+  // int unrolling = 0;
   // printf("Thread-%2d started!\n", thread_data->id);
   free(thread_data);
   int k = a->w;
@@ -334,7 +328,6 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
     pthread_mutex_unlock(&mat_task_mutex);
     double sum = 0;
     sum_bl = _mm256_setzero_pd();
-
 
     int x = mat_task_list[index][0], y = mat_task_list[index][1];
     // double *p_a = a->content + x * a->w, *p_b = b->content + y * b->w;
@@ -366,7 +359,8 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
     } else {
       int block_remain = block_count % 4;
       // PINT(block_remain);
-      for (int i = 0; i < block_count / 4; i += 4) {
+      // PINT(block_count / 4);
+      for (int i = 0; i < block_count / 4; i++) {
         load_a_0 = _mm256_load_pd(p_a + 0);
         load_b_0 = _mm256_load_pd(p_b + 0);
         load_a_1 = _mm256_load_pd(p_a + 4);
@@ -434,7 +428,8 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
 double mat_native_time_limit = 0;
 int mat_native_timeout = 0;
 
-Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c, int processor_number, int unrolling) {
+Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c, int processor_number,
+                      int unrolling) {
   // 检查是否合法
   if (a->w != b->h) {
     return NULL;
