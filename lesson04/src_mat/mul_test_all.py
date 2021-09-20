@@ -34,13 +34,15 @@ def build_it(build_method: str = 'make'):
                 return
 
 
-def test_all(start_n=4, max_n: int = 8, **kwargs):
+def test_all(start_n=4, max_n: int = 8, out: str = 'plot.png', **kwargs):
     # plt.rcParams['font.sans-serif'] = ['FSGB2312']
     build_it(**kwargs)
 
-    if os.path.exists("../data"):
-        os.system("rm -rf ../data")
-    os.mkdir("../data")
+    # if os.path.exists("../data"):
+    #     os.system("rm -rf ../data")
+    # os.mkdir("../data")
+    if not os.path.exists("../data"):
+        os.mkdir("../data")
 
     label_names: list = None
 
@@ -89,8 +91,9 @@ def test_all(start_n=4, max_n: int = 8, **kwargs):
     plt.ylabel("Time")
     [plt.plot(X_linear, Y[i]) for i in range(len(Y))]
     plt.legend(label_names, loc='upper right')
-    plt.savefig("../data/plot.png")
-    print('Saved image file: ../data/plot.png')
+    save_path = os.path.join("../data/", out)
+    plt.savefig(save_path)
+    print(f'Saved image file: {save_path}')
     plt.clf()
 
 
@@ -102,6 +105,9 @@ if __name__ == '__main__':
                         default=8, help='设置开始 N，N = 2^k，请输入 k。')
     parser.add_argument('-b', '--build-method', type=str, default='make',
                         help='设置编译方式，两者都可以。', choices=['make', 'cmake'])
+    parser.add_argument('-o', '--out', type=str, default='plot.png',
+                        help='设置图片保存文件名。')
+    
 
     args = parser.parse_args()
     test_all(**args.__dict__)
