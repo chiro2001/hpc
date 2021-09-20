@@ -308,6 +308,8 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
   Mat* b = thread_data->b;
   Mat* c = thread_data->c;
   int id = thread_data->id;
+  // int unrolling = thread_data->unrolling;
+  int unrolling = 0;
   // printf("Thread-%2d started!\n", thread_data->id);
   free(thread_data);
   int k = a->w;
@@ -318,6 +320,10 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
   size_t remain_count = k % block_size;
   __m256d sum_sp, sum_bl;
   __m256d load_a, load_b;
+  __m256d load_a_0, load_b_0, load_a_1, load_b_1, load_a_2, load_b_2, load_a_3,
+      load_b_3;
+  __m256d sum_sp_0, sum_sp_1, sum_sp_2, sum_sp_3, sum_sp_0_0, sum_sp_0_1,
+      sum_sp_0_0_0;
   while (1) {
     pthread_mutex_lock(&mat_task_mutex);
     if (mat_task_tail == 0) {
@@ -327,8 +333,8 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
     index = --mat_task_tail;
     pthread_mutex_unlock(&mat_task_mutex);
     double sum = 0;
-    sum_sp = _mm256_setzero_pd();
     sum_bl = _mm256_setzero_pd();
+
 
     int x = mat_task_list[index][0], y = mat_task_list[index][1];
     // double *p_a = a->content + x * a->w, *p_b = b->content + y * b->w;
@@ -345,16 +351,55 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
     // puts("B:");
     // mat_print(b);
     // 使用 AVX 指令集
-    for (int i = 0; i < block_count; i++) {
-      load_a = _mm256_load_pd(p_a);
-      load_b = _mm256_load_pd(p_b);
-      // PD4(load_a);
-      // PD4(load_b);
-      p_a += block_size;
-      p_b += block_size;
-      sum_sp = _mm256_mul_pd(load_a, load_b);
-      sum_bl = _mm256_add_pd(sum_sp, sum_bl);
+    if (!unrolling) {
+      for (int i = 0; i < block_count; i++) {
+        load_a = _mm256_load_pd(p_a);
+        load_b = _mm256_load_pd(p_b);
+        // PD4(load_a);
+        // PD4(load_b);
+        p_a += block_size;
+        p_b += block_size;
+        sum_sp = _mm256_mul_pd(load_a, load_b);
+        sum_bl = _mm256_add_pd(sum_sp, sum_bl);
+        // PD4(sum_bl);
+      }
+    } else {
+      int block_remain = block_count % 4;
+      // PINT(block_remain);
+      for (int i = 0; i < block_count / 4; i += 4) {
+        load_a_0 = _mm256_load_pd(p_a + 0);
+        load_b_0 = _mm256_load_pd(p_b + 0);
+        load_a_1 = _mm256_load_pd(p_a + 4);
+        load_b_1 = _mm256_load_pd(p_b + 4);
+        load_a_2 = _mm256_load_pd(p_a + 8);
+        load_b_2 = _mm256_load_pd(p_b + 8);
+        load_a_3 = _mm256_load_pd(p_a + 12);
+        load_b_3 = _mm256_load_pd(p_b + 12);
+        p_a += block_size * 4;
+        p_b += block_size * 4;
+        sum_sp_0 = _mm256_mul_pd(load_a_0, load_b_0);
+        sum_sp_1 = _mm256_mul_pd(load_a_1, load_b_1);
+        sum_sp_2 = _mm256_mul_pd(load_a_2, load_b_2);
+        sum_sp_3 = _mm256_mul_pd(load_a_3, load_b_3);
+        sum_sp_0_0 = _mm256_add_pd(sum_sp_0, sum_sp_1);
+        sum_sp_0_1 = _mm256_add_pd(sum_sp_2, sum_sp_3);
+        sum_sp_0_0_0 = _mm256_add_pd(sum_sp_0_0, sum_sp_0_1);
+        sum_bl = _mm256_add_pd(sum_sp_0_0_0, sum_bl);
+        // PD4(sum_bl);
+      }
+      for (int i = 0; i < block_remain; i++) {
+        load_a = _mm256_load_pd(p_a);
+        load_b = _mm256_load_pd(p_b);
+        // PD4(load_a);
+        // PD4(load_b);
+        p_a += block_size;
+        p_b += block_size;
+        sum_sp = _mm256_mul_pd(load_a, load_b);
+        sum_bl = _mm256_add_pd(sum_sp, sum_bl);
+        // PD4(sum_bl);
+      }
     }
+
     if (block_count > 0) {
       double* p = (double*)(&sum_bl);
       sum = p[0] + p[1] + p[2] + p[3];
@@ -389,7 +434,7 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
 double mat_native_time_limit = 0;
 int mat_native_timeout = 0;
 
-Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c, int threaded) {
+Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c, int processor_number, int unrolling) {
   // 检查是否合法
   if (a->w != b->h) {
     return NULL;
@@ -404,8 +449,6 @@ Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c, int threaded) {
   mat_task_data = malloc(sizeof(int) * (a->h * b->w) * 2);
   assert(mat_task_data);
   mat_task_tail = a->h * b->w;
-  int processor_number = 1;
-  if (threaded) processor_number = sysconf(_SC_NPROCESSORS_ONLN);
   // printf("processor_number = %d\n", processor_number);
   pthread_t* pool = malloc(sizeof(pthread_t) * processor_number);
   assert(pool);
@@ -425,6 +468,7 @@ Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c, int threaded) {
     thread_data->b = t;
     thread_data->c = c;
     thread_data->id = i;
+    thread_data->unrolling = unrolling;
     ret = pthread_create(&pool[i], NULL, (void* (*)(void*))mat_mul_cell,
                          thread_data);
     if (ret) {

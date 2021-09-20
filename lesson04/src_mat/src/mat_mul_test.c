@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "cblas.h"
 #include "mat.h"
@@ -10,11 +11,11 @@
 Mat *A_g, *B_g;
 
 void do_calc(int task_id, int M, int N, Mat** C, const char* task_name,
-             double* results, int result_tail) {
+             double* results, int result_tail, int processor_number) {
   struct timespec start, end;
   Mat* A = NULL;
   Mat* B = NULL;
-  const int aligns[] = {0, 1, 1, 0};
+  const int aligns[] = {0, 1, 1, 1, 1, 0};
   int aligned = aligns[task_id];
   A = mat_create(M, N, aligned);
   B = mat_create(N, M, aligned);
@@ -32,24 +33,28 @@ void do_calc(int task_id, int M, int N, Mat** C, const char* task_name,
       B->data[x][y] = B_g->data[x][y];
     }
   }
-  pdebug("%10s计算: 开始计时\n", task_name);
+  pdebug("[%d]\t%s 计算: 开始计时\n", task_id, task_name);
   clock_gettime(CLOCK_REALTIME, &start);
   if (task_id == 0) {
     mat_mul(A, B, *C);
     if (mat_native_timeout) {
-      pdebug("%s 超时！\n", task_name);
+      pdebug("\t%s 超时！\n", task_name);
     }
   } else if (task_id == 1) {
-    mat_mul_threaded(A, B, *C, 0);
+    mat_mul_threaded(A, B, *C, 1, 0);
   } else if (task_id == 2) {
-    mat_mul_threaded(A, B, *C, 1);
+    mat_mul_threaded(A, B, *C, 1, 1);
   } else if (task_id == 3) {
+    mat_mul_threaded(A, B, *C, processor_number, 0);
+  } else if (task_id == 4) {
+    mat_mul_threaded(A, B, *C, processor_number, 1);
+  } else if (task_id == 5) {
     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, A->w, B->h, A->h, 1,
                 A->content, A->w, B->content, B->h, 0, (*C)->content, (*C)->h);
   }
   clock_gettime(CLOCK_REALTIME, &end);
   results[result_tail] = time_delta(start, end);
-  pdebug("%10s: 计算用时: %3.3lfs\n", task_name, results[result_tail]);
+  pdebug("\t%s: 计算用时: %3.3lfs\n", task_name, results[result_tail]);
 }
 
 int main(int argc, char** argv) {
@@ -86,13 +91,21 @@ int main(int argc, char** argv) {
 
   // const char task_names[][64] = {"简单矩阵", "单线程矩阵优化",
   // "多线程矩阵优化", "OpenBLAS"};
-  const char task_names[][64] = {"Native", "SIMD", "Threaded SIMD", "OpenBLAS"};
+  const char task_names[][64] = {"Native",
+                                 "SIMD",
+                                 "Unrolling SIMD",
+                                 "Threaded SIMD",
+                                 "Unrolling Threaded SIMD",
+                                 "OpenBLAS"};
 
-  const int task_number = 4;
+  const int task_number = 6;
   const int task_start = 0;
 
+  int processor_number = sysconf(_SC_NPROCESSORS_ONLN);
+  pdebug("Running with %d cores.\n", processor_number);
   for (int i = task_start; i < task_number; i++) {
-    do_calc(i, M, N, &C[result_tail], task_names[i], results, result_tail);
+    do_calc(i, M, N, &C[result_tail], task_names[i], results, result_tail,
+            processor_number);
     result_tail++;
   }
 
@@ -113,11 +126,6 @@ int main(int argc, char** argv) {
   fclose(fp);
   if (task_start == 0 && !mat_native_timeout) {
     pdebug("校验...\n");
-    // mat_print(C[0]);
-    // for (int k = 1; k < result_tail; k++) {
-    //   printf("%s: \n", task_names[k]);
-    //   mat_print(C[k]);
-    // }
     int is_ok[32];
     for (int i = 0; i < result_tail; i++) {
       is_ok[i] = 1;
@@ -127,12 +135,23 @@ int main(int argc, char** argv) {
         for (int k = 1; k < result_tail; k++) {
           if (is_ok[k]) {
             if (fabs(C[0]->data[x][y] - C[k]->data[x][y]) >= eps) {
-              printf("K = %4d; %s计算错误! (%d, %d): [%lf, %lf]\n", K,
+              printf("K = %4d; %s 计算错误! (%d, %d): [%lf, %lf]\n", K,
                      task_names[k], x, y, C[0]->data[x][y], C[k]->data[x][y]);
               is_ok[k] = 0;
             }
           }
         }
+      }
+    }
+    int is_ok_all = 1;
+    for (int i = 0; i < result_tail; i++)
+      if (!is_ok[i]) is_ok_all = 0;
+    if (!is_ok_all) {
+      puts("[0]\t参考: ");
+      mat_print(C[0]);
+      for (int k = 1; k < result_tail; k++) {
+        printf("[%d]\t%s: \n", k, task_names[k]);
+        mat_print(C[k]);
       }
     }
   }

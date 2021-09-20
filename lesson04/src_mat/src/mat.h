@@ -12,7 +12,7 @@
 // #define CHIMAT_TYPE __attribute((vector_size(32))) double
 
 #define MAT_PRINT_WIDTH 5
-#define MAT_PRINT_FORMAT "%2.2lf"
+#define MAT_PRINT_FORMAT "\t%2.2lf"
 
 
 typedef struct {
@@ -29,6 +29,7 @@ typedef struct {
   Mat* a;
   Mat* b;
   Mat* c;
+  int unrolling;
 } mat_mul_thread_t;
 
 Mat* mat_create(int width, int height, int aligned);
@@ -45,7 +46,8 @@ Mat* mat_mul(Mat *a, Mat *b, Mat *c_source);
 
 void mat_print(Mat* a);
 
-Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c_source, int threaded);
+// Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c_source, int threaded);
+Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c, int processor_number, int unrolling);
 void mat_mul_cell(mat_mul_thread_t* thread_data);
 
 extern double mat_native_time_limit;
