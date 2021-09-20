@@ -11,12 +11,17 @@
 #define CHIMAT_TYPE double
 // #define CHIMAT_TYPE __attribute((vector_size(32))) double
 
+#define MAT_PRINT_WIDTH 5
+#define MAT_PRINT_FORMAT "%2.2lf"
+
+
 typedef struct {
   int w;
   int h;
   CHIMAT_TYPE** data;
   CHIMAT_TYPE* content;
   CHIMAT_TYPE* content_real;
+  int aligned;
 } Mat;
 
 typedef struct {
@@ -26,8 +31,9 @@ typedef struct {
   Mat* c;
 } mat_mul_thread_t;
 
-Mat* mat_create(int width, int height);
+Mat* mat_create(int width, int height, int aligned);
 Mat* mat_data_init(Mat* mat);
+// Mat* mat_data_init(Mat* mat, int align);
 Mat* mat_data_init_fast(Mat* mat);
 void mat_free(Mat* mat);
 void mat_free_fast(Mat* mat);
@@ -41,5 +47,8 @@ void mat_print(Mat* a);
 
 Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c_source, int threaded);
 void mat_mul_cell(mat_mul_thread_t* thread_data);
+
+extern double mat_native_time_limit;
+extern int mat_native_timeout;
 
 #endif

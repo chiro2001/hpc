@@ -35,46 +35,60 @@ def build_it(build_method: str = 'make'):
 
 
 def test_all(start_n=4, max_n: int = 8, **kwargs):
+    # plt.rcParams['font.sans-serif'] = ['FSGB2312']
     build_it(**kwargs)
 
     if os.path.exists("../data"):
         os.system("rm -rf ../data")
     os.mkdir("../data")
 
+    label_names: list = None
+
     results = {}
     # for k in [(2 ** (max_n + 1)) // (2 ** i) for i in range((max_n + 1), 0, -1)]:
-    for k in [2 ** x for x in range(start_n, max_n)]:
+    for k in [int(2 ** (x / 2)) for x in range(start_n * 2, max_n * 2)]:
         # for k in range(0, 2 ** max_n, 10):
         repeate = 1
         for _ in range(repeate):
             # os.system(f"./mat_mul_test {k} > /dev/null")
             os.system(f"./mat_mul_test {k}")
             with open("results.txt", 'r') as f:
-                results_now = np.array([float(x) for x in f.readlines()])
+                # results_now = np.array([float(x) for x in f.readlines()])
+                lines = f.readlines()
+                results_now = np.array(
+                    [abs(float(x.split(': ')[1])) for x in lines])
+                if label_names is None:
+                    label_names = [x.split(': ')[0] for x in lines]
+                    # print(label_names)
+                # lines_data = {x.split(': ')[0]: x.split(': ')[1] for x in lines}
                 if k not in results:
                     results[k] = results_now
                 else:
                     results[k] = results[k] + results_now
         results[k] = results[k] / repeate
-        print(
-            f"N = {k:4}, time_native = {results[k][0]:9}, time_threaded = {results[k][1]:9}, time_OpenBLAS = {results[k][2]:9}")
+        print(f'N = {k:4}', ', '.join(
+            [f"{label_names[i]} = {results[k][i]}" for i in range(len(label_names))]))
+        # print(
+        #     f"N = {k:4}, time_native = {results[k][0]:9}, time_threaded = {results[k][1]:9}, time_OpenBLAS = {results[k][2]:9}")
     # print(results)
     # 画出图像
 
     # 绘制平滑曲线
     def interp1d_data(X_data, Y_data):
+        # print(X_data, Y_data)
         cubic_interploation_model = interp1d(X_data, Y_data, kind="cubic")
         xs = np.linspace(np.min(X_data), np.max(X_data), 500)
         ys = cubic_interploation_model(xs)
         return ys
     X = list(results.keys())
     X_linear = np.linspace(np.min(X), np.max(X), 500)
-    Y = [interp1d_data(X, [results[k][z] for k in results]) for z in range(3)]
-    plt.title('Running Time for Native, Threaded and OpenBLAS')
+    Y = [interp1d_data(X, [results[k][z] for k in X])
+         for z in range(len(label_names))]
+    plt.title(f'Running Time for {", ".join(label_names[:-1])} and {label_names[-1]}')
     plt.xlabel("N")
     plt.ylabel("Time")
-    [plt.plot(X_linear, y) for y in Y]
-    plt.legend(('Native', 'Threaded', 'OpenBLAS'), loc='upper right')
+    [plt.plot(X_linear, Y[i]) for i in range(len(Y))]
+    plt.legend(label_names, loc='upper right')
     plt.savefig("../data/plot.png")
     print('Saved image file: ../data/plot.png')
     plt.clf()
@@ -84,6 +98,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', '--max-n', type=int,
                         default=8, help='设置最大 N，N = 2^k，请输入 k。')
+    parser.add_argument('-s', '--start-n', type=int,
+                        default=8, help='设置开始 N，N = 2^k，请输入 k。')
     parser.add_argument('-b', '--build-method', type=str, default='make',
                         help='设置编译方式，两者都可以。', choices=['make', 'cmake'])
 

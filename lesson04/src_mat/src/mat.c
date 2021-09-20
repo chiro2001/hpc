@@ -11,6 +11,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "utils.h"
+
 // Author: Chiro2001
 // 代码来自大一上的 C 语言实验课的作品
 
@@ -22,13 +24,14 @@
 // @prog: 创建图像矩阵
 // @args: 图像宽, 高
 // @rets: 矩阵指针
-Mat* mat_create(int width, int height) {
+Mat* mat_create(int width, int height, int aligned) {
   Mat* mat = NULL;
   mat = malloc(sizeof(Mat));
   memset(mat, 0, sizeof(Mat));
   assert(mat);
   mat->w = width;
   mat->h = height;
+  mat->aligned = aligned;
   return mat;
 }
 
@@ -41,9 +44,11 @@ Mat* mat_data_init(Mat* mat) {
   }
 #ifdef USE_CONTIGROUS_MEM
   // 直接申请一整块空间罢
-  mat->content_real = malloc(sizeof(CHIMAT_TYPE) * (mat->w * mat->h + 2));
-  // assert(mat->content);
-  // memset(mat->content, 0, sizeof(CHIMAT_TYPE) * (mat->h * mat->w + 2));
+  // size_t mem_count = ((mat->w + (mat->w % 4)) * (mat->w + (mat->w % 4)) + 4);
+  size_t mem_count = ((mat->w / 4 + 1) * 4) * ((mat->w / 4 + 1) * 4) + 4;
+  mat->content_real = malloc(sizeof(CHIMAT_TYPE) * mem_count);
+  assert(mat->content_real);
+  memset(mat->content_real, 0, sizeof(CHIMAT_TYPE) * mem_count);
   // printf("\tMalloced at: %p, %p %% 32 = %lu\n", mat->content_real,
   //        mat->content_real, (size_t)(mat->content_real) % 32);
   // 尝试手动对齐 32 位
@@ -54,7 +59,17 @@ Mat* mat_data_init(Mat* mat) {
   // 然后做个索引
   mat->data = malloc(sizeof(CHIMAT_TYPE*) * mat->w);
   assert(mat->data);
-  for (int i = 0; i < mat->h; i++) mat->data[i] = mat->content + i * mat->w;
+  // printf("content @ [%p, %p]\n", mat->content, mat->content + mat->w *
+  // mat->h); 注意，索引也要对齐
+  if (mat->aligned)
+    for (int i = 0; i < mat->h; i++) {
+      // mat->data[i] = mat->content + (i * (mat->w + (4 - mat->w % 4)));
+      mat->data[i] = mat->content + (i * ((mat->w / 4 + 1) * 4));
+      // printf("mat->data[i] - mat->content = %ld\n",
+      //        mat->data[i] - mat->content);
+    }
+  else
+    for (int i = 0; i < mat->h; i++) mat->data[i] = mat->content + i * mat->w;
   return mat;
 #else
   mat->content = NULL;
@@ -83,9 +98,10 @@ Mat* mat_data_init_fast(Mat* mat) {
 // @args: 矩阵指针
 // @rets: void
 void mat_free(Mat* mat) {
-  for (int i = 0; i < mat->w; i++) {
-    free(mat->data[i]);
-  }
+  // for (int i = 0; i < mat->w; i++) {
+  //   free(mat->data[i]);
+  // }
+  free(mat->content_real);
   free(mat->data);
   free(mat);
 }
@@ -102,7 +118,7 @@ void mat_free_fast(Mat* mat) {
 // @args: 矩阵指针
 // @rets: 新的矩阵指针
 Mat* mat_clone(Mat* mat) {
-  Mat* dist = mat_create(mat->w, mat->h);
+  Mat* dist = mat_create(mat->w, mat->h, mat->aligned);
   mat_data_init(dist);
   for (int i = 0; i < mat->w; i++)
     for (int j = 0; j < mat->h; j++) dist->data[i][j] = mat->data[i][j];
@@ -113,7 +129,7 @@ Mat* mat_clone(Mat* mat) {
 // @args: 矩阵指针
 // @rets: 新的矩阵指针
 Mat* mat_clone_fast(Mat* mat) {
-  Mat* dist = mat_create(mat->w, mat->h);
+  Mat* dist = mat_create(mat->w, mat->h, mat->aligned);
   mat_data_init_fast(dist);
   // 更新索引
   for (int i = 0; i < mat->w; i++) dist->data[i] = mat->data[i];
@@ -126,7 +142,7 @@ Mat* mat_clone_fast(Mat* mat) {
 Mat* mat_crop(Mat* mat, int x1, int y1, int x2, int y2) {
   if (x1 > x2 || y1 > y2 || !mat) return NULL;
   int w = x2 - x1, h = y2 - y1;
-  Mat* dist = mat_create(w, h);
+  Mat* dist = mat_create(w, h, mat->aligned);
 #ifndef USE_FAST_CROP
   mat_data_init(dist);
   for (int i = 0; i < w; i++)
@@ -146,7 +162,7 @@ Mat* mat_crop(Mat* mat, int x1, int y1, int x2, int y2) {
 Mat* mat_padding_around(Mat* mat, int padding) {
   if (!mat) return NULL;
   int w = mat->w + padding * 2, h = mat->h + padding * 2;
-  Mat* dist = mat_create(w, h);
+  Mat* dist = mat_create(w, h, mat->aligned);
   mat_data_init(dist);
   for (int i = 0; i < mat->w; i++)
     for (int j = 0; j < mat->h; j++)
@@ -196,28 +212,65 @@ Mat* mat_conv(Mat* mat, double kernel[3][3]) {
 // @prog: 执行矩阵乘法，返回一个新的矩阵作为运算结果，或者直接在目的矩阵操作
 // @args: a * b -> c
 // @rets: c
-Mat* mat_mul(Mat* a, Mat* b, Mat* c_source) {
+Mat* mat_mul(Mat* a, Mat* b, Mat* c) {
   // 检查是否合法
-  if (a->w != b->h) {
-    return NULL;
-  }
-  // 可以在外部提供源
-  Mat* c = NULL;
-  if (c_source != NULL) {
-    c = c_source;
-  } else {
-    c = mat_create(a->h, b->w);
-    mat_data_init(c);
-  }
+  if ((!a || !b || !c) || (a->w != b->h)) return NULL;
+  // 计时，超时的话就直接返回
   int k = a->w;
+  struct timespec start, end;
+  clock_gettime(CLOCK_REALTIME, &start);
   for (int x = 0; x < c->w; x++) {
     for (int y = 0; y < c->h; y++) {
       double sum = 0;
       for (int i = 0; i < k; i++) sum += a->data[x][i] * b->data[i][y];
       c->data[x][y] = sum;
     }
+    if ((c->h >= 256 || c->w >= 256) && mat_native_time_limit > eps) {
+      clock_gettime(CLOCK_REALTIME, &end);
+      double delta = time_delta(start, end);
+      if (delta > mat_native_time_limit) {
+        mat_native_timeout = 1;
+        return c;
+      }
+    }
   }
   return c;
+}
+
+// @prog: 对矩阵进行一个印的打
+// @args: a
+void mat_print(Mat* a) {
+  const char format_all[] = "Mat([%s], shape=(%d, %d))";
+  // const char format_line[] = "    [%s], \n";
+  char* content = malloc(sizeof(char) * a->w * a->h * (MAT_PRINT_WIDTH + 3) +
+                         sizeof(char) * a->h * (4 + 5));
+  // char* buf[512];
+  memcpy(content, format_all, sizeof(char) * 4);
+  int last = 4;
+  for (int x = 0; x < a->h; x++) {
+    if (x != 0)
+      strcpy(content + last, "     [");
+    else
+      strcpy(content + last, "[[");
+    last += strlen(content + last);
+    for (int y = 0; y < a->w; y++) {
+      if (y != a->w - 1) {
+        sprintf(content + last, MAT_PRINT_FORMAT ", ", a->data[x][y]);
+      } else {
+        sprintf(content + last, MAT_PRINT_FORMAT, a->data[x][y]);
+      }
+      last += strlen(content + last);
+    }
+    if (x != a->h - 1) {
+      strcpy(content + last, "], \n");
+    } else {
+      strcpy(content + last, "]]");
+    }
+    last += strlen(content + last);
+  }
+  sprintf(content + last, format_all + 8, a->w, a->h);
+  puts(content);
+  free(content);
 }
 
 // @prog: 对矩阵进行一个置的转
@@ -225,7 +278,7 @@ Mat* mat_mul(Mat* a, Mat* b, Mat* c_source) {
 // @rets: a^T
 Mat* mat_transpose(Mat* a) {
   if (!a) return NULL;
-  Mat* t = mat_create(a->h, a->w);
+  Mat* t = mat_create(a->h, a->w, a->aligned);
   mat_data_init(t);
   for (int x = 0; x < t->w; x++) {
     for (int y = 0; y < t->h; y++) {
@@ -263,13 +316,8 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
   const size_t block_size = 4;
   size_t block_count = k / block_size;
   size_t remain_count = k % block_size;
-  __m256d sum_sp, sum_bl, sum_2;
+  __m256d sum_sp, sum_bl;
   __m256d load_a, load_b;
-  // __m256d vector_a[512], vector_b[512];
-  // double vector_a[512], vector_b[512];
-  // printf("T-%2d prepare for while, block_count = %d\n", id, (int)block_count);
-  // PINT(block_size);
-  // PINT(remain_count);
   while (1) {
     pthread_mutex_lock(&mat_task_mutex);
     if (mat_task_tail == 0) {
@@ -281,186 +329,86 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
     double sum = 0;
     sum_sp = _mm256_setzero_pd();
     sum_bl = _mm256_setzero_pd();
-    sum_2 = _mm256_setzero_pd();
 
     int x = mat_task_list[index][0], y = mat_task_list[index][1];
-    // printf("got index: %d @ (%d, %d)\n", index, x, y);
+    // double *p_a = a->content + x * a->w, *p_b = b->content + y * b->w;
+    // if (id) printf("Thread-%2d task: (%4d, %4d)\n", id, x, y);
+    // double *p_a = a->content + (x * a->w / 4 + 1) * 4,
+    //        *p_b = b->content + (y * b->w / 4 + 1) * 4;
+    double *p_a = a->content + (x * ((a->w / 4 + 1) * 4)),
+           *p_b = b->content + (y * ((b->w / 4 + 1) * 4));
 
-    // printf("Thread-%2d (%2d, %2d) finished.\n", id, x, y);
-    // for (int i = 0; i < k; i += 4) {
-    //   // 手动循环展开试试
-    //   sum += a->data[x][i] * b->data[i][y];
-    //   sum += a->data[x][i + 1] * b->data[i + 1][y];
-    //   sum += a->data[x][i + 2] * b->data[i + 2][y];
-    //   sum += a->data[x][i + 3] * b->data[i + 3][y];
-    // }
+    // mat->data[i] = mat->content + (i * ((mat->w / 4 + 1) * 4));
 
-    // for (int i = 0; i < k; i++) {
-    //   sum += a->data[x][i] * b->data[i][y];
-    // }
-    // c->data[x][y] = sum;
-
-    // 首先拷贝成 vector
-    // for (int i = 0; i < block_size; i++) {
-    //   // double* p = (double*)(&vector_b[i]);
-    //   // p[0] = b->data[i + 0][y];
-    //   // p[1] = b->data[i + 1][y];
-    //   // p[2] = b->data[i + 2][y];
-    //   // p[3] = b->data[i + 3][y];
-    //   // p = (double*)(&vector_a[i]);
-    //   // 按内存位置拷贝
-    //   memcpy(vector_a + i, a->data[x]);
-    //   // p[0] = a->data[x][i + 0];
-    //   // p[1] = a->data[x][i + 1];
-    //   // p[2] = a->data[x][i + 2];
-    //   // p[3] = a->data[x][i + 3];
-
-    // }
-    // 因为已经转置了，内存也是连续的，就直接拷贝 content 罢
-    // memcpy(vector_a, a->content, sizeof(double) * block_size * block_count);
-    // memcpy(vector_b, b->content, sizeof(double) * block_size * block_count);
-    // double *p_a = (double*)(&vector_a), *p_b = (double*)(&vector_b);
-    double *p_a = a->content + x * a->w, *p_b = b->content + y * b->w;
+    // puts("A:");
+    // mat_print(a);
+    // puts("B:");
+    // mat_print(b);
     // 使用 AVX 指令集
-    // printf("a->content = ");
-    // for (int i = 0; i < a->w * a->h; i++) {
-    //   printf("%2.2lf%s", a->content[i], i == (a->w * a->h - 1) ? "\n" : ",
-    //   ");
-    // }
     for (int i = 0; i < block_count; i++) {
-      // load_a = _mm256_load_pd((double*)(&vector_a[i]));
-      // load_b = _mm256_load_pd((double*)(&vector_b[i]));
       load_a = _mm256_load_pd(p_a);
       load_b = _mm256_load_pd(p_b);
-      // load_a = _mm256_load_pd(a->content + i * block_size);
-      // load_b = _mm256_load_pd(b->content + i * block_size);
+      // PD4(load_a);
+      // PD4(load_b);
       p_a += block_size;
       p_b += block_size;
-      // p_a += 1;
-      // p_b += 1;
-      // PD4(vector_a[i]);
-      // PD4(vector_b[i]);
-      // printf("T-%2d debug #3.\n", id);
-      // load_a = _mm256_load_pd(a->data[x] + i);
       sum_sp = _mm256_mul_pd(load_a, load_b);
-      // sum_sp = _mm256_mul_pd(vector_a[i], vector_a[i]);
-      // printf("%lf * %lf ==? %lf\n", ((double*)(&load_a))[0],
-      //        ((double*)(&load_b))[0], ((double*)(&sum_sp))[0]);
-      // exit(0);
-      sum_2 = _mm256_add_pd(sum_sp, sum_bl);
-      // printf("%lf + %lf ==? %lf %3s\n", ((double*)(&sum_sp))[0],
-      //        ((double*)(&sum_bl))[0], ((double*)(&sum_2))[0],
-      //        fabs((((double*)(&sum_sp))[0] + ((double*)(&sum_bl))[0]) -
-      //             ((double*)(&sum_2))[0]) < 1e-4
-      //            ? "YES"
-      //            : "NO");
-
-      // printf("==== loaded i = %d ====\n", i);
-      // PD4(load_a);
-      // PD4(load_b);
-      // PD4(sum_sp);
-      // PD4(sum_bl);
-      // PD4(sum_2);
-      // PD4(*p_a);
-      // PD4(*p_b);
-
-      sum_bl = sum_2;
-
-      // if (fabs(((double*)(&sum_bl))[0]) > 1e-4) exit(0);
-
-      // printf("calced: %lf\n", *((double*)(&sum_bl)));
-
-      // load_a = _mm256_setzero_pd();
-      // load_b = _mm256_setzero_pd();
-      // puts("==== set zero ====");
-      // PD4(load_a);
-      // PD4(load_b);
+      sum_bl = _mm256_add_pd(sum_sp, sum_bl);
     }
-    double* p = (double*)(&sum_bl);
-    sum = p[0] + p[1] + p[2] + p[3];
-    for (int i = 0; i < remain_count; i++)
-      sum += a->data[x][i + block_size * block_count] *
-             //  b->data[i + block_size * block_count][y];
-             b->data[y][i + block_size * block_count];
-    c->data[x][y] = sum;
-    // printf("c->data[x][y] = %lf\n", c->data[x][y]);
-  }
-}
-
-void my_assert(void* x, int line) {
-  if (!x) {
-    printf("ERROR!");
-    exit(1);
-  }
-}
-
-#define MAT_PRINT_WIDTH 5
-#define MAT_PRINT_FORMAT "%2.2lf"
-
-void mat_print(Mat* a) {
-  const char format_all[] = "Mat([%s], shape=(%d, %d))";
-  // const char format_line[] = "    [%s], \n";
-  char* content = malloc(sizeof(char) * a->w * a->h * (MAT_PRINT_WIDTH + 3) +
-                         sizeof(char) * a->h * (4 + 5));
-  // char* buf[512];
-  memcpy(content, format_all, sizeof(char) * 4);
-  int last = 4;
-  for (int x = 0; x < a->h; x++) {
-    if (x != 0)
-      strcpy(content + last, "     [");
-    else
-      strcpy(content + last, "[[");
-    last += strlen(content + last);
-    for (int y = 0; y < a->w; y++) {
-      if (y != a->w - 1) {
-        sprintf(content + last, MAT_PRINT_FORMAT ", ", a->data[x][y]);
-      } else {
-        sprintf(content + last, MAT_PRINT_FORMAT, a->data[x][y]);
-      }
-      last += strlen(content + last);
-    }
-    if (x != a->h - 1) {
-      strcpy(content + last, "], \n");
+    if (block_count > 0) {
+      double* p = (double*)(&sum_bl);
+      sum = p[0] + p[1] + p[2] + p[3];
     } else {
-      strcpy(content + last, "]]");
+      sum = 0;
     }
-    last += strlen(content + last);
+    // mat_print(a);
+    // printf("sum_partly = %lf, remain = %lu\n", sum, remain_count);
+    // printf("block_size * block_count = %lu\n", block_size * block_count);
+    for (int i = 0; i < remain_count; i++) {
+      // printf("visit: a(%d, %ld), b(%d, %ld)\n", x, i + block_size *
+      // block_count,
+      //        y, i + block_size * block_count);
+      // printf("a->content @ %p\n", a->content);
+      // printf("a->content[][] @ %p\n",
+      //        a->content + a->w * x + i + block_size * block_count);
+      // printf("a->data[x][i + block_size * block_count] @ %p\n",
+      //        a->data[x] + i + block_size * block_count);
+      // printf("val_a: %lf\n", a->data[x][i + block_size * block_count]);
+      // printf("val_b: %lf\n", b->data[y][i + block_size * block_count]);
+      // double part = a->data[x][i + block_size * block_count] *
+      //               b->data[y][i + block_size * block_count];
+      // printf("part: %lf\n", part);
+      sum += a->data[x][i + block_size * block_count] *
+             b->data[y][i + block_size * block_count];
+    }
+    // printf("sum_now: %lf\n", sum);
+    c->data[x][y] = sum;
   }
-  sprintf(content + last, format_all + 8, a->w, a->h);
-  puts(content);
-  free(content);
 }
 
-Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c_source, int threaded) {
+double mat_native_time_limit = 0;
+int mat_native_timeout = 0;
+
+Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c, int threaded) {
   // 检查是否合法
   if (a->w != b->h) {
     return NULL;
-  }
-  // 可以在外部提供源
-  Mat* c = NULL;
-  if (c_source != NULL) {
-    c = c_source;
-  } else {
-    c = mat_create(a->h, b->w);
-    mat_data_init(c);
   }
   // 首先对 b 进行一个置的转
   Mat* t = mat_transpose(b);
   // puts("B^T:");
   // mat_print(t);
-  // int k = a->w;
   // 初始化任务列表和线程池
   mat_task_list = malloc(sizeof(int*) * (a->h * b->w));
-  my_assert(mat_task_list, __LINE__);
+  assert(mat_task_list);
   mat_task_data = malloc(sizeof(int) * (a->h * b->w) * 2);
-  my_assert(mat_task_data, __LINE__);
+  assert(mat_task_data);
   mat_task_tail = a->h * b->w;
-  // int processor_number = sysconf(_SC_NPROCESSORS_ONLN);
   int processor_number = 1;
   if (threaded) processor_number = sysconf(_SC_NPROCESSORS_ONLN);
   // printf("processor_number = %d\n", processor_number);
   pthread_t* pool = malloc(sizeof(pthread_t) * processor_number);
-  my_assert(pool, __LINE__);
+  assert(pool);
   // 初始化任务
   for (int x = 0; x < c->h; x++) {
     for (int y = 0; y < c->w; y++) {
@@ -487,5 +435,7 @@ Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c_source, int threaded) {
   for (int i = 0; i < processor_number; i++) {
     pthread_join(pool[i], NULL);
   }
+  // puts("C:");
+  // mat_print(c);
   return c;
 }

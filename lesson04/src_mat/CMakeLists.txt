@@ -22,7 +22,8 @@ include_directories(${include_dirs})
 # Src
 
 file(GLOB_RECURSE source_files
-        "${PROJECT_SOURCE_DIR}/src/*.h" "${PROJECT_SOURCE_DIR}/src/mat.c")
+        "${PROJECT_SOURCE_DIR}/src/*.h"
+        "${PROJECT_SOURCE_DIR}/src/mat.c" "${PROJECT_SOURCE_DIR}/src/utils.c")
 message(STATUS "Source files: ${source_files}")
 
 # Resources
