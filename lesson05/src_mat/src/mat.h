@@ -53,7 +53,7 @@ Mat* mat_mul_threaded(Mat* a, Mat* b, Mat* c, int processor_number, int unrollin
 void mat_mul_cell(mat_mul_thread_t* thread_data);
 
 Mat* mat_mul_openmp_native(Mat* a, Mat* b, Mat* c);
-Mat* mat_mul_openmp(Mat* a, Mat* b, Mat* c, int processor_number, int unrolling);
+Mat* mat_mul_openmp(Mat* a, Mat* b, Mat* c, int unrolling);
 
 extern double mat_native_time_limit;
 extern int mat_native_timeout;

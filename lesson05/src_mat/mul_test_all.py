@@ -1,6 +1,7 @@
 import os
 import argparse
-from posixpath import join
+import psutil
+import platform
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import interp1d
@@ -34,7 +35,7 @@ def build_it(build_method: str = 'make'):
                 return
 
 
-def test_all(start_n=4, max_n: int = 8, out: str = 'plot.png', repeate: int = 1, **kwargs):
+def test_all(start_n=4, max_n: int = 8, out: str = 'plot.png', repeate: int = 1, fitting: str = 'cubic', **kwargs):
     # plt.rcParams['font.sans-serif'] = ['FSGB2312']
     build_it(**kwargs)
 
@@ -69,15 +70,12 @@ def test_all(start_n=4, max_n: int = 8, out: str = 'plot.png', repeate: int = 1,
         results[k] = results[k] / repeate
         print(f'N = {k:4}', ', '.join(
             [f"{label_names[i]} = {results[k][i]:.3}" for i in range(len(label_names))]))
-        # print(
-        #     f"N = {k:4}, time_native = {results[k][0]:9}, time_threaded = {results[k][1]:9}, time_OpenBLAS = {results[k][2]:9}")
-    # print(results)
-    # 画出图像
 
+    # 画出图像
     # 绘制平滑曲线
     def interp1d_data(X_data, Y_data):
         # print(X_data, Y_data)
-        cubic_interploation_model = interp1d(X_data, Y_data, kind="cubic")
+        cubic_interploation_model = interp1d(X_data, Y_data, kind=fitting)
         xs = np.linspace(np.min(X_data), np.max(X_data), 500)
         ys = cubic_interploation_model(xs)
         return ys
@@ -85,13 +83,17 @@ def test_all(start_n=4, max_n: int = 8, out: str = 'plot.png', repeate: int = 1,
     X_linear = np.linspace(np.min(X), np.max(X), 500)
     Y = [interp1d_data(X, [results[k][z] for k in X])
          for z in range(len(label_names))]
-    plt.title(
-        f'Running Time for {", ".join(label_names[:-1])} and {label_names[-1]}')
+    # plt.title(f'Running Time for {", ".join(label_names[:-1])} and {label_names[-1]}')
+    plt.title(f'On {platform.platform()}\n{psutil.cpu_count()} Core(s) {(psutil.cpu_freq().current / 1000):.3}GHz, ' +
+              '$N' r'\in' '[2^{' + str(start_n) + '}, 2^{' + str(max_n) + '}]$, ' + f'Repeate={repeate}, {len(label_names)} items, {fitting} fitting.')
     plt.xlabel("N")
     plt.ylabel("Time(s)")
     [plt.plot(X_linear, Y[i]) for i in range(len(Y))]
-    plt.legend(label_names, loc='upper right')
-    save_path = os.path.join("../data/", out)
+    plt.legend(label_names, loc='upper left')
+    if not out.endswith('.png'):
+        out = out + '.png'
+    save_path = os.path.join(
+        "../data/", '.'.join(out.split('.')[:-1]) + f"_s{start_n}_m{max_n}_r{repeate}_{fitting}")
     plt.savefig(save_path)
     print(f'Saved image file: {save_path}')
     plt.clf()
@@ -100,15 +102,17 @@ def test_all(start_n=4, max_n: int = 8, out: str = 'plot.png', repeate: int = 1,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', '--max-n', type=int,
-                        default=8, help='设置最大 N，N = 2^k，请输入 k。')
+                        default=7, help='设置最大 N，N = 2^k，请输入 k。')
     parser.add_argument('-s', '--start-n', type=int,
-                        default=8, help='设置开始 N，N = 2^k，请输入 k。')
+                        default=3, help='设置开始 N，N = 2^k，请输入 k。')
     parser.add_argument('-r', '--repeate', type=int,
                         default=1, help='设置每个 N 重复多少次取平均值。')
     parser.add_argument('-b', '--build-method', type=str, default='make',
                         help='设置编译方式，两者都可以。', choices=['make', 'cmake'])
+    parser.add_argument('-f', '--fitting', type=str, default='cubic',
+                        help='设置曲线拟合方式: 二次拟合或线性。', choices=['cubic', 'linear'])
     parser.add_argument('-o', '--out', type=str, default='plot.png',
-                        help='设置图片保存文件名。')
+                        help='设置图片保存基础文件名(不含扩展名)。')
 
     args = parser.parse_args()
     test_all(**args.__dict__)

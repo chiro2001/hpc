@@ -15,7 +15,7 @@ void do_calc(int task_id, int M, int N, Mat** C, const char* task_name,
   struct timespec start, end;
   Mat* A = NULL;
   Mat* B = NULL;
-  const int aligns[] = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0};
+  const int aligns[] = {0, 0, 1, 1, 1, 1, 1, 1, 0};
   int aligned = aligns[task_id];
   A = mat_create(M, N, aligned);
   B = mat_create(N, M, aligned);
@@ -58,14 +58,10 @@ void do_calc(int task_id, int M, int N, Mat** C, const char* task_name,
   } else if (task_id == 5) {
     mat_mul_threaded(A, B, *C, processor_number, 1);
   } else if (task_id == 6) {
-    mat_mul_openmp(A, B, *C, 1, 0);
+    mat_mul_openmp(A, B, *C, 0);
   } else if (task_id == 7) {
-    mat_mul_openmp(A, B, *C, 1, 1);
+    mat_mul_openmp(A, B, *C, 1);
   } else if (task_id == 8) {
-    mat_mul_openmp(A, B, *C, processor_number, 0);
-  } else if (task_id == 9) {
-    mat_mul_openmp(A, B, *C, processor_number, 1);
-  } else if (task_id == 10) {
     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, A->w, B->h, A->h, 1,
                 A->content, A->w, B->content, B->h, 0, (*C)->content, (*C)->h);
   }
@@ -106,8 +102,6 @@ int main(int argc, char** argv) {
   Mat* C[32] = {NULL};
   double results[32];
 
-  // const char task_names[][64] = {"简单矩阵", "单线程矩阵优化",
-  // "多线程矩阵优化", "OpenBLAS"};
   const char task_names[][64] = {"Native",
                                  "OpenMP",
                                  "SIMD",
@@ -116,11 +110,9 @@ int main(int argc, char** argv) {
                                  "Unrolling Threaded SIMD",
                                  "OpenMP SIMD",
                                  "OpenMP Unrolling SIMD",
-                                 "OpenMP Threaded SIMD",
-                                 "OpenMP Unrolling Threaded SIMD",
                                  "OpenBLAS"};
 
-  const int task_number = 11;
+  const int task_number = 9;
   const int task_start = 0;
   int processor_number = sysconf(_SC_NPROCESSORS_ONLN);
   pdebug("Running with %d cores.\n", processor_number);

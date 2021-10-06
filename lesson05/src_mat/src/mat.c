@@ -450,8 +450,7 @@ int mat_native_timeout = 0;
 double mat_openmp_time_limit = 0;
 int mat_openmp_timeout = 0;
 
-Mat* mat_mul_openmp(Mat* a, Mat* b, Mat* c, int processor_number,
-                    int unrolling) {
+Mat* mat_mul_openmp(Mat* a, Mat* b, Mat* c, int unrolling) {
   // 检查是否合法
   if (a->w != b->h) {
     return NULL;
