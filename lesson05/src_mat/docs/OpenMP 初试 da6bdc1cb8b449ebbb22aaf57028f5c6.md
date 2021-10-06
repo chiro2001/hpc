@@ -1,4 +1,4 @@
-# OpenMP初试
+# OpenMP 初试
 
 > code at: /lesson05/src_mat/src, data at: /lesson05/src_mat/data
 > 
@@ -125,11 +125,11 @@ Hello, OpenMP!
 
 **小矩阵情况：$N \in [2^1, \lfloor 2^{7.5} \rfloor]$，重复 50 次取平均值**
 
-![Untitled](OpenMP%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled.png)
+![Untitled](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled.png)
 
 图1，openmp_wsl_s1_m7_r50_cubic.png
 
-![Untitled](OpenMP%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%201.png)
+![Untitled](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%201.png)
 
 图2，openmp_server_s1_m7_r50_cubic.png
 
@@ -141,21 +141,21 @@ Hello, OpenMP!
 
 **大矩阵情况：$N \in [2^7, \lfloor 2^{10.5} \rfloor]$，重复 2 次取平均值**
 
-![Untitled](OpenMP%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%202.png)
+![Untitled](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%202.png)
 
 图3，openmp_wsl_s7_m9_r2_linear.png
 
-![Untitled](OpenMP%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%203.png)
+![Untitled](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%203.png)
 
 图4，openmp_wsl_s7_m11_r2_linear.png
 
-![Untitled](OpenMP%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%204.png)
+![openmp_server_s7_m11_r2_linear.png](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/openmp_server_s7_m11_r2_linear.png)
 
 图5，openmp_server_s7_m11_r2_linear.png
 
 1. OpenMP 在此实验中表现并不算好。
     
-    首先是橙色线的 "OpenMP"，即在最外层加了自动展开的 Native 算法，在$E \in [2^7, 2^9)$的时候表现仍然不如 Native。明明并行块已经足够大，而且并行块之间并没有数据冲突，但是速度就是很慢。在 N = 1448 的时候， OpenMP 优化终于快过 Native，但是并没快过太多，而且和手动管理多线程的优化方法还有很大差别。
+    首先是橙色线的 "OpenMP"，即在最外层加了自动展开的 Native 算法，在$E \in [2^7, 2^9)$的时候表现仍然不如 Native。明明并行块已经足够大，而且并行块之间并没有数据冲突，但是速度就是很慢。在 N = 1448 且运行环境为 8 核的时候， OpenMP 优化终于快过 Native，但是并没快过太多，而且和手动管理多线程的优化方法还有很大差别。
     
     然后是“OpenMP SIMD”和“SIMD”的对比（粉色和绿色线），即用 OpenMP 优化过调度的SIMD优化以及单线程的 SIMD 优化。在图 3 中，OpenMP SIMD 仍然慢于 SIMD，在图 4 和图 5，OpenMP SIMD 才快于 单线程的 SIMD。
     
@@ -327,3 +327,5 @@ Hello, OpenMP!
 1. 在实际环境测试中，OpenMP 性能并没有太大优化，甚至有出现计算错误的情况，很有可能 OpenMP 的使用方法错误了。
 2. OpenMP 中方便快捷的 Directives 的使用可以极大的加快开发速度，具有方便易用、兼容性高、高性能的特点。
 3. 和 pthread 对比， OpenMP 开发比自己手动管理线程数量和线程池要方便得多，而且兼容性更高，Windows 同样可以简单使用。
+
+![Untitled](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%204.png)
