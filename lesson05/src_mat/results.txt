@@ -1,9 +1,9 @@
-Native: 0.000006
-OpenMP: 0.117980
-SIMD: 0.006976
-Unrolling SIMD: 0.007829
-Threaded SIMD: 0.018029
-Unrolling Threaded SIMD: 0.002965
-OpenMP SIMD: 0.027909
-OpenMP Unrolling SIMD: 0.004724
-OpenBLAS: 0.027533
+Native: 0.216582
+OpenMP: 0.280888
+SIMD: 0.086666
+Unrolling SIMD: 0.072940
+Threaded SIMD: 0.033264
+Unrolling Threaded SIMD: 0.031250
+OpenMP SIMD: 0.118482
+OpenMP Unrolling SIMD: 0.133767
+OpenBLAS: 0.030565
