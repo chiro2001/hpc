@@ -92,7 +92,7 @@ i = 48
 添加的 OpenMP 优化如下：
 
 1. 普通计算的时候用 OpenMP 优化
-    
+   
     ```c
     Mat* mat_mul_openmp_native(Mat* a, Mat* b, Mat* c) {
       // 检查是否合法
@@ -117,7 +117,7 @@ i = 48
     如在最内层循环开启 OpenMP，需要使用 `#pragma omp parallel for reduction(+:sum)` 。
     
 2. 用 OpenMP 优化 lesson04 中的任务调度程序
-    
+   
     ```c
     Mat* mat_mul_openmp(Mat* a, Mat* b, Mat* c, int unrolling) {
       // 检查是否合法
@@ -182,8 +182,6 @@ i = 48
 1. 在小矩阵的情况下，因为比较复杂的算法都需要一些内存分配等规划时间和空间，所以这些算法往往不如直接进行矩阵计算快，也不如直接计算要稳定。
 2. SIMD（单指令单数据）表现相对稳定，在这种情况下相比直接计算慢的不多。
 3. 多线程计算分配内存的花销一直存在，而且在小矩阵的情况下很明显。
-4. OpenMP 的优化在小矩阵的情况下并不好，比很多方法差很多，说明对 OpenMP 库来说，计算拆得太零碎对整体计算优化不大。
-5. OpenBLAS 在计算小矩阵的时候速度和直接计算差不多，说明内部对小矩阵计算也有所优化。
 
 **大矩阵情况：$N \in [2^7, \lfloor 2^{10.5} \rfloor]$，重复 2 次取平均值**
 
@@ -200,7 +198,7 @@ i = 48
 图5，openmp_server_s7_m11_r2_linear.png
 
 1. OpenMP 在此实验中 N 相对较大的时候表现很不错，优化效果很明显。
-    
+   
     首先是橙色线的 "OpenMP"，即在最外层加了 OpenMP 的 Native 算法，效率约为 Native 的 8 倍。
     
     然后是“OpenMP SIMD”和“SIMD”的对比（粉色和绿色线），即用 OpenMP 优化过调度的 SIMD优化以及单线程的 SIMD 优化。经过 OpenMP 优化后速度也增长到了原来 SIMD 的 8 倍左右。
