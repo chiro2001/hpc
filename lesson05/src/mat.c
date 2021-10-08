@@ -254,13 +254,16 @@ Mat* mat_mul_openmp_native(Mat* a, Mat* b, Mat* c) {
   clock_gettime(CLOCK_REALTIME, &start);
 #endif
 #pragma omp parallel
-  for (int x = 0; x < c->w; x++) {
-    // #pragma omp parallel
-    for (int y = 0; y < c->h; y++) {
-      double sum = 0;
+  {
+#pragma omp for
+    for (int x = 0; x < c->w; x++) {
       // #pragma omp parallel
-      for (int i = 0; i < k; i++) sum += a->data[x][i] * b->data[i][y];
-      c->data[x][y] = sum;
+      for (int y = 0; y < c->h; y++) {
+        double sum = 0;
+        // #pragma omp parallel
+        for (int i = 0; i < k; i++) sum += a->data[x][i] * b->data[i][y];
+        c->data[x][y] = sum;
+      }
     }
 #ifdef USE_TIMEOUT_OPENMP
     if ((c->h >= 256 || c->w >= 256) && mat_openmp_time_limit > eps) {
@@ -344,8 +347,7 @@ void mat_mul_cell(mat_mul_thread_t* thread_data) {
   int single = thread_data->single;
   int single_index = thread_data->single_index;
   int unrolling = thread_data->unrolling;
-  if (!single)
-    free(thread_data);
+  if (!single) free(thread_data);
   int k = a->w;
   int index = 0;
 
@@ -485,9 +487,12 @@ Mat* mat_mul_openmp(Mat* a, Mat* b, Mat* c, int unrolling) {
     thread_data[i].single_index = i;
     thread_data[i].unrolling = unrolling;
   }
-  #pragma omp parallel
-  for (int t = 0; t < mat_task_tail; t++) {
-    mat_mul_cell(thread_data + t);
+#pragma omp parallel
+  {
+#pragma omp for
+    for (int t = 0; t < mat_task_tail; t++) {
+      mat_mul_cell(thread_data + t);
+    }
   }
 
   // puts("C:");
