@@ -21,11 +21,11 @@ build:
 		-L${OpenBLAS_LIBRARIES} \
 		-I${OpenBLAS_INCLUDE_DIRS} \
 		-lopenblas \
-		-static \
 		-lpthread \
 		-fopenmp \
 		-ldl \
-		-mavx
+		-mavx \
+		-Wl,-Bsymbolic-functions -Wl,-z,relro -I/usr/include/x86_64-linux-gnu/mpich -L/usr/lib/x86_64-linux-gnu -lmpich
 
 run: build
 # 所以，神降下了祂的神罚，惩罚作为世界载体的 CPU 高负荷执行一段无用的计算

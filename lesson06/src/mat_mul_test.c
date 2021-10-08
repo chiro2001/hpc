@@ -1,4 +1,5 @@
 #include <math.h>
+#include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -10,11 +11,11 @@
 
 Mat *A_g, *B_g;
 
-void do_calc(int task_id, int M, int N, Mat** C, const char* task_name,
-             double* results, int result_tail, int processor_number) {
+void do_calc(int task_id, int M, int N, Mat **C, const char *task_name,
+             double *results, int result_tail, int processor_number) {
   struct timespec start, end;
-  Mat* A = NULL;
-  Mat* B = NULL;
+  Mat *A = NULL;
+  Mat *B = NULL;
   const int aligns[] = {0, 0, 1, 1, 1, 1, 1, 1, 0};
   int aligned = aligns[task_id];
   A = mat_create(M, N, aligned);
@@ -70,7 +71,15 @@ void do_calc(int task_id, int M, int N, Mat** C, const char* task_name,
   pdebug("\t%s: 计算用时: %3.3lfs\n", task_name, results[result_tail]);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
+  int size = 0, rank = 0;
+  char processor_name[MPI_MAX_PROCESSOR_NAME];
+  int processor_name_length = 0;
+  MPI_Init(&argc, &argv);
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Get_processor_name(processor_name, &processor_name_length);
+  printf("Running on %s, total %d slot(s).\n", processor_name, size);
   // 处理一下参数
   int K = 5;
   if (argc <= 1) {
@@ -99,18 +108,15 @@ int main(int argc, char** argv) {
     }
   }
 
-  Mat* C[32] = {NULL};
+  Mat *C[32] = {NULL};
   double results[32];
 
-  const char task_names[][64] = {"Native",
-                                 "OpenMP",
-                                 "SIMD",
-                                 "Unrolling SIMD",
-                                 "Threaded SIMD",
-                                 "Unrolling Threaded SIMD",
-                                 "OpenMP SIMD",
-                                 "OpenMP Unrolling SIMD",
-                                 "OpenBLAS"};
+  const char task_names[][64] = {"Native",        "OpenMP",
+                                 "SIMD",          "Unrolling SIMD",
+                                 "Threaded SIMD", "Unrolling Threaded SIMD",
+                                 "OpenMP SIMD",   "OpenMP Unrolling SIMD",
+                                 "OpenBLAS",      "MPI",
+                                 "MPI SIMD",      "MPI Unrolling SIMD"};
 
   const int task_number = 9;
   const int task_start = 0;
@@ -121,7 +127,7 @@ int main(int argc, char** argv) {
   }
 
   // 结果写入文件
-  FILE* fp = fopen("results.txt", "w");
+  FILE *fp = fopen("results.txt", "w");
   if (!fp) {
     printf("Cannot open results.txt!!\n");
     return 1;
@@ -157,7 +163,8 @@ int main(int argc, char** argv) {
     }
     int is_ok_all = 1;
     for (int i = task_start; i < task_number; i++)
-      if (!is_ok[i]) is_ok_all = 0;
+      if (!is_ok[i])
+        is_ok_all = 0;
     if (!is_ok_all) {
       puts("[0]\t参考: ");
       mat_print(C[0]);
