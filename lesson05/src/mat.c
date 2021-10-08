@@ -257,10 +257,9 @@ Mat* mat_mul_openmp_native(Mat* a, Mat* b, Mat* c) {
   {
 #pragma omp for
     for (int x = 0; x < c->w; x++) {
-      // #pragma omp parallel
       for (int y = 0; y < c->h; y++) {
         double sum = 0;
-        // #pragma omp parallel
+        
         for (int i = 0; i < k; i++) sum += a->data[x][i] * b->data[i][y];
         c->data[x][y] = sum;
       }

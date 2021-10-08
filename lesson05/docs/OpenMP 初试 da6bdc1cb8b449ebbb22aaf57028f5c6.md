@@ -37,38 +37,84 @@ Hello, OpenMP!
 
 在开启了 OpenMP 的那一行，一行语句被拆分到 8 个核心分别执行，所以输出了 8 次。
 
+```c
+// openmp_demo_for.cpp
+#include <cstdio>
+#include <omp.h>
+
+int main(int argc, char **argv) {
+  #pragma omp parallel
+	{
+		#pragma omp for
+		for (int i = 0; i < 64; i++) printf("i = %d\n", i);
+	}
+  return 0;
+}
+```
+
+使用 `#pragma omp for` 对 `for` 循环开启 OpenMP。 `g++ -o openmp_demo_for openmp_demo_for.cpp -fopenmp && ./openmp_demo_for` 输出为：
+
+```bash
+i = 0
+i = 1
+i = 2
+i = 3
+i = 4
+i = 5
+i = 6
+i = 7
+i = 16
+i = 17
+i = 18
+i = 19
+i = 20
+i = 21
+i = 22
+i = 23
+i = 8
+i = 9
+i = 10
+i = 11
+i = 12
+i = 13
+i = 14
+i = 15
+i = 48
+......
+```
+
+运行环境为 8 核心 CPU。所以可知，OpenMP 现在按照 8 个线程分组执行。
+
 ## 使用 OpenMP 优化矩阵乘法
 
 代码基本和 lesson04 一样，添加了 OpenMP 操作对比，优化了数据展示方式。
 
-添加的 OpenMP **优化**如下：
+添加的 OpenMP 优化如下：
 
 1. 普通计算的时候用 OpenMP 优化
     
     ```c
-    // @prog: 用 OpenMP 执行矩阵乘法
-    // @args: a * b -> c
-    // @rets: c
     Mat* mat_mul_openmp_native(Mat* a, Mat* b, Mat* c) {
       // 检查是否合法
       if ((!a || !b || !c) || (a->w != b->h)) return NULL;
       // 计时，超时的话就直接返回
       int k = a->w;
-      #pragma omp parallel
-      for (int x = 0; x < c->w; x++) {
-        for (int y = 0; y < c->h; y++) {
-          double sum = 0;
-          for (int i = 0; i < k; i++) sum += a->data[x][i] * b->data[i][y];
-          c->data[x][y] = sum;
+    #pragma omp parallel
+      {
+    #pragma omp for
+        for (int x = 0; x < c->w; x++) {
+          for (int y = 0; y < c->h; y++) {
+            double sum = 0;
+            for (int i = 0; i < k; i++) sum += a->data[x][i] * b->data[i][y];
+            c->data[x][y] = sum;
+          }
         }
       }
       return c;
     }
     ```
     
-    这里把 OpenMP 放在了最外面一层循环，因为按照实验放在最外层已经是相对更快的做法了，暂时不知道原因。
-    
-    而且如果 OpenMP 放在最内侧的 i 循环，甚至会计算错误。我不知道这是什么原因。
+    如在最内层循环开启 OpenMP，需要使用 `#pragma omp parallel for reduction(+:sum)` 。
     
 2. 用 OpenMP 优化 lesson04 中的任务调度程序
     
@@ -106,7 +152,7 @@ Hello, OpenMP!
         thread_data[i].single_index = i;
         thread_data[i].unrolling = unrolling;
       }
-      #pragma omp parallel
+      #pragma omp parallel for
       for (int t = 0; t < mat_task_tail; t++) {
         mat_mul_cell(thread_data + t);
       }
@@ -125,13 +171,13 @@ Hello, OpenMP!
 
 **小矩阵情况：$N \in [2^1, \lfloor 2^{7.5} \rfloor]$，重复 50 次取平均值**
 
-![Untitled](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled.png)
+![openmp_update_s1_m7_r50_cubic.png](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/openmp_update_s1_m7_r50_cubic.png)
 
-图1，openmp_wsl_s1_m7_r50_cubic.png
+图1，openmp_update_s1_m7_r50_cubic.png
 
-![Untitled](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%201.png)
+![openmp_update_server_s1_m7_r50_cubic.png](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/openmp_update_server_s1_m7_r50_cubic.png)
 
-图2，openmp_server_s1_m7_r50_cubic.png
+图2，openmp_update_server_s1_m7_r50_cubic.png
 
 1. 在小矩阵的情况下，因为比较复杂的算法都需要一些内存分配等规划时间和空间，所以这些算法往往不如直接进行矩阵计算快，也不如直接计算要稳定。
 2. SIMD（单指令单数据）表现相对稳定，在这种情况下相比直接计算慢的不多。
@@ -141,191 +187,34 @@ Hello, OpenMP!
 
 **大矩阵情况：$N \in [2^7, \lfloor 2^{10.5} \rfloor]$，重复 2 次取平均值**
 
-![Untitled](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%202.png)
+![openmp_update_s7_m9_r10_linear.png](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/openmp_update_s7_m9_r10_linear.png)
 
-图3，openmp_wsl_s7_m9_r2_linear.png
+图3，openmp_update_s7_m9_r10_linear.png
 
-![Untitled](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%203.png)
+![openmp_update_s7_m11_r2_linear.png](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/openmp_update_s7_m11_r2_linear.png)
 
-图4，openmp_wsl_s7_m11_r2_linear.png
+图4，openmp_update_s7_m11_r2_linear.png
 
-![openmp_server_s7_m11_r2_linear.png](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/openmp_server_s7_m11_r2_linear.png)
+![openmp_update_server_s7_m11_r2_linear.png](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/openmp_update_server_s7_m11_r2_linear.png)
 
 图5，openmp_server_s7_m11_r2_linear.png
 
-1. OpenMP 在此实验中表现并不算好。
+1. OpenMP 在此实验中 N 相对较大的时候表现很不错，优化效果很明显。
     
-    首先是橙色线的 "OpenMP"，即在最外层加了自动展开的 Native 算法，在$E \in [2^7, 2^9)$的时候表现仍然不如 Native。明明并行块已经足够大，而且并行块之间并没有数据冲突，但是速度就是很慢。在 N = 1448 且运行环境为 8 核的时候， OpenMP 优化终于快过 Native，但是并没快过太多，而且和手动管理多线程的优化方法还有很大差别。
+    首先是橙色线的 "OpenMP"，即在最外层加了 OpenMP 的 Native 算法，效率约为 Native 的 8 倍。
     
-    然后是“OpenMP SIMD”和“SIMD”的对比（粉色和绿色线），即用 OpenMP 优化过调度的SIMD优化以及单线程的 SIMD 优化。在图 3 中，OpenMP SIMD 仍然慢于 SIMD，在图 4 和图 5，OpenMP SIMD 才快于 单线程的 SIMD。
+    然后是“OpenMP SIMD”和“SIMD”的对比（粉色和绿色线），即用 OpenMP 优化过调度的 SIMD优化以及单线程的 SIMD 优化。经过 OpenMP 优化后速度也增长到了原来 SIMD 的 8 倍左右。
     
     再然后是“OpenMP Unrolling SIMD”和“Unrolling SIMD”（灰色和红色线），即用 OpenMP 优化过调度的手动循环展开的 SIMD，以及单线程循环展开的 SIMD。这两条线情况和粉色、绿色线结果相同。
     
-    由上面三组比较可以看出，在 N 特别大的时候，OpenMP 才比优化前有优势。
+    由上面三组比较可以看出，当 N 比较大，OpenMP 可以自动调度上所有的 CPU 核心进行计算，成倍提高计算速度。
     
-    那么是不是 OpenMP 没有运行起来呢？我们可以使用 `pstree` 命令查看进程的线程树。
-    
-    ```bash
-    ➜  build_mkfile git:(master) ✗ ./mat_mul_test 1024 &
-    [3] 8453
-    使用: K = 1024                                                                                                                                                        
-    Running with 8 cores.
-    # OpenMP 启动前，"Native"
-    ➜  build_mkfile git:(master) ✗ pstree -p 8453
-    mat_mul_test(8453)─┬─{mat_mul_test}(8455)
-                       ├─{mat_mul_test}(8456)
-                       ├─{mat_mul_test}(8457)
-                       ├─{mat_mul_test}(8461)
-                       ├─{mat_mul_test}(8462)
-                       ├─{mat_mul_test}(8463)
-                       └─{mat_mul_test}(8464)
-    Native: 计算用时: 32.866s
-    # OpenMP 启动后，"OpenMP"
-    [1]     OpenMP 计算: 开始计时
-    pstree -p 8453
-    mat_mul_test(8453)─┬─{mat_mul_test}(8455)
-                       ├─{mat_mul_test}(8456)
-                       ├─{mat_mul_test}(8457)
-                       ├─{mat_mul_test}(8461)
-                       ├─{mat_mul_test}(8462)
-                       ├─{mat_mul_test}(8463)
-                       ├─{mat_mul_test}(8464)
-                       ├─{mat_mul_test}(8825)
-                       ├─{mat_mul_test}(8826)
-                       ├─{mat_mul_test}(8827)
-                       ├─{mat_mul_test}(8828)
-                       ├─{mat_mul_test}(8829)
-                       ├─{mat_mul_test}(8830)
-                       └─{mat_mul_test}(8831)
-    OpenMP: 计算用时: 28.793s
-    ```
-    
-    可见 OpenMP 确实有作用，开始计算后多出了 6 个线程，N = 1024 时最终计算也比 Native 快些。
-    
-    再看看 N = 256 的时候。
-    
-    ```bash
-    #!/bin/bash
-    ./build_mkfile/mat_mul_test 256 &
-    for i in $(seq 1 10)
-    do
-    sleep 0.1 && pstree -p `ps -ef | grep "mat_mul_test" | grep -v grep | awk '{print $2}'`
-    done
-    ```
-    
-    ```bash
-    ➜  src_mat git:(master) ✗ sh test_openmp.sh
-    使用: K = 256
-    Running with 8 cores.
-    [0]     Native 计算: 开始计时
-    mat_mul_test(14287)─┬─{mat_mul_test}(14289)
-                        ├─{mat_mul_test}(14290)
-                        ├─{mat_mul_test}(14291)
-                        ├─{mat_mul_test}(14292)
-                        ├─{mat_mul_test}(14293)
-                        ├─{mat_mul_test}(14295)
-                        └─{mat_mul_test}(14296)
-            Native: 计算用时: 0.217s
-    [1]     OpenMP 计算: 开始计时
-    mat_mul_test(14287)─┬─{mat_mul_test}(14289)
-                        ├─{mat_mul_test}(14290)
-                        ├─{mat_mul_test}(14291)
-                        ├─{mat_mul_test}(14292)
-                        ├─{mat_mul_test}(14293)
-                        ├─{mat_mul_test}(14295)
-                        ├─{mat_mul_test}(14296)
-                        ├─{mat_mul_test}(14304)
-                        ├─{mat_mul_test}(14305)
-                        ├─{mat_mul_test}(14306)
-                        ├─{mat_mul_test}(14307)
-                        ├─{mat_mul_test}(14308)
-                        ├─{mat_mul_test}(14309)
-                        └─{mat_mul_test}(14310)
-            OpenMP: 计算用时: 0.281s
-    [2]     SIMD 计算: 开始计时
-    mat_mul_test(14287)─┬─{mat_mul_test}(14289)
-                        ├─{mat_mul_test}(14290)
-                        ├─{mat_mul_test}(14291)
-                        ├─{mat_mul_test}(14292)
-                        ├─{mat_mul_test}(14293)
-                        ├─{mat_mul_test}(14295)
-                        ├─{mat_mul_test}(14296)
-                        ├─{mat_mul_test}(14304)
-                        ├─{mat_mul_test}(14305)
-                        ├─{mat_mul_test}(14306)
-                        ├─{mat_mul_test}(14307)
-                        ├─{mat_mul_test}(14308)
-                        ├─{mat_mul_test}(14309)
-                        └─{mat_mul_test}(14310)
-            SIMD: 计算用时: 0.087s
-    [3]     Unrolling SIMD 计算: 开始计时
-    mat_mul_test(14287)─┬─{mat_mul_test}(14289)
-                        ├─{mat_mul_test}(14290)
-                        ├─{mat_mul_test}(14291)
-                        ├─{mat_mul_test}(14292)
-                        ├─{mat_mul_test}(14293)
-                        ├─{mat_mul_test}(14295)
-                        ├─{mat_mul_test}(14296)
-                        ├─{mat_mul_test}(14304)
-                        ├─{mat_mul_test}(14305)
-                        ├─{mat_mul_test}(14306)
-                        ├─{mat_mul_test}(14307)
-                        ├─{mat_mul_test}(14308)
-                        ├─{mat_mul_test}(14309)
-                        ├─{mat_mul_test}(14310)
-                        └─{mat_mul_test}(14326)
-            Unrolling SIMD: 计算用时: 0.073s
-    [4]     Threaded SIMD 计算: 开始计时
-            Threaded SIMD: 计算用时: 0.033s
-    [5]     Unrolling Threaded SIMD 计算: 开始计时
-            Unrolling Threaded SIMD: 计算用时: 0.031s
-    [6]     OpenMP SIMD 计算: 开始计时
-    mat_mul_test(14287)─┬─{mat_mul_test}(14289)
-                        ├─{mat_mul_test}(14290)
-                        ├─{mat_mul_test}(14291)
-                        ├─{mat_mul_test}(14292)
-                        ├─{mat_mul_test}(14293)
-                        ├─{mat_mul_test}(14295)
-                        ├─{mat_mul_test}(14296)
-                        ├─{mat_mul_test}(14304)
-                        ├─{mat_mul_test}(14305)
-                        ├─{mat_mul_test}(14306)
-                        ├─{mat_mul_test}(14307)
-                        ├─{mat_mul_test}(14308)
-                        ├─{mat_mul_test}(14309)
-                        └─{mat_mul_test}(14310)
-            OpenMP SIMD: 计算用时: 0.118s
-    [7]     OpenMP Unrolling SIMD 计算: 开始计时
-    mat_mul_test(14287)─┬─{mat_mul_test}(14289)
-                        ├─{mat_mul_test}(14290)
-                        ├─{mat_mul_test}(14291)
-                        ├─{mat_mul_test}(14292)
-                        ├─{mat_mul_test}(14293)
-                        ├─{mat_mul_test}(14295)
-                        ├─{mat_mul_test}(14296)
-                        ├─{mat_mul_test}(14304)
-                        ├─{mat_mul_test}(14305)
-                        ├─{mat_mul_test}(14306)
-                        ├─{mat_mul_test}(14307)
-                        ├─{mat_mul_test}(14308)
-                        ├─{mat_mul_test}(14309)
-                        └─{mat_mul_test}(14310)
-            OpenMP Unrolling SIMD: 计算用时: 0.134s
-    [8]     OpenBLAS 计算: 开始计时
-            OpenBLAS: 计算用时: 0.031s
-    校验...
-    DONE.
-    ```
-    
-    OpenMP 确实启动了……就是在这时候 OpenMP “优化”后确实比 Native 更慢了……
-    
-2. 而 OpenMP 和手动的多线程相比呢？可以很清楚地看出，“Threaded SIMD”和“Unrolling Threaded SIMD”消耗时间和最稳定最快的 OpenBLAS 最接近，领先 OpenMP 优化的几条线很多。其中，手动循环展开在 N 很大的时候和未手动循环展开也有一定的领先。
-3. OpenBLAS 在大矩阵的计算实验中十分稳定，计算的时候却只使用了一个核心，但是比 Unrolling Threaded SIMD 还快不少。
+2. 而 OpenMP 和手动的多线程相比呢？上述数据中，OpenMP 优化在 N 较大时效率始终高于手动分配调度的多线程算法，在 N 很小的时候（N < 核心数）可能没有完全应用到所有核心的性能，比手动的多线程要慢一些。
+3. OpenBLAS 在大矩阵的计算实验中十分稳定，但是比我实现的几种组合方法还快不少。
+4. 自己实现的几种方法中，“OpenMP Unrolling SIMD”效率和 OpenBLAS 接近，但是稳定性和速度还是比不上 OpenBLAS。
 
 ## 实验结论
 
-1. 在实际环境测试中，OpenMP 性能并没有太大优化，甚至有出现计算错误的情况，很有可能 OpenMP 的使用方法错误了。
+1. 在实际环境测试中，OpenMP 性能优化明显。
 2. OpenMP 中方便快捷的 Directives 的使用可以极大的加快开发速度，具有方便易用、兼容性高、高性能的特点。
 3. 和 pthread 对比， OpenMP 开发比自己手动管理线程数量和线程池要方便得多，而且兼容性更高，Windows 同样可以简单使用。
-
-![Untitled](OpenMP%20%E5%88%9D%E8%AF%95%20da6bdc1cb8b449ebbb22aaf57028f5c6/Untitled%204.png)
