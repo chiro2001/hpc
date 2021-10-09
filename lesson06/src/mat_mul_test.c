@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
   } else {
     K = atoi(argv[1]);
     if (argc <= 2) {
-      PINT(task_start);
+      // PINT(task_start);
     } else {
       task_start = atoi(argv[2]);
     }
@@ -198,16 +198,16 @@ int main(int argc, char **argv) {
       for (int i = task_start; i < task_number; i++)
         if (!is_ok[i])
           is_ok_all = 0;
-      if (!is_ok_all) {
-        puts("[0]\t参考: ");
-        mat_print(C[0]);
-        for (int k = task_start; k < task_number; k++) {
-          if (!is_ok[k]) {
-            printf("[%d]\t%s: \n", k, task_names[k]);
-            mat_print(C[k]);
-          }
-        }
-      }
+      // if (!is_ok_all) {
+      //   puts("[0]\t参考: ");
+      //   mat_print(C[0]);
+      //   for (int k = task_start; k < task_number; k++) {
+      //     if (!is_ok[k]) {
+      //       printf("[%d]\t%s: \n", k, task_names[k]);
+      //       mat_print(C[k]);
+      //     }
+      //   }
+      // }
     }
   }
   pdebug("DONE.\n");

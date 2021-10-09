@@ -43,6 +43,7 @@ link_libraries(-lpthread ${OpenBLAS_LIBRARIES} -lm ${MPI_LIBRARIES})
 message(STATUS "OpenBLAS libs are: ${OpenBLAS_LIBRARIES}")
 
 set(CMAKE_C_FLAGS "-Wall -g -ggdb -mavx -fopenmp -ldl")
+#set(CMAKE_C_FLAGS "-Wall -O3 -mavx -fopenmp -ldl -march=native")
 
 add_executable(mat_mul_test ${PROJECT_SOURCE_DIR}/src/mat_mul_test.c ${source_files})
 
