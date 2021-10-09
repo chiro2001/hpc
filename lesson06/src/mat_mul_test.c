@@ -19,7 +19,7 @@ void do_calc(int task_id, int M, int N, Mat **C, const char *task_name,
   int size = 0, rank = 0;
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  const int aligns[] = {0, 0, 1, 1, 1, 1, 1, 1, 0, 1};
+  const int aligns[] = {0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1};
   int aligned = aligns[task_id];
   A = mat_create(M, N, aligned);
   B = mat_create(N, M, aligned);
@@ -75,8 +75,11 @@ void do_calc(int task_id, int M, int N, Mat **C, const char *task_name,
     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, A->w, B->h, A->h, 1,
                 A->content, A->w, B->content, B->h, 0, (*C)->content, (*C)->h);
   } else if (task_id == 9) {
-    // mat_mul_mpi(A, B, *C, 0);
-    mat_mul_mpi_all(A, B, *C, 0);
+    mat_mul_mpi_all(A, B, *C, 0, 1);
+  } else if (task_id == 10) {
+    mat_mul_mpi_all(A, B, *C, 0, 0);
+  } else if (task_id == 11) {
+    mat_mul_mpi_all(A, B, *C, 1, 0);
   }
   clock_gettime(CLOCK_REALTIME, &end);
   results[result_tail] = time_delta(start, end);
@@ -93,14 +96,14 @@ int main(int argc, char **argv) {
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Get_processor_name(processor_name, &processor_name_length);
   if (rank != 0) {
-    pdebug("Slot %d\n", rank);
+    // pdebug("Slot %d\n", rank);
     // MPI_Finalize();
     // return 0;
   } else
     pdebug("Running on %s, total %d slot(s).\n", processor_name, size);
   // 处理一下参数
   int K = 4;
-  const int task_number = 10;
+  const int task_number = 12;
   int task_start = 0;
   const int task_mpi_start = 9;
   if (argc <= 1) {
@@ -155,8 +158,8 @@ int main(int argc, char **argv) {
     for (int i = task_mpi_start; i < task_number; i++) {
       do_calc(i, M, N, &C[i], task_names[i], results, i, processor_number);
     }
-    pdebug("Slot %d calc done.\n", rank);
-    system("sleep 3");
+    // pdebug("Slot %d calc done.\n", rank);
+    // system("sleep 3");
     MPI_Finalize();
     return 0;
   }

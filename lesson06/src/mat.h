@@ -55,9 +55,9 @@ void mat_mul_cell(mat_mul_thread_t *thread_data);
 Mat *mat_mul_openmp_native(Mat *a, Mat *b, Mat *c);
 Mat *mat_mul_openmp(Mat *a, Mat *b, Mat *c, int unrolling);
 
-double mat_cell_do_mul(double *p_a, double *p_b, int unrolling, int k);
-Mat *mat_mul_mpi(Mat *a, Mat *b, Mat *c, int unrolling);
-Mat *mat_mul_mpi_all(Mat *a, Mat *b, Mat *c, int unrolling);
+double mat_cell_do_mul(double *p_a, double *p_b, int k, int unrolling, int native);
+// Mat *mat_mul_mpi(Mat *a, Mat *b, Mat *c, int unrolling);
+Mat *mat_mul_mpi_all(Mat *a, Mat *b, Mat *c, int unrolling, int native);
 
 extern double mat_native_time_limit;
 extern int mat_native_timeout;
