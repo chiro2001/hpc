@@ -16,8 +16,8 @@
 
 double time_delta(struct timespec time1, struct timespec time2);
 
-#define PINT(x) printf(#x "\t= %d\n", (int)x)
-#define PD(x) printf(#x "\t= %lf\n", (double)x)
+#define PINT(x) pdebug(#x "\t= %d\n", (int)x)
+#define PD(x) pdebug(#x "\t= %lf\n", (double)x)
 #define PD4(x)                                                               \
   printf("\t" #x "\t= %2.2lf, %2.2lf, %2.2lf, %2.2lf\n", ((double*)(&x))[0], \
          ((double*)(&x))[1], ((double*)(&x))[2], ((double*)(&x))[3])
