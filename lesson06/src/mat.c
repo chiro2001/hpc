@@ -33,31 +33,19 @@ Mat *mat_create(int width, int height, int aligned) {
   mat->w = width;
   mat->h = height;
   mat->aligned = aligned;
+  mat->data = NULL;
+  mat->content_real = NULL;
+  mat->content = NULL;
   return mat;
 }
 
-// @prog: 初始化矩阵的数据
-// @args: 矩阵指针
-// @rets: 矩阵指针
-Mat *mat_data_init(Mat *mat) {
-  if (!mat) {
-    return NULL;
-  }
-#ifdef USE_CONTIGROUS_MEM
-  // 直接申请一整块空间罢
-  // size_t mem_count = ((mat->w + (mat->w % 4)) * (mat->w + (mat->w % 4)) + 4);
-  size_t mem_count = ((mat->w / 4 + 1) * 4) * ((mat->w / 4 + 1) * 4) + 4;
-  mat->content_real = malloc(sizeof(CHIMAT_TYPE) * mem_count);
-  assert(mat->content_real);
-  memset(mat->content_real, 0, sizeof(CHIMAT_TYPE) * mem_count);
-  // printf("\tMalloced at: %p, %p %% 32 = %lu\n", mat->content_real,
-  //        mat->content_real, (size_t)(mat->content_real) % 32);
+Mat *mat_make_index(Mat *mat) {
   // 尝试手动对齐 32 位
   mat->content =
       (double *)((void *)mat->content_real + (size_t)(mat->content_real) % 32);
-  // printf("\tNow content at: %p, %% 32 = %lu\n", mat->content,
-  //        (size_t)(mat->content) % 32);
-  // 然后做个索引
+  // PINT((int)((size_t)mat->content - (size_t)mat->content_real));
+  if (mat->data)
+    free(mat->data);
   mat->data = malloc(sizeof(CHIMAT_TYPE *) * mat->w);
   assert(mat->data);
   // printf("content @ [%p, %p]\n", mat->content, mat->content + mat->w *
@@ -72,6 +60,34 @@ Mat *mat_data_init(Mat *mat) {
   else
     for (int i = 0; i < mat->h; i++)
       mat->data[i] = mat->content + i * mat->w;
+  return mat;
+}
+
+// @prog: 初始化矩阵的数据
+// @args: 矩阵指针
+// @rets: 矩阵指针
+Mat *mat_data_init(Mat *mat) {
+  if (!mat) {
+    return NULL;
+  }
+#ifdef USE_CONTIGROUS_MEM
+  // 直接申请一整块空间罢
+  // size_t mem_count = ((mat->w + (mat->w % 4)) * (mat->w + (mat->w % 4)) + 4);
+  size_t mem_count = ((mat->w / 4 + 1) * 4) * ((mat->w / 4 + 1) * 4) + 4;
+  // PINT(mem_count);
+  mat->content_real = malloc(sizeof(CHIMAT_TYPE) * mem_count);
+  assert(mat->content_real);
+  memset(mat->content_real, 0, sizeof(CHIMAT_TYPE) * mem_count);
+  // printf("\tMalloced at: %p, %p %% 32 = %lu\n", mat->content_real,
+  //        mat->content_real, (size_t)(mat->content_real) % 32);
+  // // 尝试手动对齐 32 位
+  // mat->content =
+  //     (double *)((void *)mat->content_real + (size_t)(mat->content_real) %
+  //     32);
+  // printf("\tNow content at: %p, %% 32 = %lu\n", mat->content,
+  //        (size_t)(mat->content) % 32)
+  // 然后做个索引
+  mat_make_index(mat);
   return mat;
 #else
   mat->content = NULL;
@@ -106,6 +122,9 @@ void mat_free(Mat *mat) {
   free(mat->content_real);
   free(mat->data);
   free(mat);
+  mat->content_real = NULL;
+  mat->content = NULL;
+  mat->data = NULL;
 }
 
 // @prog: 释放被快速初始化的矩阵的数据
@@ -114,6 +133,9 @@ void mat_free(Mat *mat) {
 void mat_free_fast(Mat *mat) {
   free(mat->data);
   free(mat);
+  mat->content_real = NULL;
+  mat->content = NULL;
+  mat->data = NULL;
 }
 
 // @prog: 深度拷贝一个矩阵
@@ -509,7 +531,7 @@ Mat *mat_mul_openmp(Mat *a, Mat *b, Mat *c, int unrolling) {
     mat_mul_cell(thread_data + i);
   }
 
-  mat_free(t);
+  // mat_free(t);
   return c;
 }
 
@@ -563,7 +585,7 @@ Mat *mat_mul_threaded(Mat *a, Mat *b, Mat *c, int processor_number,
   }
   // puts("C:");
   // mat_print(c);
-  mat_free(t);
+  // mat_free(t);
   return c;
 }
 
@@ -602,7 +624,7 @@ Mat *mat_mul_mpi_native(Mat *a, Mat *b, Mat *c) {
         // pdebug("DONE_REMAIN c[%d][%d] = %lf\n", x, yr, c->data[x][yr]);
       }
   }
-  mat_free(t);
+  // mat_free(t);
   return c;
 }
 
@@ -655,8 +677,8 @@ Mat *mat_mul_mpi(Mat *a, Mat *b, Mat *c, int unrolling) {
       // PD4(*line_a);
       // pdebug("  [%d]:", rank);
       // PD4(*line_b);
-      // double sum = mat_cell_do_mul(line_a, line_b, 0, a->w);
-      double sum = 0;
+      double sum = mat_cell_do_mul(line_a, line_b, 0, a->w);
+      // double sum = 0;
       MPI_Gather(&sum, 1, MPI_DOUBLE, sum_part, 1, MPI_DOUBLE, 0,
                  MPI_COMM_WORLD);
       if (rank == 0) {
@@ -668,12 +690,76 @@ Mat *mat_mul_mpi(Mat *a, Mat *b, Mat *c, int unrolling) {
   // for (int xr = (a->w / size) * size; xr < a->w; xr++) {
   //
   // }
-  mat_free(t);
+  // mat_free(t);
   free(numbers);
   free(offsets);
 
   free(line_a_raw);
   free(line_b_raw);
+  free(sum_part);
+  return c;
+}
+
+Mat *mat_mul_mpi_all(Mat *a, Mat *b, Mat *c, int unrolling) {
+  // 检查是否合法
+  if (a->w != b->h) {
+    return NULL;
+  }
+  int rank = 0, size = 0;
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  // 首先对 b 进行一个置的转
+  Mat *t = mat_transpose(b);
+  int mem_count = a->w * a->h * 2;
+  // int mem_count = a->w * a->h;
+  // int mem_count = a->w * a->h + 10;
+  // PINT(mem_count);
+  // 同步内存信息
+  if (rank == 0) {
+    // 然后发送 a, b 数据到其他 slot
+    for (int i = 1; i < size; i++) {
+      MPI_Send(a->content, mem_count, MPI_DOUBLE, i, MPI_TAG_MAT_A,
+               MPI_COMM_WORLD);
+      MPI_Send(t->content, mem_count, MPI_DOUBLE, i, MPI_TAG_MAT_B,
+               MPI_COMM_WORLD);
+    }
+  } else {
+    MPI_Recv(a->content, mem_count, MPI_DOUBLE, 0, MPI_TAG_MAT_A,
+             MPI_COMM_WORLD, MPI_STATUSES_IGNORE);
+    MPI_Recv(t->content, mem_count, MPI_DOUBLE, 0, MPI_TAG_MAT_B,
+             MPI_COMM_WORLD, MPI_STATUSES_IGNORE);
+    // 整理内存索引
+    // mat_make_index(a);
+    // mat_make_index(t);
+  }
+  printf("[%d] A:\n", rank);
+  mat_print(a);
+  printf("[%d] B:\n", rank);
+  mat_print(b);
+  system("sleep 0.5");
+  // 初始化任务数据，进行数据分发
+  double *sum_part = malloc(sizeof(double) * size);
+  for (int x = rank; x < a->w - a->w % size; x += size) {
+    for (int ys = 0; ys < b->h; ys += 1) {
+      double sum = mat_cell_do_mul(a->data[x], t->data[ys], 0, a->w);
+      MPI_Gather(&sum, 1, MPI_DOUBLE, sum_part, 1, MPI_DOUBLE, 0,
+                 MPI_COMM_WORLD);
+      if (rank == 0) {
+        for (int i = 0; i < size; i++) {
+          c->data[x + i][ys] = sum_part[i];
+          // pdebug("DONE c[%d][%d]\n", x + i, ys);
+        }
+      }
+    }
+  }
+  if (rank == 0)
+    for (int xr = a->w - a->w % size; xr < a->w; xr++) {
+      for (int ys = 0; ys < b->h; ys += 1) {
+        c->data[xr][ys] = mat_cell_do_mul(a->data[xr], t->data[ys], 0, a->w);
+        // pdebug("REMAIN c[%d][%d]\n", xr, ys);
+      }
+    }
+  mat_free(t);
   free(sum_part);
   return c;
 }

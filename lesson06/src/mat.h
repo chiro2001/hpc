@@ -57,6 +57,7 @@ Mat *mat_mul_openmp(Mat *a, Mat *b, Mat *c, int unrolling);
 
 double mat_cell_do_mul(double *p_a, double *p_b, int unrolling, int k);
 Mat *mat_mul_mpi(Mat *a, Mat *b, Mat *c, int unrolling);
+Mat *mat_mul_mpi_all(Mat *a, Mat *b, Mat *c, int unrolling);
 
 extern double mat_native_time_limit;
 extern int mat_native_timeout;
@@ -65,6 +66,9 @@ int mat_openmp_timeout;
 
 enum {
   MPI_TAG_LINE_B = 0xE1,
+  MPI_TAG_LINE_A,
+  MPI_TAG_MAT_A,
+  MPI_TAG_MAT_B
 };
 
 #endif

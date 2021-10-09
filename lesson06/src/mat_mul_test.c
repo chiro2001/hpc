@@ -33,8 +33,13 @@ void do_calc(int task_id, int M, int N, Mat **C, const char *task_name,
       // B->data[x][y] = (double)(rand() % 40) / 40;
       // A->data[x][y] = 1;
       // B->data[x][y] = 1;
-      A->data[x][y] = A_g->data[x][y];
-      B->data[x][y] = B_g->data[x][y];
+      if (rank == 0) {
+        A->data[x][y] = A_g->data[x][y];
+        B->data[x][y] = B_g->data[x][y];
+      } else {
+        A->data[x][y] = 0;
+        B->data[x][y] = 0;
+      }
     }
   }
   if (rank == 0)
@@ -70,7 +75,8 @@ void do_calc(int task_id, int M, int N, Mat **C, const char *task_name,
     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, A->w, B->h, A->h, 1,
                 A->content, A->w, B->content, B->h, 0, (*C)->content, (*C)->h);
   } else if (task_id == 9) {
-    mat_mul_mpi(A, B, *C, 0);
+    // mat_mul_mpi(A, B, *C, 0);
+    mat_mul_mpi_all(A, B, *C, 0);
   }
   clock_gettime(CLOCK_REALTIME, &end);
   results[result_tail] = time_delta(start, end);
@@ -122,8 +128,8 @@ int main(int argc, char **argv) {
       // B->data[x][y] = (double)(rand() % 40) / 40;
       // A->data[x][y] = 1;
       // B->data[x][y] = 1;
-      A_g->data[x][y] = (double)(rand() % 4);
-      B_g->data[x][y] = (double)(rand() % 4);
+      A_g->data[x][y] = (double)(rand() % 4) + 1.0;
+      B_g->data[x][y] = (double)(rand() % 4) + 1.0;
     }
   }
 
@@ -150,6 +156,7 @@ int main(int argc, char **argv) {
       do_calc(i, M, N, &C[i], task_names[i], results, i, processor_number);
     }
     pdebug("Slot %d calc done.\n", rank);
+    system("sleep 3");
     MPI_Finalize();
     return 0;
   }
@@ -198,16 +205,16 @@ int main(int argc, char **argv) {
       for (int i = task_start; i < task_number; i++)
         if (!is_ok[i])
           is_ok_all = 0;
-      // if (!is_ok_all) {
-      //   puts("[0]\t参考: ");
-      //   mat_print(C[0]);
-      //   for (int k = task_start; k < task_number; k++) {
-      //     if (!is_ok[k]) {
-      //       printf("[%d]\t%s: \n", k, task_names[k]);
-      //       mat_print(C[k]);
-      //     }
-      //   }
-      // }
+      if (!is_ok_all) {
+        puts("[0]\t参考: ");
+        mat_print(C[0]);
+        for (int k = task_start; k < task_number; k++) {
+          if (!is_ok[k]) {
+            printf("[%d]\t%s: \n", k, task_names[k]);
+            mat_print(C[k]);
+          }
+        }
+      }
     }
   }
   pdebug("DONE.\n");
