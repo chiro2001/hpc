@@ -29,10 +29,6 @@ void do_calc(int task_id, int M, int N, Mat **C, const char *task_name,
   mat_data_init(*C);
   for (int x = 0; x < M; x++) {
     for (int y = 0; y < N; y++) {
-      // A->data[x][y] = (double)(rand() % 40) / 40;
-      // B->data[x][y] = (double)(rand() % 40) / 40;
-      // A->data[x][y] = 1;
-      // B->data[x][y] = 1;
       if (rank == 0) {
         A->data[x][y] = A_g->data[x][y];
         B->data[x][y] = B_g->data[x][y];
@@ -110,6 +106,11 @@ int main(int argc, char **argv) {
     // pdebug("使用默认: K = %d\n", K);
   } else {
     K = atoi(argv[1]);
+    if (K < 0) {
+      pdebug("Return Slot numbers: %d\n", size);
+      MPI_Finalize();
+      return size;
+    }
     if (argc <= 2) {
       // PINT(task_start);
     } else {
@@ -139,11 +140,11 @@ int main(int argc, char **argv) {
   Mat *C[32] = {NULL};
   double results[32];
 
-  const char task_names[][64] = {"Native",        "OpenMP",
+  const char task_names[][64] = {"Native",        "$OpenMP_{Native}$",
                                  "SIMD",          "Unrolling SIMD",
                                  "Threaded SIMD", "Unrolling Threaded SIMD",
                                  "OpenMP SIMD",   "OpenMP Unrolling SIMD",
-                                 "OpenBLAS",      "MPI",
+                                 "OpenBLAS",      "$MPI_{Native}$",
                                  "MPI SIMD",      "MPI Unrolling SIMD"};
 
   int processor_number = sysconf(_SC_NPROCESSORS_ONLN);
@@ -209,11 +210,11 @@ int main(int argc, char **argv) {
         if (!is_ok[i])
           is_ok_all = 0;
       if (!is_ok_all) {
-        puts("[0]\t参考: ");
+        pdebug("[0]\t参考: \n");
         mat_print(C[0]);
         for (int k = task_start; k < task_number; k++) {
           if (!is_ok[k]) {
-            printf("[%d]\t%s: \n", k, task_names[k]);
+            pdebug("[%d]\t%s: \n", k, task_names[k]);
             mat_print(C[k]);
           }
         }

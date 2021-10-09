@@ -78,15 +78,7 @@ Mat *mat_data_init(Mat *mat) {
   mat->content_real = malloc(sizeof(CHIMAT_TYPE) * mem_count);
   assert(mat->content_real);
   memset(mat->content_real, 0, sizeof(CHIMAT_TYPE) * mem_count);
-  // printf("\tMalloced at: %p, %p %% 32 = %lu\n", mat->content_real,
-  //        mat->content_real, (size_t)(mat->content_real) % 32);
-  // // 尝试手动对齐 32 位
-  // mat->content =
-  //     (double *)((void *)mat->content_real + (size_t)(mat->content_real) %
-  //     32);
-  // printf("\tNow content at: %p, %% 32 = %lu\n", mat->content,
-  //        (size_t)(mat->content) % 32)
-  // 然后做个索引
+  // 做个索引
   mat_make_index(mat);
   return mat;
 #else
@@ -340,7 +332,7 @@ void mat_print(Mat *a) {
     last += strlen(content + last);
   }
   sprintf(content + last, format_all + 8, a->w, a->h);
-  puts(content);
+  pdebug("%s\n", content);
   free(content);
 }
 
@@ -537,7 +529,7 @@ Mat *mat_mul_openmp(Mat *a, Mat *b, Mat *c, int unrolling) {
     mat_mul_cell(thread_data + i);
   }
 
-  // mat_free(t);
+  mat_free(t);
   return c;
 }
 
@@ -589,122 +581,10 @@ Mat *mat_mul_threaded(Mat *a, Mat *b, Mat *c, int processor_number,
   for (int i = 0; i < processor_number; i++) {
     pthread_join(pool[i], NULL);
   }
-  // puts("C:");
   // mat_print(c);
-  // mat_free(t);
+  mat_free(t);
   return c;
 }
-
-// // @prog: 用 MPI 执行矩阵乘法
-// // @args: a * b -> c
-// // @rets: c
-// Mat *mat_mul_mpi_native(Mat *a, Mat *b, Mat *c) {
-//   // 检查是否合法
-//   if ((!a || !b || !c) || (a->w != b->h))
-//     return NULL;
-//   int rank = 0, size = 0;
-//   MPI_Comm_size(MPI_COMM_WORLD, &size);
-//   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-//   // 首先对 b 进行一个置的转
-//   Mat *t = mat_transpose(b);
-//   int k = a->w;
-//   for (int x = 0; x < c->w; x++) {
-//     for (int ys = 0; ys < c->h; ys += size) {
-//       double *line_b = malloc(sizeof(double) * (t->h));
-//       double *sum_part = malloc(sizeof(double) * size);
-//       MPI_Scatter(t->data[ys], a->h, MPI_DOUBLE, line_b, a->h, MPI_DOUBLE, 0,
-//                   MPI_COMM_WORLD);
-//       double sum = 0;
-//       for (int i = 0; i < k; i++) {
-//         sum += a->data[x][i] * line_b[i];
-//       }
-//       MPI_Gather(&sum, 1, MPI_DOUBLE, sum_part, 1, MPI_DOUBLE, 0,
-//                  MPI_COMM_WORLD);
-//       for (int i = 0; i < size; i++) {
-//         c->data[x][ys + i] = sum_part[i];
-//       }
-//     }
-//     if (rank == 0)
-//       for (int yr = b->h / size * size; yr < b->h; yr++) {
-//         c->data[x][yr] = mat_cell_do_mul(a->data[x], t->data[yr], a->w, );
-//         // pdebug("DONE_REMAIN c[%d][%d] = %lf\n", x, yr, c->data[x][yr]);
-//       }
-//   }
-//   // mat_free(t);
-//   return c;
-// }
-
-// Mat *mat_mul_mpi(Mat *a, Mat *b, Mat *c, int unrolling) {
-//   // 检查是否合法
-//   if (a->w != b->h) {
-//     return NULL;
-//   }
-//   // 首先对 b 进行一个置的转
-//   Mat *t = mat_transpose(b);
-//   // 初始化任务数据，进行数据分发
-//   // 注意内存字节对齐
-//   int rank = 0, size = 0;
-//   MPI_Comm_size(MPI_COMM_WORLD, &size);
-//   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-//   // if (rank == 0) {
-//   //   puts("A[]:");
-//   //   mat_print(a);
-//   //   puts("B[]:");
-//   //   mat_print(b);
-//   // }
-//   int *numbers = malloc(sizeof(int) * size);
-//   int *offsets = malloc(sizeof(int) * size);
-//   for (int i = 0; i < size; i++) {
-//     numbers[i] = a->h;
-//     offsets[i] = i * ((b->w / 4 + 1) * 4);
-//   }
-//   double *line_a_raw = malloc(sizeof(double) * (t->h) + 32);
-//   double *line_a = (double *)((size_t)line_a_raw + (size_t)line_a_raw % 32);
-//   double *line_b_raw = malloc(sizeof(double) * (t->h) + 32);
-//   double *line_b = (double *)((size_t)line_b_raw + (size_t)line_b_raw % 32);
-//   double *sum_part = malloc(sizeof(double) * size);
-//
-//   for (int x = 0; x < a->w; x += size) {
-//     MPI_Scatterv(a->data[x], numbers, offsets, MPI_DOUBLE, line_a, a->h,
-//                  MPI_DOUBLE, 0, MPI_COMM_WORLD);
-//     for (int ys = 0; ys < b->h; ys += 1) {
-//       if (rank == 0) {
-//         for (int i = 1; i < size; i++) {
-//           // pdebug("sending to [%d]\n", i);
-//           MPI_Send(t->data[ys], a->w, MPI_DOUBLE, i, MPI_TAG_LINE_B,
-//                    MPI_COMM_WORLD);
-//         }
-//         memcpy(line_b, t->data[ys], sizeof(double) * a->w);
-//       } else {
-//         MPI_Recv(line_b, a->w, MPI_DOUBLE, 0, MPI_TAG_LINE_B, MPI_COMM_WORLD,
-//                  MPI_STATUSES_IGNORE);
-//       }
-//       // pdebug("  [%d]:", rank);
-//       // PD4(*line_a);
-//       // pdebug("  [%d]:", rank);
-//       // PD4(*line_b);
-//       double sum = mat_cell_do_mul(line_a, line_b, a->w, 0, );
-//       // double sum = 0;
-//       MPI_Gather(&sum, 1, MPI_DOUBLE, sum_part, 1, MPI_DOUBLE, 0,
-//                  MPI_COMM_WORLD);
-//       if (rank == 0) {
-//         for (int i = 0; i < size; i++)
-//           c->data[x + i][ys] = sum_part[i];
-//       }
-//     }
-//   }
-//   // for (int xr = (a->w / size) * size; xr < a->w; xr++) {
-//   //
-//   // }
-//   // mat_free(t);
-//   free(numbers);
-//   free(offsets);
-//
-//   free(line_a_raw);
-//   free(line_b_raw);
-//   free(sum_part);
-//   return c;
-// }
 
 Mat *mat_mul_mpi_all(Mat *a, Mat *b, Mat *c, int unrolling, int native) {
   // 检查是否合法
@@ -716,57 +596,26 @@ Mat *mat_mul_mpi_all(Mat *a, Mat *b, Mat *c, int unrolling, int native) {
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   // 首先对 b 进行一个置的转
   Mat *t = mat_transpose(b);
-  // int mem_count = ((a->w / 4 + 1) * 4) * ((a->h / 4 + 1) * 4) + 4;
-  // int mem_count = a->w * a->h;
-  // PINT(mem_count);
   // 同步内存信息
   if (rank == 0) {
     // 然后发送 a, b 数据到其他 slot
     for (int i = 1; i < size; i++) {
-      // MPI_Send(a->content_real, mem_count, MPI_DOUBLE, i, MPI_TAG_MAT_A,
-      //          MPI_COMM_WORLD);
-      // MPI_Send(t->content_real, mem_count, MPI_DOUBLE, i, MPI_TAG_MAT_B,
-      //          MPI_COMM_WORLD);
+      // 按行发送数据，防止因为content_real不一致造成数据错误
       for (int x = 0; x < a->h; x++) {
         MPI_Send(a->data[x], a->w, MPI_DOUBLE, i, MPI_TAG_MAT_A,
                  MPI_COMM_WORLD);
         MPI_Send(t->data[x], a->w, MPI_DOUBLE, i, MPI_TAG_MAT_B,
                  MPI_COMM_WORLD);
       }
-      // MPI_Send(a->content, mem_count, MPI_DOUBLE, i, MPI_TAG_MAT_A,
-      //          MPI_COMM_WORLD);
-      // MPI_Send(t->content, mem_count, MPI_DOUBLE, i, MPI_TAG_MAT_B,
-      //          MPI_COMM_WORLD);
-      // PINT(((int)(a->content - a->content_real)));
-      // PINT(((int)(t->content - t->content_real)));
     }
   } else {
-    // MPI_Recv(a->content_real, mem_count, MPI_DOUBLE, 0, MPI_TAG_MAT_A,
-    //          MPI_COMM_WORLD, MPI_STATUSES_IGNORE);
-    // MPI_Recv(t->content_real, mem_count, MPI_DOUBLE, 0, MPI_TAG_MAT_B,
-    //          MPI_COMM_WORLD, MPI_STATUSES_IGNORE);
     for (int x = 0; x < a->h; x++) {
       MPI_Recv(a->data[x], a->w, MPI_DOUBLE, 0, MPI_TAG_MAT_A, MPI_COMM_WORLD,
                MPI_STATUSES_IGNORE);
       MPI_Recv(t->data[x], a->w, MPI_DOUBLE, 0, MPI_TAG_MAT_B, MPI_COMM_WORLD,
                MPI_STATUSES_IGNORE);
     }
-    // MPI_Recv(a->content, mem_count, MPI_DOUBLE, 0, MPI_TAG_MAT_A,
-    //          MPI_COMM_WORLD, MPI_STATUSES_IGNORE);
-    // MPI_Recv(t->content, mem_count, MPI_DOUBLE, 0, MPI_TAG_MAT_B,
-    //          MPI_COMM_WORLD, MPI_STATUSES_IGNORE);
-    // 整理内存索引
-    // mat_make_index(a);
-    // mat_make_index(t);
-    // PINT(((int)(a->content - a->content_real)));
-    // PINT(((int)(t->content - t->content_real)));
   }
-  // if (rank == 1) {
-  //   printf("[%d] A:\n", rank);
-  //   mat_print(a);
-  //   printf("[%d] B^T:\n", rank);
-  //   mat_print(t);
-  // }
   // 初始化任务数据，进行数据分发
   double *sum_part = malloc(sizeof(double) * size);
   for (int x = rank; x < a->w - a->w % size; x += size) {

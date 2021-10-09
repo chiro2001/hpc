@@ -1,7 +1,7 @@
 #include <omp.h>
 #include <time.h>
 
-#define DEBUG
+// #define DEBUG
 
 #ifdef DEBUG
 #define pdebug(...) printf(__VA_ARGS__)
