@@ -509,8 +509,7 @@ Mat *mat_mul_openmp(Mat *a, Mat *b, Mat *c, int unrolling) {
     mat_mul_cell(thread_data + i);
   }
 
-  // puts("C:");
-  // mat_print(c);
+  mat_free(t);
   return c;
 }
 
@@ -564,6 +563,46 @@ Mat *mat_mul_threaded(Mat *a, Mat *b, Mat *c, int processor_number,
   }
   // puts("C:");
   // mat_print(c);
+  mat_free(t);
+  return c;
+}
+
+// @prog: 用 MPI 执行矩阵乘法
+// @args: a * b -> c
+// @rets: c
+Mat *mat_mul_mpi_native(Mat *a, Mat *b, Mat *c) {
+  // 检查是否合法
+  if ((!a || !b || !c) || (a->w != b->h))
+    return NULL;
+  int rank = 0, size = 0;
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  // 首先对 b 进行一个置的转
+  Mat *t = mat_transpose(b);
+  int k = a->w;
+  for (int x = 0; x < c->w; x++) {
+    for (int ys = 0; ys < c->h; ys += size) {
+      double *line_b = malloc(sizeof(double) * (t->h));
+      double *sum_part = malloc(sizeof(double) * size);
+      MPI_Scatter(t->data[ys], a->h, MPI_DOUBLE, line_b, a->h, MPI_DOUBLE, 0,
+                  MPI_COMM_WORLD);
+      double sum = 0;
+      for (int i = 0; i < k; i++) {
+        sum += a->data[x][i] * line_b[i];
+      }
+      MPI_Gather(&sum, 1, MPI_DOUBLE, sum_part, 1, MPI_DOUBLE, 0,
+                 MPI_COMM_WORLD);
+      for (int i = 0; i < size; i++) {
+        c->data[x][ys + i] = sum_part[i];
+      }
+    }
+    if (rank == 0)
+      for (int yr = b->h / size * size; yr < b->h; yr++) {
+        c->data[x][yr] = mat_cell_do_mul(a->data[x], t->data[yr], 0, a->w);
+        // pdebug("DONE_REMAIN c[%d][%d] = %lf\n", x, yr, c->data[x][yr]);
+      }
+  }
+  mat_free(t);
   return c;
 }
 
@@ -574,91 +613,150 @@ Mat *mat_mul_mpi(Mat *a, Mat *b, Mat *c, int unrolling) {
   }
   // 首先对 b 进行一个置的转
   Mat *t = mat_transpose(b);
-  // puts("B^T:");
-  // mat_print(t);
-
-  mat_task_tail = a->h * b->w;
-  mat_task_list = malloc(sizeof(int *) * mat_task_tail);
-  assert(mat_task_list);
-  mat_task_data = malloc(sizeof(int) * mat_task_tail * 2);
-  assert(mat_task_data);
-  // 初始化任务
-  for (int x = 0; x < c->h; x++) {
-    for (int y = 0; y < c->w; y++) {
-      mat_task_list[x * c->w + y] = &mat_task_data[(x * c->w + y) * 2];
-      mat_task_list[x * c->w + y][0] = x;
-      mat_task_list[x * c->w + y][1] = y;
-    }
-  }
-  // 填满线程参数
-  mat_mul_thread_t *thread_data =
-      malloc(sizeof(mat_mul_thread_t) * mat_task_tail);
-  for (int i = 0; i < mat_task_tail; i++) {
-    thread_data[i].a = a;
-    thread_data[i].b = t;
-    thread_data[i].c = c;
-    thread_data[i].id = i;
-    thread_data[i].single = 1;
-    thread_data[i].single_index = i;
-    thread_data[i].unrolling = unrolling;
-  }
-
   // 初始化任务数据，进行数据分发
-  // 先没有内存字节对齐
+  // 注意内存字节对齐
   int rank = 0, size = 0;
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  // slots 池处理到的地方
-  // int *slots_tails = malloc(sizeof(int) * size);
-  // memset(slots_tails, 0, sizeof(int) * size);
-
-  // for (int slot_tail = 0; slot_tail < a->w * b->h / size; slot_tail++) {
-  //   double *line_a = malloc(sizeof(double) * a->h);
-  //   double *line_b = malloc(sizeof(double) * t->h);
-  //   double *sum_all = malloc(sizeof(double) * size);
-  //   mat_mul_thread_t *task_data = thread_data + slot_tail;
-  //   MPI_Scatter(a->content + task_data * size * a->h, a->h, MPI_DOUBLE,
-  //   line_a,
-  //               a->h, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-  //   double sum = mat_cell_do_mul(line_a, line_b, 0, a->w);
-  //   MPI_Gather(&sum, 1, MPI_DOUBLE, sum_all, 1, MPI_DOUBLE, 0,
-  //   MPI_COMM_WORLD);
-  //
-  // }
-  double *line_b_raw = malloc(sizeof(double) * (t->h) + 32);
-  double *line_b = (double *)((size_t)line_b_raw + (size_t)line_b_raw % 32);
+  if (rank == 0) {
+    puts("A[]:");
+    mat_print(a);
+    puts("B[]:");
+    mat_print(b);
+  }
   int *numbers = malloc(sizeof(int) * size);
   int *offsets = malloc(sizeof(int) * size);
   for (int i = 0; i < size; i++) {
     numbers[i] = a->h;
     offsets[i] = i * ((b->w / 4 + 1) * 4);
   }
-  for (int x = 0; x < a->w; x++) {
-    for (int ys = 0; ys < b->h; ys += size) {
+  for (int x = 0; x < a->w; x += size) {
+    double *line_a_raw = malloc(sizeof(double) * (t->h) + 32);
+    double *line_a = (double *)((size_t)line_a_raw + (size_t)line_a_raw % 32);
+    MPI_Scatterv(a->data[x], numbers, offsets, MPI_DOUBLE, line_a, a->h,
+                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    // for (int ys = 0; ys < b->h; ys += size) {
+    //   double *line_b_raw = malloc(sizeof(double) * (t->h) + 32);
+    //   double *line_b = (double *)((size_t)line_b_raw + (size_t)line_b_raw %
+    //   32); double *sum_part = malloc(sizeof(double) * size);
+    //   MPI_Scatterv(t->data[ys], numbers, offsets, MPI_DOUBLE, line_b, a->h,
+    //                MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    //   printf("  [%d]:", rank);
+    //   PD4(*line_a);
+    //   printf("  [%d]:", rank);
+    //   PD4(*line_b);
+    //   // double sum = mat_cell_do_mul(a->data[x], line_b, 0, a->w);
+    //   double sum = mat_cell_do_mul(line_a, line_b, 0, a->w);
+    //   // double sum = mat_cell_do_mul(line_a, t->data[ys + rank], 0, a->w);
+    //   // double sum = mat_cell_do_mul(line_a, t->data[ys], 0, a->w);
+    //   MPI_Gather(&sum, 1, MPI_DOUBLE, sum_part, 1, MPI_DOUBLE, 0,
+    //              MPI_COMM_WORLD);
+    //   // if (rank == 0) {
+    //   //   for (int i = 0; i < size; i++) {
+    //   //     c->data[x][ys + i] = sum_part[i];
+    //   //     // pdebug("DONE c[%d][%d] = %lf, sum_part[%d] = %lf\n", x, ys +
+    //   i,
+    //   //     //        c->data[x][ys + i], i, sum_part[i]);
+    //   //   }
+    //   //   // pdebug("DONE c[%d][%d ... %d]\n", x, ys, ys + size - 1);
+    //   // } else {
+    //   //   // pdebug("\t[%d] c[%d][%d ... %d]\n", rank, x, ys, ys + size -
+    //   1);
+    //   // }
+    //   for (int i = 0; i < size; i++) {
+    //     c->data[x + rank][ys + i] = sum_part[i];
+    //     // pdebug("DONE c[%d][%d] = %lf, sum_part[%d] = %lf\n", x, ys + i,
+    //     //        c->data[x][ys + i], i, sum_part[i]);
+    //   }
+    //   free(line_b_raw);
+    //   free(sum_part);
+    // }
+    for (int ys = 0; ys < b->h; ys += 1) {
+      double *line_b_raw = malloc(sizeof(double) * (t->h) + 32);
+      double *line_b = (double *)((size_t)line_b_raw + (size_t)line_b_raw % 32);
       double *sum_part = malloc(sizeof(double) * size);
-      // MPI_Scatter(t->data[ys], a->h, MPI_DOUBLE, line_b, a->h, MPI_DOUBLE, 0,
-      //             MPI_COMM_WORLD);
-      MPI_Scatterv(t->data[ys], numbers, offsets, MPI_DOUBLE, line_b, a->h,
-                   MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      double sum = mat_cell_do_mul(a->data[x], line_b, 0, a->w);
-      // MPI_Gather(&sum, 1, MPI_DOUBLE, &c->data[x][ys], 1, MPI_DOUBLE, 0,
-      // MPI_COMM_WORLD);
+      if (rank == 0) {
+        for (int i = 0; i < size; i++) {
+          MPI_Send(t->data[ys], a->w, MPI_DOUBLE, i, MPI_TAG_LINE_B,
+                   MPI_COMM_WORLD);
+        }
+      }
+      MPI_Recv(line_b, a->w, MPI_DOUBLE, 0, MPI_TAG_LINE_B, MPI_COMM_WORLD,
+               MPI_STATUSES_IGNORE);
+      // MPI_Scatterv(t->data[ys], numbers, offsets, MPI_DOUBLE, line_b, a->h,
+      //              MPI_DOUBLE, 0, MPI_COMM_WORLD);
+      printf("  [%d]:", rank);
+      PD4(*line_a);
+      printf("  [%d]:", rank);
+      PD4(*line_b);
+      // double sum = mat_cell_do_mul(a->data[x], line_b, 0, a->w);
+      double sum = mat_cell_do_mul(line_a, line_b, 0, a->w);
+      // double sum = mat_cell_do_mul(line_a, t->data[ys + rank], 0, a->w);
+      // double sum = mat_cell_do_mul(line_a, t->data[ys], 0, a->w);
       MPI_Gather(&sum, 1, MPI_DOUBLE, sum_part, 1, MPI_DOUBLE, 0,
                  MPI_COMM_WORLD);
-      if (rank == 0)
-        for (int i = 0; i < size; i++) {
-          c->data[x][ys + i] = sum_part[i];
-          // printf("DONE c[%d][%d] = %lf, sum_part[%d] = %lf\n", x, ys + i,
-          //        c->data[x][ys + i], i, sum_part[i]);
-        }
-    }
-    if (rank == 0)
-      for (int yr = b->h / size * size; yr < b->h; yr++) {
-        c->data[x][yr] = mat_cell_do_mul(a->data[x], t->data[yr], 0, a->w);
-        // printf("DONE_REMAIN c[%d][%d] = %lf\n", x, yr, c->data[x][yr]);
+      // if (rank == 0) {
+      //   for (int i = 0; i < size; i++) {
+      //     c->data[x][ys + i] = sum_part[i];
+      //     // pdebug("DONE c[%d][%d] = %lf, sum_part[%d] = %lf\n", x, ys + i,
+      //     //        c->data[x][ys + i], i, sum_part[i]);
+      //   }
+      //   // pdebug("DONE c[%d][%d ... %d]\n", x, ys, ys + size - 1);
+      // } else {
+      //   // pdebug("\t[%d] c[%d][%d ... %d]\n", rank, x, ys, ys + size - 1);
+      // }
+      // for (int i = 0; i < size; i++) {
+      //   c->data[x + rank][ys + i] = sum_part[i];
+      //   pdebug("DONE c[%d][%d] = %lf, sum_part[%d] = %lf\n", x + rank, ys +
+      //   i,
+      //          c->data[x + rank][ys + i], i, sum_part[i]);
+      // }
+
+      if (rank == 0) {
+        for (int i = 0; i < size; i++)
+          c->data[x + i][ys] = sum_part[i];
       }
+      free(line_b_raw);
+      free(sum_part);
+    }
+    free(line_a_raw);
   }
-  free(line_b_raw);
+  // for (int xr = a->w / size * size; xr < a->w; xr++) {
+  //   for (int ys = 0; ys < b->h; ys += size) {
+  //     double *line_b_raw = malloc(sizeof(double) * (t->h) + 32);
+  //     double *line_b = (double *)((size_t)line_b_raw + (size_t)line_b_raw %
+  //     32); double *sum_part = malloc(sizeof(double) * size);
+  //     MPI_Scatterv(t->data[ys], numbers, offsets, MPI_DOUBLE, line_b, a->h,
+  //                  MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  //     // double sum = mat_cell_do_mul(a->data[x], line_b, 0, a->w);
+  //     double sum = mat_cell_do_mul(a->data[xr], line_b, 0, a->w);
+  //     // double sum = mat_cell_do_mul(line_a, t->data[ys + rank], 0, a->w);
+  //     // double sum = mat_cell_do_mul(line_a, t->data[ys], 0, a->w);
+  //     MPI_Gather(&sum, 1, MPI_DOUBLE, sum_part, 1, MPI_DOUBLE, 0,
+  //                MPI_COMM_WORLD);
+  //     if (rank == 0) {
+  //       for (int i = 0; i < size; i++) {
+  //         c->data[xr][ys + i] = sum_part[i];
+  //         // pdebug("DONE c[%d][%d] = %lf, sum_part[%d] = %lf\n", x, ys + i,
+  //         //        c->data[x][ys + i], i, sum_part[i]);
+  //       }
+  //       // pdebug("DONE c[%d][%d ... %d]\n", x, ys, ys + size - 1);
+  //     } else {
+  //       // pdebug("\t[%d] c[%d][%d ... %d]\n", rank, x, ys, ys + size - 1);
+  //     }
+  //     free(line_b_raw);
+  //     free(sum_part);
+  //   }
+  //   if (rank == 0)
+  //     for (int yr = b->h / size * size; yr < b->h; yr++) {
+  //       c->data[xr][yr] = mat_cell_do_mul(a->data[xr], t->data[yr], 0, a->w);
+  //       // pdebug("DONE_REMAIN c[%d][%d] = %lf\n", x, yr, c->data[x][yr]);
+  //     }
+  //   // c->data[x][yr] = mat_cell_do_mul(a->data[x], t->data[yr], 0, a->w);
+  //   // pdebug("DONE_REMAIN c[%d][%d] = %lf\n", x, yr, c->data[x][yr]);
+  // }
+  mat_free(t);
   free(numbers);
   free(offsets);
 

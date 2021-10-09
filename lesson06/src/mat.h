@@ -63,4 +63,8 @@ extern int mat_native_timeout;
 double mat_openmp_time_limit;
 int mat_openmp_timeout;
 
+enum {
+  MPI_TAG_LINE_B = 0xE1,
+};
+
 #endif

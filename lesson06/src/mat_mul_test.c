@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
   mat_native_time_limit = 10.0;
   mat_openmp_time_limit = 10.0;
   int M = K, N = K;
-  srand(time(NULL));
+  srand(time(NULL) + rank);
 
   A_g = mat_create(N, M, 0);
   B_g = mat_create(M, N, 0);
