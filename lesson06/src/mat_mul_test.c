@@ -1,87 +1,4 @@
-#include <math.h>
-#include <mpi.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
-
-#include "cblas.h"
-#include "mat.h"
 #include "utils.h"
-
-Mat *A_g, *B_g;
-
-void do_calc(int task_id, int M, int N, Mat **C, const char *task_name,
-             double *results, int result_tail, int processor_number) {
-  struct timespec start, end;
-  Mat *A = NULL;
-  Mat *B = NULL;
-  int size = 0, rank = 0;
-  MPI_Comm_size(MPI_COMM_WORLD, &size);
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  const int aligns[] = {0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1};
-  int aligned = aligns[task_id];
-  A = mat_create(M, N, aligned);
-  B = mat_create(N, M, aligned);
-  *C = mat_create(A->w, B->h, aligned);
-  mat_data_init(A);
-  mat_data_init(B);
-  mat_data_init(*C);
-  for (int x = 0; x < M; x++) {
-    for (int y = 0; y < N; y++) {
-      if (rank == 0) {
-        A->data[x][y] = A_g->data[x][y];
-        B->data[x][y] = B_g->data[x][y];
-      } else {
-        A->data[x][y] = 0;
-        B->data[x][y] = 0;
-      }
-    }
-  }
-  if (rank == 0)
-    pdebug("[%d]\t%s 计算: 开始计时\n", task_id, task_name);
-  clock_gettime(CLOCK_REALTIME, &start);
-  if (task_id == 0) {
-    mat_mul(A, B, *C);
-#ifdef USE_TIMEOUT_NATIVE
-    if (mat_native_timeout) {
-      pdebug("\t%s 超时！\n", task_name);
-    }
-#endif
-  } else if (task_id == 1) {
-    mat_mul_openmp_native(A, B, *C);
-#ifdef USE_TIMEOUT_OPENMP
-    if (mat_openmp_timeout) {
-      pdebug("\t%s 超时！\n", task_name);
-    }
-#endif
-  } else if (task_id == 2) {
-    mat_mul_threaded(A, B, *C, 1, 0);
-  } else if (task_id == 3) {
-    mat_mul_threaded(A, B, *C, 1, 1);
-  } else if (task_id == 4) {
-    mat_mul_threaded(A, B, *C, processor_number, 0);
-  } else if (task_id == 5) {
-    mat_mul_threaded(A, B, *C, processor_number, 1);
-  } else if (task_id == 6) {
-    mat_mul_openmp(A, B, *C, 0);
-  } else if (task_id == 7) {
-    mat_mul_openmp(A, B, *C, 1);
-  } else if (task_id == 8) {
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, A->w, B->h, A->h, 1,
-                A->content, A->w, B->content, B->h, 0, (*C)->content, (*C)->h);
-  } else if (task_id == 9) {
-    mat_mul_mpi_all(A, B, *C, 0, 1);
-  } else if (task_id == 10) {
-    mat_mul_mpi_all(A, B, *C, 0, 0);
-  } else if (task_id == 11) {
-    mat_mul_mpi_all(A, B, *C, 1, 0);
-  }
-  clock_gettime(CLOCK_REALTIME, &end);
-  results[result_tail] = time_delta(start, end);
-  if (rank == 0)
-    pdebug("\t%s: 计算用时: %3.3lfs\n", task_name, results[result_tail]);
-}
 
 int main(int argc, char **argv) {
   int size = 0, rank = 0;
@@ -91,17 +8,12 @@ int main(int argc, char **argv) {
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Get_processor_name(processor_name, &processor_name_length);
-  if (rank != 0) {
-    // pdebug("Slot %d\n", rank);
-    // MPI_Finalize();
-    // return 0;
-  } else
+  if (rank == 0)
     pdebug("Running on %s, total %d slot(s).\n", processor_name, size);
   // 处理一下参数
   int K = 4;
-  const int task_number = 12;
   int task_start = 0;
-  const int task_mpi_start = 9;
+  int task_end = MAT_TASK_SIZE;
   if (argc <= 1) {
     // pdebug("使用默认: K = %d\n", K);
   } else {
@@ -110,11 +22,27 @@ int main(int argc, char **argv) {
       pdebug("Return Slot numbers: %d\n", size);
       MPI_Finalize();
       return size;
+    } else if (K == 0) {
+      printf("%s 0\t\t: help\n"
+             "%s K [start] [end]\t: Run task from start to end\n"
+             "%s K [-id]\t\t: Run task id\n"
+             "%s -1\t\t: Get slots size\n",
+             argv[0], argv[0], argv[0], argv[0]);
+      MPI_Finalize();
+      return 0;
     }
     if (argc <= 2) {
       // PINT(task_start);
     } else {
       task_start = atoi(argv[2]);
+      if (argc <= 3) {
+        // pass
+      } else {
+        task_end = atoi(argv[3]) + 1;
+        task_end = task_end < MAT_TASK_SIZE ? task_end : MAT_TASK_SIZE;
+        task_end = task_end > task_start ? task_end : task_start + 1;
+        PINT(task_end);
+      }
     }
   }
   mat_native_time_limit = 10.0;
@@ -137,28 +65,64 @@ int main(int argc, char **argv) {
     }
   }
 
-  Mat *C[32] = {NULL};
-  double results[32];
-
-  const char task_names[][64] = {"Native",        "$OpenMP_{Native}$",
-                                 "SIMD",          "Unrolling SIMD",
-                                 "Threaded SIMD", "Unrolling Threaded SIMD",
-                                 "OpenMP SIMD",   "OpenMP Unrolling SIMD",
-                                 "OpenBLAS",      "$MPI_{Native}$",
-                                 "MPI SIMD",      "MPI Unrolling SIMD"};
+  TaskInfo **tasks = malloc(sizeof(TaskInfo *) * (MAT_TASK_SIZE + 1));
+  int tasks_tail = 0;
 
   int processor_number = sysconf(_SC_NPROCESSORS_ONLN);
-  if (rank == 0) {
-    pdebug("Running with %d cores.\n", processor_number);
-    pdebug("使用: K = %d\n", K);
-    pdebug("使用: task_start = %d [%s]\n", task_start, task_names[task_start]);
-    for (int i = task_start; i < task_number; i++) {
-      do_calc(i, M, N, &C[i], task_names[i], results, i, processor_number);
+  if (task_start >= 0) {
+    if (rank == 0) {
+      TaskInfo *task_info_start = task_find_by_id(task_start);
+      if (!task_info_start) {
+        printf("Unkown task_id: %d\n", task_start);
+        MPI_Finalize();
+        return 1;
+      }
+      pdebug("Running with %d cores.\n", processor_number);
+      pdebug("使用: K = %d\n", K);
+      pdebug("使用: task_start = %d [%s]\n", task_start, task_info_start->name);
+      pdebug("使用: task_end-1 = %d [%s]\n", task_end - 1,
+             task_find_by_id(task_end - 1)->name);
+      // 生成需要执行的 tasks。
+      for (int i = task_start; i < task_end; i++) {
+        TaskInfo *task = task_find_by_id(i);
+        if (!task)
+          continue;
+        tasks[tasks_tail++] = task;
+      }
+    } else {
+      for (int i = task_start; i < task_end; i++) {
+        TaskInfo *task = task_find_by_id(i);
+        if (!task)
+          continue;
+        if (!task->is_mpi)
+          continue;
+        tasks[tasks_tail++] = task;
+      }
     }
   } else {
-    for (int i = task_mpi_start; i < task_number; i++) {
-      do_calc(i, M, N, &C[i], task_names[i], results, i, processor_number);
+    // task_start < 0 表示指定只运行某一 TASK
+    int task_id = -task_start;
+    TaskInfo *task = task_find_by_id(task_id);
+    if (!task) {
+      printf("Unkown task_id: %d\n", task_id);
+      MPI_Finalize();
+      return 1;
     }
+    if (rank == 0) {
+      tasks[tasks_tail++] = task;
+    } else {
+      if (task->is_mpi) {
+        tasks[tasks_tail++] = task;
+      }
+    }
+  }
+
+  // 执行 tasks
+  for (int i = 0; i < tasks_tail; i++) {
+    do_calc(M, N, &tasks[i]->C, tasks[i], processor_number);
+  }
+
+  if (rank != 0) {
     // pdebug("Slot %d calc done.\n", rank);
     // system("sleep 3");
     MPI_Finalize();
@@ -175,47 +139,54 @@ int main(int argc, char **argv) {
     }
   }
   if (fp) {
-    for (int i = task_start; i < task_number; i++) {
+    for (int i = 0; i < tasks_tail; i++) {
+      TaskInfo *task = tasks[i];
       if (i == 0 && mat_native_timeout) {
-        fprintf(fp, "%s: %lf\n", task_names[i], -results[i]);
+        fprintf(fp, "%s: %lf\n", task->name, -task->time);
       } else {
-        fprintf(fp, "%s: %lf\n", task_names[i], results[i]);
-        // printf("%s: %lf\n", task_names[i], results[i]);
+        fprintf(fp, "%s: %lf\n", task->name, task->time);
+        // pdebug("%s: %lf\n", task->name, task->time);
       }
     }
     fclose(fp);
   }
   if (rank == 0) {
-    if (task_start == 0 && !mat_native_timeout) {
-      pdebug("校验...\n");
-      int is_ok[32];
-      for (int i = 0; i < task_number; i++) {
-        is_ok[i] = 1;
+    TaskInfo *native = NULL;
+    for (int i = 0; i < tasks_tail; i++)
+      if (tasks[i]->task_id == 0) {
+        native = tasks[i];
+        break;
       }
-      for (int x = 0; x < C[0]->w; x++) {
-        for (int y = 0; y < C[0]->h; y++) {
-          for (int k = task_start; k < task_number; k++) {
-            if (is_ok[k]) {
-              if (fabs(C[0]->data[x][y] - C[k]->data[x][y]) >= eps) {
+    if (native != NULL && tasks_tail >= 2 && !mat_native_timeout) {
+      pdebug("校验...\n");
+      for (int i = 0; i < tasks_tail; i++)
+        tasks[i]->checked = 1;
+      int is_ok_all = 1;
+      for (int x = 0; x < native->C->w; x++) {
+        for (int y = 0; y < native->C->h; y++) {
+          for (int k = 0; k < tasks_tail; k++) {
+            TaskInfo *task = tasks[k];
+            if (task->task_id == 0)
+              continue;
+            if (task->checked) {
+              if (fabs(native->C->data[x][y] - task->C->data[x][y]) >= eps) {
                 printf("K = %4d; %s 计算错误! (%d, %d): [%lf, %lf]\n", K,
-                       task_names[k], x, y, C[0]->data[x][y], C[k]->data[x][y]);
-                is_ok[k] = 0;
+                       task->name, x, y, native->C->data[x][y],
+                       task->C->data[x][y]);
+                task->checked = 0;
+                is_ok_all = 0;
               }
             }
           }
         }
       }
-      int is_ok_all = 1;
-      for (int i = task_start; i < task_number; i++)
-        if (!is_ok[i])
-          is_ok_all = 0;
       if (!is_ok_all) {
         pdebug("[0]\t参考: \n");
-        mat_print(C[0]);
-        for (int k = task_start; k < task_number; k++) {
-          if (!is_ok[k]) {
-            pdebug("[%d]\t%s: \n", k, task_names[k]);
-            mat_print(C[k]);
+        mat_print(native->C);
+        for (int k = 0; k < tasks_tail; k++) {
+          if (!tasks[k]->checked) {
+            pdebug("[%d]\t%s: \n", tasks[k]->task_id, tasks[k]->name);
+            mat_print(tasks[k]->C);
           }
         }
       }

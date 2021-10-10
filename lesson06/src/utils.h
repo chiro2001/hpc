@@ -1,7 +1,16 @@
+#include <math.h>
+#include <mpi.h>
 #include <omp.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
-// #define DEBUG
+#include "cblas.h"
+#include "mat.h"
+#include "task.h"
+
+#define DEBUG
 
 #ifdef DEBUG
 #define pdebug(...) printf(__VA_ARGS__)

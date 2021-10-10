@@ -30,7 +30,9 @@ include_directories(${include_dirs})
 
 file(GLOB_RECURSE source_files
         "${PROJECT_SOURCE_DIR}/src/*.h"
-        "${PROJECT_SOURCE_DIR}/src/mat.c" "${PROJECT_SOURCE_DIR}/src/utils.c")
+        "${PROJECT_SOURCE_DIR}/src/mat.c"
+        "${PROJECT_SOURCE_DIR}/src/utils.c"
+        "${PROJECT_SOURCE_DIR}/src/task.c")
 message(STATUS "Source files: ${source_files}")
 
 # Resources

@@ -1,4 +1,5 @@
 import os
+import time
 import argparse
 import psutil
 import platform
@@ -41,7 +42,14 @@ def build_it(build_method: str = 'make'):
                 return
 
 
-def test_all(start_n=4, max_n: int = 8, out: str = 'plot.png', repeate: int = 1, fitting: str = 'cubic', task_start: int = 0, slot_n: int = 0, **kwargs):
+def test_all(start_n=4,
+             max_n: int = 8,
+             out: str = 'plot.png',
+             repeate: int = 1,
+             fitting: str = 'cubic',
+             task_start: int = 0,
+             slot_n: int = 0,
+             record_delta: float = 0.1, **kwargs):
     # plt.rcParams['font.sans-serif'] = ['FSGB2312']
     build_it(**kwargs)
 
@@ -56,6 +64,7 @@ def test_all(start_n=4, max_n: int = 8, out: str = 'plot.png', repeate: int = 1,
         print(f"Running on {slot_n} slot(s)")
 
     label_names: list = None
+    memories_record = {}
 
     results = {}
     # for k in [(2 ** (max_n + 1)) // (2 ** i) for i in range((max_n + 1), 0, -1)]:
@@ -63,7 +72,24 @@ def test_all(start_n=4, max_n: int = 8, out: str = 'plot.png', repeate: int = 1,
         # for k in range(0, 2 ** max_n, 10):
         for _ in range(repeate):
             # os.system(f"./mat_mul_test {k} > /dev/null")
-            os.system(f"mpirun {'' if slot_n == 0 else f'-n {slot_n}'} mat_mul_test {k} {task_start}")
+            # 后台启动进程，记录 pid
+            os.system(
+                f"mpirun {'' if slot_n == 0 else f'-n {slot_n}'} mat_mul_test {k} {task_start}")
+            # pid = (os.system('''ps -ef | grep "mat_mul_test" | grep -v grep | awk '{print $2}'''') & 0xFF00) >> 8
+            pid = int(os.popen(
+                '''ps -ef | grep "mat_mul_test" | grep -v grep | awk '{print $2}' ''').readlines()[0])
+            memories = []
+            time_start = time.time()
+            # 持续记录内存大小
+            # 等待跑完
+            while len(os.popen('''ps -ef | grep "mat_mul_test" | grep -v grep | awk '{print $2}' ''').readlines()) > 0:
+                try:
+                    mem_bytes = int(os.popen('''ps aux | grep "python3" | grep -v grep | awk '{print $6}' ''').readlines()[0])
+                except IndexError:
+                    break
+                memories.append((time.time() - time_start, mem_bytes))
+                time.sleep(record_delta)
+            memories_record[k] = memories
             with open("results.txt", 'r') as f:
                 # results_now = np.array([float(x) for x in f.readlines()])
                 lines = f.readlines()
@@ -94,12 +120,21 @@ def test_all(start_n=4, max_n: int = 8, out: str = 'plot.png', repeate: int = 1,
     Y = [interp1d_data(X, [results[k][z] for k in X])
          for z in range(len(label_names))]
     # plt.title(f'Running Time for {", ".join(label_names[:-1])} and {label_names[-1]}')
-    plt.title(f'On {platform.platform()}\n{psutil.cpu_count()} Core(s) {(psutil.cpu_freq().current / 1000):.3}GHz, {slot_n} Slot(s)' +
+    fig1, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
+    ax1.set_title(f'On {platform.platform()}\n{psutil.cpu_count()} Core(s) {(psutil.cpu_freq().current / 1000):.3}GHz, {slot_n} Slot(s)' +
               '$N' r'\in' '[2^{' + str(start_n) + '}, 2^{' + str(max_n) + '}]$, ' + f'R={repeate}, {len(label_names)} items, {fitting} fitting.')
-    plt.xlabel("N")
-    plt.ylabel("Time(s)")
-    [plt.plot(X_linear, Y[i]) for i in range(len(Y))]
-    plt.legend(label_names, loc='upper left')
+    ax1.set_xlabel("N")
+    ax1.set_ylabel("Time(s)")
+    [ax1.plot(X_linear, Y[i]) for i in range(len(Y))]
+    ax1.legend(label_names, loc='upper left')
+
+    ax2.set_title(f"Memory usage")
+    ax2.set_xlable('Time')
+    ax2.set_ylable('Memory/MB')
+    k_names = [f"N = {k}" for k in memories_record]
+    for k in memories_record:
+        ax2.plot(*(np.array(memories_record[k]).T))
+    ax2.legend(k_names, loc='upper left')
     if not out.endswith('.png'):
         out = out + '.png'
     save_path = os.path.join(
@@ -125,6 +160,8 @@ if __name__ == '__main__':
                         help='设置编译方式……暂时没写 Makefile。', choices=['make', 'cmake'])
     parser.add_argument('-f', '--fitting', type=str, default='cubic',
                         help='设置曲线拟合方式: 二次拟合或线性。', choices=['cubic', 'linear'])
+    parser.add_argument('-e', '--record-delta', type=float, default=0.1,
+                        help='设置内存记录时间间隔。')
     parser.add_argument('-o', '--out', type=str, default='plot.png',
                         help='设置图片保存基础文件名(不含扩展名)。')
 
