@@ -68,7 +68,8 @@ enum {
   MPI_TAG_LINE_B = 0xE1,
   MPI_TAG_LINE_A,
   MPI_TAG_MAT_A,
-  MPI_TAG_MAT_B
+  MPI_TAG_MAT_B,
+  MPI_TAG_MAT_N
 };
 
 #endif

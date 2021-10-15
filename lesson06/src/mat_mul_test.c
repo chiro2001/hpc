@@ -23,11 +23,12 @@ int main(int argc, char **argv) {
       MPI_Finalize();
       return size;
     } else if (K == 0) {
-      printf("%s 0\t\t: help\n"
-             "%s K [start] [end]\t: Run task from start to end\n"
-             "%s K [-id]\t\t: Run task id\n"
-             "%s -1\t\t: Get slots size\n",
-             argv[0], argv[0], argv[0], argv[0]);
+      printf(
+          "%s 0\t\t: help\n"
+          "%s K [start] [end]\t: Run task from start to end\n"
+          "%s K [-id]\t\t: Run task id\n"
+          "%s -1\t\t: Get slots size\n",
+          argv[0], argv[0], argv[0], argv[0]);
       MPI_Finalize();
       return 0;
     }
@@ -50,18 +51,21 @@ int main(int argc, char **argv) {
   int M = K, N = K;
   srand(time(NULL) + rank);
 
-  A_g = mat_create(N, M, 0);
-  B_g = mat_create(M, N, 0);
-  mat_data_init(A_g);
-  mat_data_init(B_g);
-  for (int x = 0; x < M; x++) {
-    for (int y = 0; y < N; y++) {
-      // A->data[x][y] = (double)(rand() % 40) / 40;
-      // B->data[x][y] = (double)(rand() % 40) / 40;
-      // A->data[x][y] = 1;
-      // B->data[x][y] = 1;
-      A_g->data[x][y] = (double)(rand() % 4) + 1.0;
-      B_g->data[x][y] = (double)(rand() % 4) + 1.0;
+  // 主进程才用到
+  if (rank == 0) {
+    A_g = mat_create(N, M, 0);
+    B_g = mat_create(M, N, 0);
+    mat_data_init(A_g);
+    mat_data_init(B_g);
+    for (int x = 0; x < M; x++) {
+      for (int y = 0; y < N; y++) {
+        // A->data[x][y] = (double)(rand() % 40) / 40;
+        // B->data[x][y] = (double)(rand() % 40) / 40;
+        // A->data[x][y] = 1;
+        // B->data[x][y] = 1;
+        A_g->data[x][y] = (double)(rand() % 4) + 1.0;
+        B_g->data[x][y] = (double)(rand() % 4) + 1.0;
+      }
     }
   }
 
@@ -85,17 +89,14 @@ int main(int argc, char **argv) {
       // 生成需要执行的 tasks。
       for (int i = task_start; i < task_end; i++) {
         TaskInfo *task = task_find_by_id(i);
-        if (!task)
-          continue;
+        if (!task) continue;
         tasks[tasks_tail++] = task;
       }
     } else {
       for (int i = task_start; i < task_end; i++) {
         TaskInfo *task = task_find_by_id(i);
-        if (!task)
-          continue;
-        if (!task->is_mpi)
-          continue;
+        if (!task) continue;
+        if (!task->is_mpi) continue;
         tasks[tasks_tail++] = task;
       }
     }
@@ -119,6 +120,7 @@ int main(int argc, char **argv) {
 
   // 执行 tasks
   for (int i = 0; i < tasks_tail; i++) {
+    // printf("Slot %d task: %s\n", rank, tasks[i]->name);
     do_calc(M, N, &tasks[i]->C, tasks[i], processor_number);
   }
 
@@ -159,15 +161,13 @@ int main(int argc, char **argv) {
       }
     if (native != NULL && tasks_tail >= 2 && !mat_native_timeout) {
       pdebug("校验...\n");
-      for (int i = 0; i < tasks_tail; i++)
-        tasks[i]->checked = 1;
+      for (int i = 0; i < tasks_tail; i++) tasks[i]->checked = 1;
       int is_ok_all = 1;
       for (int x = 0; x < native->C->w; x++) {
         for (int y = 0; y < native->C->h; y++) {
           for (int k = 0; k < tasks_tail; k++) {
             TaskInfo *task = tasks[k];
-            if (task->task_id == 0)
-              continue;
+            if (task->task_id == 0) continue;
             if (task->checked) {
               if (fabs(native->C->data[x][y] - task->C->data[x][y]) >= eps) {
                 printf("K = %4d; %s 计算错误! (%d, %d): [%lf, %lf]\n", K,

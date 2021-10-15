@@ -1,8 +1,8 @@
 #include "mat.h"
-#include <mpi.h>
 
 #include <assert.h>
 #include <malloc.h>
+#include <mpi.h>
 // #include <pmmintrin.h>
 #include <immintrin.h>
 #include <math.h>
@@ -44,8 +44,7 @@ Mat *mat_make_index(Mat *mat) {
   mat->content =
       (double *)((void *)mat->content_real + (size_t)(mat->content_real) % 32);
   // PINT((int)((size_t)mat->content - (size_t)mat->content_real));
-  if (mat->data)
-    free(mat->data);
+  if (mat->data) free(mat->data);
   mat->data = malloc(sizeof(CHIMAT_TYPE *) * mat->w);
   assert(mat->data);
   // printf("content @ [%p, %p]\n", mat->content, mat->content + mat->w *
@@ -58,8 +57,7 @@ Mat *mat_make_index(Mat *mat) {
       //        mat->data[i] - mat->content);
     }
   else
-    for (int i = 0; i < mat->h; i++)
-      mat->data[i] = mat->content + i * mat->w;
+    for (int i = 0; i < mat->h; i++) mat->data[i] = mat->content + i * mat->w;
   return mat;
 }
 
@@ -137,8 +135,7 @@ Mat *mat_clone(Mat *mat) {
   Mat *dist = mat_create(mat->w, mat->h, mat->aligned);
   mat_data_init(dist);
   for (int i = 0; i < mat->w; i++)
-    for (int j = 0; j < mat->h; j++)
-      dist->data[i][j] = mat->data[i][j];
+    for (int j = 0; j < mat->h; j++) dist->data[i][j] = mat->data[i][j];
   return dist;
 }
 
@@ -149,8 +146,7 @@ Mat *mat_clone_fast(Mat *mat) {
   Mat *dist = mat_create(mat->w, mat->h, mat->aligned);
   mat_data_init_fast(dist);
   // 更新索引
-  for (int i = 0; i < mat->w; i++)
-    dist->data[i] = mat->data[i];
+  for (int i = 0; i < mat->w; i++) dist->data[i] = mat->data[i];
   return dist;
 }
 
@@ -158,20 +154,17 @@ Mat *mat_clone_fast(Mat *mat) {
 // @args: 矩阵指针, Rect(x1, y1, x2, y2)
 // @rets: 矩阵指针
 Mat *mat_crop(Mat *mat, int x1, int y1, int x2, int y2) {
-  if (x1 > x2 || y1 > y2 || !mat)
-    return NULL;
+  if (x1 > x2 || y1 > y2 || !mat) return NULL;
   int w = x2 - x1, h = y2 - y1;
   Mat *dist = mat_create(w, h, mat->aligned);
 #ifndef USE_FAST_CROP
   mat_data_init(dist);
   for (int i = 0; i < w; i++)
-    for (int j = 0; j < h; j++)
-      dist->data[i][j] = mat->data[i + x1][j + y1];
+    for (int j = 0; j < h; j++) dist->data[i][j] = mat->data[i + x1][j + y1];
 #else
   mat_data_init_fast(dist);
-  for (int i = 0; i < w; i++)
-    dist->data[i] = mat->data[i + x1] + y1;
-#endif // USE_FAST_CROP
+  for (int i = 0; i < w; i++) dist->data[i] = mat->data[i + x1] + y1;
+#endif  // USE_FAST_CROP
   // 打印调试信息会使程序运行效率下降(惨不忍睹)
   // printf("\tcrop: (%d, %d, %d, %d)\n", x1, y1, x2, y2);
   return dist;
@@ -181,8 +174,7 @@ Mat *mat_crop(Mat *mat, int x1, int y1, int x2, int y2) {
 // @args: 矩阵指针, 扩展像素宽度
 // @rets: 矩阵指针
 Mat *mat_padding_around(Mat *mat, int padding) {
-  if (!mat)
-    return NULL;
+  if (!mat) return NULL;
   int w = mat->w + padding * 2, h = mat->h + padding * 2;
   Mat *dist = mat_create(w, h, mat->aligned);
   mat_data_init(dist);
@@ -223,9 +215,9 @@ Mat *mat_conv(Mat *mat, double kernel[3][3]) {
       mat_free(crop);
 #else
       mat_free_fast(crop);
-#endif // USE_FAST_CROP
-       // printf("#1.3 (%d, %d) %d %d %d\n", i, j,
-       // dist->data[i][j].red,dist->data[i][j].green, dist->data[i][j].blue);
+#endif  // USE_FAST_CROP
+        // printf("#1.3 (%d, %d) %d %d %d\n", i, j,
+        // dist->data[i][j].red,dist->data[i][j].green, dist->data[i][j].blue);
     }
   }
   return dist;
@@ -236,8 +228,7 @@ Mat *mat_conv(Mat *mat, double kernel[3][3]) {
 // @rets: c
 Mat *mat_mul(Mat *a, Mat *b, Mat *c) {
   // 检查是否合法
-  if ((!a || !b || !c) || (a->w != b->h))
-    return NULL;
+  if ((!a || !b || !c) || (a->w != b->h)) return NULL;
   // 计时，超时的话就直接返回
   int k = a->w;
 #ifdef USE_TIMEOUT_NATIVE
@@ -247,8 +238,7 @@ Mat *mat_mul(Mat *a, Mat *b, Mat *c) {
   for (int x = 0; x < c->w; x++) {
     for (int y = 0; y < c->h; y++) {
       double sum = 0;
-      for (int i = 0; i < k; i++)
-        sum += a->data[x][i] * b->data[i][y];
+      for (int i = 0; i < k; i++) sum += a->data[x][i] * b->data[i][y];
       c->data[x][y] = sum;
     }
 #ifdef USE_TIMEOUT_NATIVE
@@ -270,8 +260,7 @@ Mat *mat_mul(Mat *a, Mat *b, Mat *c) {
 // @rets: c
 Mat *mat_mul_openmp_native(Mat *a, Mat *b, Mat *c) {
   // 检查是否合法
-  if ((!a || !b || !c) || (a->w != b->h))
-    return NULL;
+  if ((!a || !b || !c) || (a->w != b->h)) return NULL;
   // 计时，超时的话就直接返回
   int k = a->w;
 #ifdef USE_TIMEOUT_OPENMP
@@ -282,8 +271,7 @@ Mat *mat_mul_openmp_native(Mat *a, Mat *b, Mat *c) {
   for (int x = 0; x < c->w; x++) {
     for (int y = 0; y < c->h; y++) {
       double sum = 0;
-      for (int i = 0; i < k; i++)
-        sum += a->data[x][i] * b->data[i][y];
+      for (int i = 0; i < k; i++) sum += a->data[x][i] * b->data[i][y];
       c->data[x][y] = sum;
     }
 #ifdef USE_TIMEOUT_OPENMP
@@ -340,8 +328,7 @@ void mat_print(Mat *a) {
 // @args: a
 // @rets: a^T
 Mat *mat_transpose(Mat *a) {
-  if (!a)
-    return NULL;
+  if (!a) return NULL;
   Mat *t = mat_create(a->h, a->w, a->aligned);
   mat_data_init(t);
   for (int x = 0; x < t->w; x++) {
@@ -376,8 +363,7 @@ double mat_cell_do_mul(double *p_a, double *p_b, int k, int unrolling,
   double sum;
   if (native) {
     sum = 0;
-    for (int i = 0; i < k; i++)
-      sum += p_a[i] * p_b[i];
+    for (int i = 0; i < k; i++) sum += p_a[i] * p_b[i];
     return sum;
   }
   // 使用 AVX 指令集
@@ -455,8 +441,7 @@ void mat_mul_cell(mat_mul_thread_t *thread_data) {
   int single = thread_data->single;
   int single_index = thread_data->single_index;
   int unrolling = thread_data->unrolling;
-  if (!single)
-    free(thread_data);
+  if (!single) free(thread_data);
   int k = a->w;
   int index = 0;
 
@@ -479,8 +464,7 @@ void mat_mul_cell(mat_mul_thread_t *thread_data) {
            *p_b = b->content + (y * ((b->w / 4 + 1) * 4));
     c->data[x][y] = mat_cell_do_mul(p_a, p_b, k, unrolling, 0);
 
-    if (single)
-      break;
+    if (single) break;
   }
 }
 
@@ -587,17 +571,14 @@ Mat *mat_mul_threaded(Mat *a, Mat *b, Mat *c, int processor_number,
 }
 
 Mat *mat_mul_mpi_all(Mat *a, Mat *b, Mat *c, int unrolling, int native) {
-  // 检查是否合法
-  if (a->w != b->h) {
-    return NULL;
-  }
   int rank = 0, size = 0;
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  // 首先对 b 进行一个置的转
-  Mat *t = mat_transpose(b);
+  Mat *t = NULL;
   // 同步内存信息
   if (rank == 0) {
+    // 首先对 b 进行一个置的转
+    t = mat_transpose(b);
     // 然后发送 a, b 数据到其他 slot
     for (int i = 1; i < size; i++) {
       // 按行发送数据，防止因为content_real不一致造成数据错误
@@ -609,6 +590,7 @@ Mat *mat_mul_mpi_all(Mat *a, Mat *b, Mat *c, int unrolling, int native) {
       }
     }
   } else {
+    t = b;
     for (int x = 0; x < a->h; x++) {
       MPI_Recv(a->data[x], a->w, MPI_DOUBLE, 0, MPI_TAG_MAT_A, MPI_COMM_WORLD,
                MPI_STATUSES_IGNORE);
@@ -627,7 +609,6 @@ Mat *mat_mul_mpi_all(Mat *a, Mat *b, Mat *c, int unrolling, int native) {
       if (rank == 0) {
         for (int i = 0; i < size; i++) {
           c->data[x + i][ys] = sum_part[i];
-          // pdebug("DONE c[%d][%d]\n", x + i, ys);
         }
       }
     }
@@ -637,10 +618,11 @@ Mat *mat_mul_mpi_all(Mat *a, Mat *b, Mat *c, int unrolling, int native) {
       for (int ys = 0; ys < b->h; ys += 1) {
         c->data[xr][ys] =
             mat_cell_do_mul(a->data[xr], t->data[ys], a->w, unrolling, native);
-        // pdebug("REMAIN c[%d][%d]\n", xr, ys);
       }
     }
-  mat_free(t);
+  if (rank == 0) {
+    mat_free(t);
+  }
   free(sum_part);
   return c;
 }

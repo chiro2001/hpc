@@ -75,25 +75,67 @@ def test_all(start_n=4,
             # 后台启动进程，记录 pid
             os.system(
                 f"mpirun {'' if slot_n == 0 else f'-n {slot_n}'} mat_mul_test {k} {task_start} {task_end if task_end != 0 else ''} &")
+            # 注意这个是 `mpirun` 的 pid 不是实际运行进程 pid
             pid = int(os.popen(
                 '''ps -ef | grep "mat_mul_test" | grep -v grep | awk '{print $2}' ''').readlines()[0])
+            # print(f"PID = {pid}")
+            # showed_info = False
             memories = []
             time_start = time.time()
             # 持续记录内存大小
             # 等待跑完
             memories_record[k] = []
             while len(os.popen('''ps -ef | grep "mat_mul_test" | grep -v grep | awk '{print $2}' ''').readlines()) > 0:
+                mem_size = None
                 try:
-                    # mem_bytes = int(os.popen('''ps aux | grep "python3" | grep -v grep | awk '{print $6}' ''').readlines()[0])
-                    lines = os.popen(f'''cat /proc/{pid}/status | grep "VmRSS"''').readlines()
+                    # # listen_on = "VmRSS"
+                    # listen_on = "VmSize"
+                    # # listen_on = "VmPeak"
+                    # lines = os.popen(
+                    #     f'''cat /proc/{pid}/status | grep "{listen_on}"''').readlines()
+                    # if not showed_info:
+                    #     os.system(f'cat /proc/{pid}/status &')
+                    #     showed_info = True
                     # print(f"lines: {lines}")
-                    if len(lines) == 0:
-                        mem_size = None
-                        print(f"cannot read memory info!")
-                    else:
-                        mem_size = int(lines[0].split()[-2]) / 1024
+                    # if len(lines) == 0:
+                    #     mem_size = None
+                    #     print(f"cannot read memory info!")
+                    # else:
+                    #     mem_size = int(lines[0].split()[-2]) / 1024
+
+                    # mem_rss = os.popen("ps aux | grep " + str(pid) + " | grep -v grep | awk '{print $6;}'").readline()
+                    # mem_size = int(mem_rss) / 1024
+                    # print(f"rss = {mem_rss}, size = {mem_size} MB")
+
+                    # mem_rss = os.popen("ps -eo pid,rss,args | grep mat_mul_test | grep -v grep | awk '{print $2;}'").readline()
+                    # mem_size = int(mem_rss) / 1024
+                    # print(f"rss = {mem_rss}, size = {mem_size} MB")
+
+                    lines = os.popen("ps -eo pid,rss,args | grep mat_mul_test | grep -v grep").readlines()
+                    lines_splits = [line.split() for line in lines]
+                    lines_splits = [line for line in lines_splits if 'mat_mul_test' in line[2]]
+                    # print(lines_splits)
+                    mem_rss = 0
+                    for line in lines_splits:
+                        pid_child = int(line[0])
+                        # listen_on = "VmRSS"
+                        # listen_on = "VmSize"
+                        listen_on = "VmPeak"
+                        lines_ = os.popen(
+                            f'''cat /proc/{pid_child}/status | grep "{listen_on}"''').readlines()
+                        # print(f"lines: {lines_}")
+                        if len(lines_) == 0:
+                            mem_rss += 0
+                            # print(f"cannot read memory info!")
+                        else:
+                            r = int(lines_[0].split()[-2])
+                            mem_rss += r
+                            # print(f"PID: {pid_child} MEM: {r}")
+                    mem_size = mem_rss / 1024
                 except IndexError:
                     break
+                except ValueError:
+                    pass
                 if mem_size is not None:
                     memories.append((time.time() - time_start, mem_size))
                 else:
@@ -129,9 +171,10 @@ def test_all(start_n=4,
     X_linear = np.linspace(np.min(X), np.max(X), 500)
     Y = [interp1d_data(X, [results[k][z] for k in X])
          for z in range(len(label_names))]
-    fig1, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex='none', sharey='none')
+    fig1, (ax1, ax2) = plt.subplots(
+        nrows=2, ncols=1, sharex='none', sharey='none')
     ax1.set_title(f'On {platform.platform()}\n{psutil.cpu_count()} Core(s) {(psutil.cpu_freq().current / 1000):.3}GHz, {slot_n} Slot(s)' +
-              '$N' r'\in' '[2^{' + str(start_n) + '}, 2^{' + str(max_n) + '}]$, ' + f'R={repeate}, {len(label_names)} items, {fitting} fitting.')
+                  '$N' r'\in' '[2^{' + str(start_n) + '}, 2^{' + str(max_n) + '}]$, ' + f'R={repeate}, {len(label_names)} items, {fitting} fitting.')
     ax1.set_xlabel("N")
     ax1.set_ylabel("Time(s)")
     [ax1.plot(X_linear, Y[i]) for i in range(len(Y))]
@@ -144,9 +187,43 @@ def test_all(start_n=4,
     except AttributeError:
         print(f"Warning: cannot set up label of ax2")
     k_names = [f"N = {k}" for k in memories_record]
+    mem_record_max_x = 0
+    mem_record_max_y = {}
+    memories_record_all = {}
+
     for k in memories_record:
-        ax2.plot(*(np.array(memories_record[k]).T))
-    ax2.legend(k_names, loc='upper left')
+        # print(np.array(memories_record[k]).T[0])
+        mem_record_max_x = max(
+            len(np.array(memories_record[k]).T[0]), mem_record_max_x)
+        mem_record_max_y[k] = np.max(np.array(memories_record[k]).T[1])
+    # # 扩展内存记录数据，方便看出来
+    # for k in memories_record:
+    #     memories_record_all[k] = np.array(
+    #         [*memories_record[k],
+    #             *(np.array([
+    #                 np.linspace(
+    #                     np.max(np.array(memories_record[k]).T[0]), mem_record_max_x, int(1 / record_delta)),
+    #                 [mem_record_max_y[k] for _ in range(mem_record_max_x - len(memories_record[k]))]]).T)
+    #          ]
+    #     )
+    # print(f"mem_record_max_x = {mem_record_max_x}")
+    # for k in memories_record:
+    #     for i in range(len(memories_record[k]), mem_record_max_x):
+    #         memories_record[k].append([i, mem_record_max_y[k]])
+    #     memories_record_all[k] = np.array(memories_record[k]).T
+
+    # for k in memories_record:
+    #     # ax2.plot(*(np.array(memories_record[k]).T))
+    #     # print(f"shape = {memories_record_all[k].shape}")
+    #     ax2.plot(*memories_record_all[k])
+
+    mem_record_max_y_list = [mem_record_max_y[k] for k in mem_record_max_y]
+    mem_record_max_x_list = [k for k in mem_record_max_y]
+    # print(mem_record_max_y_list)
+    ax2.plot(mem_record_max_x_list, mem_record_max_y_list)
+    ax2.plot(mem_record_max_x_list, [(n ** 2 * 8) / (1024 ** 2) for n in mem_record_max_x_list])
+    # ax2.legend(k_names, loc='upper left')
+    ax2.legend(['VmPeak', 'Matrix Size'], loc='upper left')
     if not out.endswith('.png'):
         out = out + '.png'
     save_path = os.path.join(

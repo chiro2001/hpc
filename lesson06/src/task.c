@@ -19,8 +19,7 @@ TaskInfo tasks_info[] = {{0, "$Native$", 0, 0},
 
 TaskInfo *task_find_by_id(int task_id) {
   for (int i = 0; i < MAT_TASK_SIZE; i++) {
-    if (tasks_info[i].task_id == task_id)
-      return &tasks_info[i];
+    if (tasks_info[i].task_id == task_id) return &tasks_info[i];
   }
   return NULL;
 }
@@ -29,35 +28,36 @@ Mat *A_g, *B_g;
 
 void do_calc(int M, int N, Mat **C, TaskInfo *task, int processor_number) {
   struct timespec start, end;
-  if (!A_g || !B_g)
-    return;
   Mat *A = NULL;
   Mat *B = NULL;
   int size = 0, rank = 0;
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  // const int aligns[] = {0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1};
+  if (rank == 0 && (!A_g || !B_g)) return;
   int task_id = task->task_id;
   int aligned = task->aligned;
   A = mat_create(M, N, aligned);
   B = mat_create(N, M, aligned);
-  *C = mat_create(A->w, B->h, aligned);
   mat_data_init(A);
   mat_data_init(B);
-  mat_data_init(*C);
-  for (int x = 0; x < M; x++) {
-    for (int y = 0; y < N; y++) {
-      if (rank == 0) {
-        A->data[x][y] = A_g->data[x][y];
-        B->data[x][y] = B_g->data[x][y];
-      } else {
-        A->data[x][y] = 0;
-        B->data[x][y] = 0;
+
+  if (rank == 0) {
+    *C = mat_create(A->w, B->h, aligned);
+    mat_data_init(*C);
+    for (int x = 0; x < M; x++) {
+      for (int y = 0; y < N; y++) {
+        if (rank == 0) {
+          A->data[x][y] = A_g->data[x][y];
+          B->data[x][y] = B_g->data[x][y];
+        } else {
+          A->data[x][y] = 0;
+          B->data[x][y] = 0;
+        }
       }
     }
   }
-  if (rank == 0)
-    pdebug("[%d]\t%s 计算: 开始计时\n", task->task_id, task->name);
+
+  if (rank == 0) pdebug("[%d]\t%s 计算: 开始计时\n", task->task_id, task->name);
   clock_gettime(CLOCK_REALTIME, &start);
   if (task_id == 0) {
     mat_mul(A, B, *C);
@@ -97,6 +97,5 @@ void do_calc(int M, int N, Mat **C, TaskInfo *task, int processor_number) {
   }
   clock_gettime(CLOCK_REALTIME, &end);
   task->time = time_delta(start, end);
-  if (rank == 0)
-    pdebug("\t%s: 计算用时: %3.3lfs\n", task->name, task->time);
+  if (rank == 0) pdebug("\t%s: 计算用时: %3.3lfs\n", task->name, task->time);
 }
